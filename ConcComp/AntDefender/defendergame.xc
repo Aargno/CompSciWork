@@ -1,3 +1,10 @@
+/*
+ * antdefender.xc
+ *
+ *  Created on: 19 Oct 2018
+ *      Author: AaronRobey
+ */
+
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 // COMS20001
@@ -115,11 +122,12 @@ void userAnt(chanend fromButtons, chanend toVisualiser, chanend toController) {
   toVisualiser <: userAntPosition;         //show initial position
   while (1) {
     fromButtons :> buttonInput; //expect values 13 and 14
-    if (buttonInput == 14) attemptedAntPosition = (userAntPosition + 1) % 23;
+    if (buttonInput == 13) attemptedAntPosition = (userAntPosition + 1) % 23;
     else attemptedAntPosition = (userAntPosition - 1) % 23;
     toController <: attemptedAntPosition;
     toController :> moveForbidden;
-    if (!moveForbidden) userAntPosition = attemptedAntPosition;
+    if (moveForbidden == 3) break;
+    else if (moveForbidden != 1) userAntPosition = attemptedAntPosition;
     ////////////////////////////////////////////////////////////
     //
     // !!! place code here for userAnt behaviour
@@ -146,13 +154,15 @@ void attackerAnt(chanend toVisualiser, chanend toController) {
           else currentDirection = 1;
       }
       attemptedAntPosition = attackerAntPosition + currentDirection;
+      if (attemptedAntPosition == -1) attemptedAntPosition = 22;
+      else if (attemptedAntPosition == 23) attemptedAntPosition = 0;
       toController <: attemptedAntPosition;
       toController :> moveForbidden;
-      if (moveForbidden) {
+      if (moveForbidden == 3) break;
+      else if (moveForbidden == 1) {
           if (currentDirection == 1) currentDirection = -1;
           else currentDirection = 1;
-      }
-      else attackerAntPositon = attemptedAntPosition;
+      } else attackerAntPosition = attemptedAntPosition;
       moveCounter++;
   ////////////////////////////////////////////////////////////
   //
@@ -177,14 +187,15 @@ void controller(chanend fromAttacker, chanend fromUser) {
   while (!gameEnded) {
     select {
       case fromAttacker :> attempt:
-          if (attempt == lastReportedUserAntPosition) fromAttacker <: 0;
+          if (attempt == lastReportedUserAntPosition) fromAttacker <: 1;
           else {
-              fromAttacker <: 1;
-              lastReportedAttackerAntPosition = attempt;
-          }
-          if (lastReportedAttackerAntPosition >= 8 || lastReportedAttackerAntPosition <= 14) {
+            lastReportedAttackerAntPosition = attempt;
+            lastReportedAttackerAntPosition = attempt;
+            if (lastReportedAttackerAntPosition >= 8 && lastReportedAttackerAntPosition <= 14) {
               gameEnded++;
-              printf("Defender lost, gg scrub\n");
+              printf("Defender lost, press any button to end the game!\n");
+              continue;
+            } else fromAttacker <: 0;
           }
       /////////////////////////////////////////////////////////////
       //
@@ -193,9 +204,9 @@ void controller(chanend fromAttacker, chanend fromUser) {
       /////////////////////////////////////////////////////////////
           break;
       case fromUser :> attempt:
-          if (attempt == lastReportedAttackerAntPosition) fromAttacker <: 0;
+          if (attempt == lastReportedAttackerAntPosition) fromUser <: 1;
           else {
-              fromAttacker <: 1;
+              fromUser <: 0;
               lastReportedUserAntPosition = attempt;
           }
       /////////////////////////////////////////////////////////////
@@ -206,6 +217,8 @@ void controller(chanend fromAttacker, chanend fromUser) {
           break;
     }
   }
+  fromUser :> attempt;
+  fromUser <: 3;
 }
 
 //MAIN PROCESS defining channels, orchestrating and starting the processes
