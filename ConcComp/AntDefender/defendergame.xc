@@ -115,6 +115,11 @@ void userAnt(chanend fromButtons, chanend toVisualiser, chanend toController) {
   toVisualiser <: userAntPosition;         //show initial position
   while (1) {
     fromButtons :> buttonInput; //expect values 13 and 14
+    if (buttonInput == 14) attemptedAntPosition = (userAntPosition + 1) % 23;
+    else attemptedAntPosition = (userAntPosition - 1) % 23;
+    toController <: attemptedAntPosition;
+    toController :> moveForbidden;
+    if (!moveForbidden) userAntPosition = attemptedAntPosition;
     ////////////////////////////////////////////////////////////
     //
     // !!! place code here for userAnt behaviour
@@ -136,22 +141,34 @@ void attackerAnt(chanend toVisualiser, chanend toController) {
   toVisualiser <: attackerAntPosition;       //show initial position
 
   while (running) {
+      if (moveCounter % 31 == 0 || moveCounter % 37 == 0) {
+          if (currentDirection == 1) currentDirection = -1;
+          else currentDirection = 1;
+      }
+      attemptedAntPosition = attackerAntPosition + currentDirection;
+      toController <: attemptedAntPosition;
+      toController :> moveForbidden;
+      if (moveForbidden) {
+          if (currentDirection == 1) currentDirection = -1;
+          else currentDirection = 1;
+      }
+      else attackerAntPositon = attemptedAntPosition;
+      moveCounter++;
   ////////////////////////////////////////////////////////////
   //
   // !!! place your code here for attacker behaviour
   //
   /////////////////////////////////////////////////////////////
-      attackerAntPosition++;
   toVisualiser <: attackerAntPosition;
   waitMoment();
   }
 }
 
-//COLLISION DETECTOR... the controller process responds to ¿permission-to-move¿ requests
+//COLLISION DETECTOR... the controller process responds to ï¿½permission-to-moveï¿½ requests
 //                      from attackerAnt and userAnt. The process also checks if an attackerAnt
 //                      has moved to winning positions.
 void controller(chanend fromAttacker, chanend fromUser) {
-  unsigned int lastReportedUserAntPosition = 11;      //position last reported by userAnt
+  unsigned int lastReportedUserAntPosition = 11;      //position last reported by u serAnt
   unsigned int lastReportedAttackerAntPosition = 5;   //position last reported by attackerAnt
   unsigned int attempt = 0;                           //incoming data from ants
   int gameEnded = 0;                                  //indicates if game is over
@@ -160,19 +177,33 @@ void controller(chanend fromAttacker, chanend fromUser) {
   while (!gameEnded) {
     select {
       case fromAttacker :> attempt:
+          if (attempt == lastReportedUserAntPosition) fromAttacker <: 0;
+          else {
+              fromAttacker <: 1;
+              lastReportedAttackerAntPosition = attempt;
+          }
+          if (lastReportedAttackerAntPosition >= 8 || lastReportedAttackerAntPosition <= 14) {
+              gameEnded++;
+              printf("Defender lost, gg scrub\n");
+          }
       /////////////////////////////////////////////////////////////
       //
       // !!! place your code here to give permission/deny attacker move or to end game
       //
       /////////////////////////////////////////////////////////////
-        break;
+          break;
       case fromUser :> attempt:
+          if (attempt == lastReportedAttackerAntPosition) fromAttacker <: 0;
+          else {
+              fromAttacker <: 1;
+              lastReportedUserAntPosition = attempt;
+          }
       /////////////////////////////////////////////////////////////
       //
       // !!! place your code here to give permission/deny user move
       //
       /////////////////////////////////////////////////////////////
-        break;
+          break;
     }
   }
 }
