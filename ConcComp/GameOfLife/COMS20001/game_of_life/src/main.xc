@@ -79,21 +79,30 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
   uchar val[IMWD][IMHT];
   uchar val2[IMWD][IMHT];
   int count = 0;
-
   //Starting up and wait for tilting of the xCore-200 Explorer
   printf( "ProcessImage: Start, size = %dx%d\n", IMHT, IMWD );
   printf( "Waiting for Board Tilt...\n" );
   fromAcc :> int value;
-
+  timer t;
+  unsigned int start, startRound, endRound, end;
+  t :> start;
   //Read in and do something with your image values..
   //This just inverts every pixel, but you should
   //change the image according to the "Game of Life"
-  printf( "Processing...\n" );
   for (int y = 0; y < IMHT; y++) {
-      for (int x = 0; x < IMWD; x++) {
-          c_in :> val[x][y];
-      }
+        for (int x = 0; x < IMWD; x++) {
+            c_in :> val[x][y];
+        }
   }
+  for (int h = 0; h < 34; h++) {
+  printf( "Processing...\n" );
+  if (h > 0) printf("Prev round took %f secs \n", (double)(endRound - startRound)/100000000);
+  t :> startRound;
+//  for (int y = 0; y < IMHT; y++) {
+//      for (int x = 0; x < IMWD; x++) {
+//          c_in :> val[x][y];
+//      }
+//  }
   for (int y = 0; y < IMHT; y++) {
        for (int x = 0; x < IMWD; x++) {
            if (val[mod(x-1, IMWD)][y] == 0xFF) count++;
@@ -111,9 +120,17 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
            count = 0;
        }
    }
+  for( int y = 0; y < IMHT; y++ ) {   //go through all lines
+       for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
+         val[x][y] = val2[x][y];
+       }
+     }
+  t :> endRound;
+  }
    for( int y = 0; y < IMHT; y++ ) {   //go through all lines
      for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
        c_out <: (uchar)( val2[x][y] ^ 0xFF ); //send some modified pixel out
+       val[x][y] = val2[x][y];
      }
    }
 //  for( int y = 0; y < IMHT; y++ ) {   //go through all lines
@@ -122,7 +139,8 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
 //      c_out <: (uchar)( val ^ 0xFF ); //send some modified pixel out
 //    }
 //  }
-  printf( "\nOne processing round completed...\n" );
+  t :> end;
+  printf( "\nOne processing round completed... Took %d secs\n", (end - start)/100000000);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
