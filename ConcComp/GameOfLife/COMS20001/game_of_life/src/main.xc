@@ -120,7 +120,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
   for (int y = 0; y < IMHT; y++) {
       for (int x = 0; x < IMWD; x++) {
 //          c_in :> read;
-          val[(int)floor(x/8)][(int)floor(y/8)] |= read << ((8 - (x + 1)) % 8); //Loads bits into character array
+          val[(int)floor(x/8)][(int)floor(y/8)] |= read << (mod((8 - (x + 1)), 8)); //Loads bits into character array
       }
   }
   for (int y = 0; y < IMHT; y++) {
@@ -134,9 +134,9 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
              if (checkNeighbourBit(x-1, y+1, val)) count++;
              if (checkNeighbourBit(x+1, y-1, val)) count++;
              if (checkNeighbourBit(x, y, val)) {
-                 if (count > 3 || count < 2) val2[(int)floor(x/8)][(int)floor(y/8)] ^= (1 << ((8 - (x + 1)) % 8)); //Togles live bit to dead
-             } else if (count == 3) val2[(int)floor(x/8)][(int)floor(y/8)] ^= (1 << ((8 - (x + 1)) % 8));
-             else val2[(int)floor(x/8)][(int)floor(y/8)] |= ((val[(int)floor(x/8)][(int)floor(y/8)] >> ((8 - (x + 1)) % 8)) & 1) << ((8 - (x + 1)) % 8);
+                 if (count > 3 || count < 2) val2[(int)floor(x/8)][(int)floor(y/8)] ^= (1 << (mod((8 - (x + 1)),8))); //Togles live bit to dead
+             } else if (count == 3) val2[(int)floor(x/8)][(int)floor(y/8)] ^= (1 << (mod((8 - (x + 1)), 8)));
+             else val2[(int)floor(x/8)][(int)floor(y/8)] |= ((val[(int)floor(x/8)][(int)floor(y/8)] >> (mod((8 - (x + 1)), 8))) & 1) << (mod((8 - (x + 1)), 8));
              count = 0;
          }
      }
@@ -159,7 +159,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
 //   }
    for( int y = 0; y < IMHT; y++ ) {   //go through all lines
      for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
-       c_out <: (uchar)(((val2[(int)(floor(x/8))][(int)(floor(y/8))] ^ 0xFF ) >> ((8 - (x+1)) % 8)) & 1); //send some modified pixel out
+       c_out <: (uchar)(((val2[(int)(floor(x/8))][(int)(floor(y/8))] ^ 0xFF ) >> (mod((8 - (x+1)), 8))) & 1); //send some modified pixel out
      }
    }
 //  for( int y = 0; y < IMHT; y++ ) {   //go through all lines
