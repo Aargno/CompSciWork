@@ -3,6 +3,7 @@
 
 #include <platform.h>
 #include <xs1.h>
+#include <math.h>
 #include <stdio.h>
 #include "pgmIO.h"
 #include "i2c.h"
@@ -48,7 +49,8 @@ void DataInStream(char infname[], chanend c_out)
   for( int y = 0; y < IMHT; y++ ) {
     _readinline( line, IMWD );
     for( int x = 0; x < IMWD; x++ ) {
-      c_out <: line[ x ];
+        if (line[x] == 0xFF) c_out <: 1;
+        else c_out <: 0;
       printf( "-%4.1d ", line[ x ] ); //show image values
     }
     printf( "\n" );
@@ -60,11 +62,34 @@ void DataInStream(char infname[], chanend c_out)
   return;
 }
 
+void emptyChar(uchar val[IMWD/8][IMHT/8]) {
+    for (int y = 0; y < IMHT/8; y++) for (int x = 0; x < IMWD/8; x++) val[x][y] = 0;
+}
+
+uchar oneBitChangeMask(int x, int bit) {
+    uchar result = 0xFF;
+    result ^= (bit ^ 1) << ((8 - (x + 1)) % 8);
+}
+
 int mod(int x, int m) {
 //    if (x == m) x = 0;
     if (x == -1) x = m-1;
 //    while (x < 0) x += m;
     return x % m;
+}
+
+/**
+ * Function to check if given bit is live or dead.
+ */
+int checkNeighbourBit(int x, int y, uchar check[IMWD/8][IMHT/8]) {
+    int arrayAddressX = mod(x, IMWD);
+    int arrayAddressY = mod(y, IMHT);
+    x = mod(x, 8);
+    //What it should do:
+    //Take the correct position array, we get this above, and right shift the character by the correct ammount of bits
+    //for checking. -1 should give x = 7 which gives a shift of 8 - x+1 = 0, while say 16 should give x=0 and
+    //a shift of 8 - x+1 = 7 to check the leftmost bit in the character (we consider this the first bit)
+    return (((check[(int)floor(arrayAddressX/8)][(int)floor(arrayAddressY/8)] >> ((8 - (x + 1)) % 8)) & 1) == 1);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -76,10 +101,13 @@ int mod(int x, int m) {
 /////////////////////////////////////////////////////////////////////////////////////////
 void distributor(chanend c_in, chanend c_out, chanend fromAcc)
 {
-  uchar val[IMWD][IMHT];
-  uchar val2[IMWD][IMHT];
+  uchar read;
+  uchar val[IMWD/8][IMHT/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
+  uchar val2[IMWD/8][IMHT/8];
   int count = 0;
 
+  emptyChar(val);//Set characters to all 0 bit
+  emptyChar(val2);
   //Starting up and wait for tilting of the xCore-200 Explorer
   printf( "ProcessImage: Start, size = %dx%d\n", IMHT, IMWD );
   printf( "Waiting for Board Tilt...\n" );
@@ -91,29 +119,47 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
   printf( "Processing...\n" );
   for (int y = 0; y < IMHT; y++) {
       for (int x = 0; x < IMWD; x++) {
-          c_in :> val[x][y];
+//          c_in :> read;
+          val[(int)floor(x/8)][(int)floor(y/8)] |= read << ((8 - (x + 1)) % 8); //Loads bits into character array
       }
   }
   for (int y = 0; y < IMHT; y++) {
-       for (int x = 0; x < IMWD; x++) {
-           if (val[mod(x-1, IMWD)][y] == 0xFF) count++;
-           if (val[mod(x+1, IMWD)][y] == 0xFF) count++;
-           if (val[x][mod(y-1, IMHT)] == 0xFF) count++;
-           if (val[x][mod(y+1, IMHT)] == 0xFF) count++;
-           if (val[mod(x-1, IMWD)][mod(y-1, IMHT)] == 0xFF) count++;
-           if (val[mod(x+1, IMWD)][mod(y+1, IMHT)] == 0xFF) count++;
-           if (val[mod(x-1, IMWD)][mod(y+1, IMHT)] == 0xFF) count++;
-           if (val[mod(x+1, IMWD)][mod(y-1, IMHT)] == 0xFF) count++;
-           if (val[x][y] == 0xFF) {
-               if (count > 3 || count < 2) val2[x][y] = 0;
-           } else if (count == 3) val2[x][y] = 0xFF;
-           else val2[x][y] = val[x][y];
-           count = 0;
-       }
-   }
+         for (int x = 0; x < IMWD; x++) {
+             if (checkNeighbourBit(x-1, y, val)) count++;
+             if (checkNeighbourBit(x+1, y, val)) count++;
+             if (checkNeighbourBit(x, y-1, val)) count++;
+             if (checkNeighbourBit(x, y+1, val)) count++;
+             if (checkNeighbourBit(x-1, y-1, val)) count++;
+             if (checkNeighbourBit(x+1, y+1, val)) count++;
+             if (checkNeighbourBit(x-1, y+1, val)) count++;
+             if (checkNeighbourBit(x+1, y-1, val)) count++;
+             if (checkNeighbourBit(x, y, val)) {
+                 if (count > 3 || count < 2) val2[(int)floor(x/8)][(int)floor(y/8)] ^= (1 << ((8 - (x + 1)) % 8)); //Togles live bit to dead
+             } else if (count == 3) val2[(int)floor(x/8)][(int)floor(y/8)] ^= (1 << ((8 - (x + 1)) % 8));
+             else val2[(int)floor(x/8)][(int)floor(y/8)] |= ((val[(int)floor(x/8)][(int)floor(y/8)] >> ((8 - (x + 1)) % 8)) & 1) << ((8 - (x + 1)) % 8);
+             count = 0;
+         }
+     }
+//  for (int y = 0; y < IMHT; y++) {
+//       for (int x = 0; x < IMWD; x++) {
+//           if (val[mod(x-1, IMWD)][y] == 0xFF) count++;
+//           if (val[mod(x+1, IMWD)][y] == 0xFF) count++;
+//           if (val[x][mod(y-1, IMHT)] == 0xFF) count++;
+//           if (val[x][mod(y+1, IMHT)] == 0xFF) count++;
+//           if (val[mod(x-1, IMWD)][mod(y-1, IMHT)] == 0xFF) count++;
+//           if (val[mod(x+1, IMWD)][mod(y+1, IMHT)] == 0xFF) count++;
+//           if (val[mod(x-1, IMWD)][mod(y+1, IMHT)] == 0xFF) count++;
+//           if (val[mod(x+1, IMWD)][mod(y-1, IMHT)] == 0xFF) count++;
+//           if (val[x][y] == 0xFF) {
+//               if (count > 3 || count < 2) val2[x][y] = 0;
+//           } else if (count == 3) val2[x][y] = 0xFF;
+//           else val2[x][y] = val[x][y];
+//           count = 0;
+//       }
+//   }
    for( int y = 0; y < IMHT; y++ ) {   //go through all lines
      for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
-       c_out <: (uchar)( val2[x][y] ^ 0xFF ); //send some modified pixel out
+       c_out <: (uchar)(((val2[(int)(floor(x/8))][(int)(floor(y/8))] ^ 0xFF ) >> ((8 - (x+1)) % 8)) & 1); //send some modified pixel out
      }
    }
 //  for( int y = 0; y < IMHT; y++ ) {   //go through all lines
@@ -132,6 +178,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
 /////////////////////////////////////////////////////////////////////////////////////////
 void DataOutStream(char outfname[], chanend c_in)
 {
+  int inc;
   int res;
   uchar line[ IMWD ];
 
@@ -146,7 +193,9 @@ void DataOutStream(char outfname[], chanend c_in)
   //Compile each line of the image and write the image line-by-line
   for( int y = 0; y < IMHT; y++ ) {
     for( int x = 0; x < IMWD; x++ ) {
-      c_in :> line[ x ];
+      c_in :> inc;
+      if (inc == 1) line[x] = 0xFF;
+      else line[x] = 0x00;
     }
     _writeoutline( line, IMWD );
     printf( "DataOutStream: Line written...\n" );
