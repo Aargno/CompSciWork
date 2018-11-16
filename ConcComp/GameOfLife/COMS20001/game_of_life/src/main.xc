@@ -62,8 +62,8 @@ void DataInStream(char infname[], chanend c_out)
   return;
 }
 
-void emptyChar(uchar val[IMWD/8][IMHT/8]) {
-    for (int y = 0; y < IMHT/8; y++) for (int x = 0; x < IMWD/8; x++) val[x][y] = 0;
+void emptyChar(uchar val[IMWD/8][IMHT]) {
+    for (int y = 0; y < IMHT; y++) for (int x = 0; x < IMWD/8; x++) val[x][y] = 0x00;
 }
 
 uchar oneBitChangeMask(int x, int bit) {
@@ -81,7 +81,7 @@ int mod(int x, int m) {
 /**
  * Function to check if given bit is live or dead.
  */
-int checkNeighbourBit(int x, int y, uchar check[IMWD/8][IMHT/8]) {
+int checkNeighbourBit(int x, int y, uchar check[IMWD/8][IMHT]) {
     int arrayAddressX = mod(x, IMWD);
     int arrayAddressY = mod(y, IMHT);
     x = mod(x, 8);
@@ -89,7 +89,7 @@ int checkNeighbourBit(int x, int y, uchar check[IMWD/8][IMHT/8]) {
     //Take the correct position array, we get this above, and right shift the character by the correct ammount of bits
     //for checking. -1 should give x = 7 which gives a shift of 8 - x+1 = 0, while say 16 should give x=0 and
     //a shift of 8 - x+1 = 7 to check the leftmost bit in the character (we consider this the first bit)
-    return (((check[(int)floor(arrayAddressX/8)][(int)floor(arrayAddressY/8)] >> ((8 - (x + 1)) % 8)) & 1) == 1);
+    return (((check[(int)floor(arrayAddressX/8)][arrayAddressY] >> (mod((8 - (x + 1)), 8))) & 1) == 1);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -101,9 +101,9 @@ int checkNeighbourBit(int x, int y, uchar check[IMWD/8][IMHT/8]) {
 /////////////////////////////////////////////////////////////////////////////////////////
 void distributor(chanend c_in, chanend c_out, chanend fromAcc)
 {
-  uchar read;
-  uchar val[IMWD/8][IMHT/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
-  uchar val2[IMWD/8][IMHT/8];
+  int read;
+  uchar val[IMWD/8][IMHT]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
+  uchar val2[IMWD/8][IMHT];
   int count = 0;
 
   emptyChar(val);//Set characters to all 0 bit
@@ -119,8 +119,8 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
   printf( "Processing...\n" );
   for (int y = 0; y < IMHT; y++) {
       for (int x = 0; x < IMWD; x++) {
-//          c_in :> read;
-          val[(int)floor(x/8)][(int)floor(y/8)] |= read << (mod((8 - (x + 1)), 8)); //Loads bits into character array
+          c_in :> read;
+          val[(int)floor(x/8)][y] |= read << (mod((8 - (x + 1)), 8)); //Loads bits into character array
       }
   }
   for (int y = 0; y < IMHT; y++) {
@@ -133,41 +133,38 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
              if (checkNeighbourBit(x+1, y+1, val)) count++;
              if (checkNeighbourBit(x-1, y+1, val)) count++;
              if (checkNeighbourBit(x+1, y-1, val)) count++;
-             if (checkNeighbourBit(x, y, val)) {
-                 if (count > 3 || count < 2) val2[(int)floor(x/8)][(int)floor(y/8)] ^= (1 << (mod((8 - (x + 1)),8))); //Togles live bit to dead
-             } else if (count == 3) val2[(int)floor(x/8)][(int)floor(y/8)] ^= (1 << (mod((8 - (x + 1)), 8)));
-             else val2[(int)floor(x/8)][(int)floor(y/8)] |= ((val[(int)floor(x/8)][(int)floor(y/8)] >> (mod((8 - (x + 1)), 8))) & 1) << (mod((8 - (x + 1)), 8));
+             if (checkNeighbourBit(x, y, val)) { //Issue is here
+                 if (count > 3 || count < 2) val2[(int)floor(x/8)][y] ^= (1 << (mod((8 - (x + 1)),8))); //Toggles live bit to dead
+             } else if (count == 3) { val2[(int)floor(x/8)][y] ^= (1 << (mod((8 - (x + 1)), 8)));
+             } else val2[(int)floor(x/8)][y] |= ((val[(int)floor(x/8)][y] >> (mod((8 - (x + 1)), 8))) & 1) << (mod((8 - (x + 1)), 8));
              count = 0;
          }
      }
-//  for (int y = 0; y < IMHT; y++) {
-//       for (int x = 0; x < IMWD; x++) {
-//           if (val[mod(x-1, IMWD)][y] == 0xFF) count++;
-//           if (val[mod(x+1, IMWD)][y] == 0xFF) count++;
-//           if (val[x][mod(y-1, IMHT)] == 0xFF) count++;
-//           if (val[x][mod(y+1, IMHT)] == 0xFF) count++;
-//           if (val[mod(x-1, IMWD)][mod(y-1, IMHT)] == 0xFF) count++;
-//           if (val[mod(x+1, IMWD)][mod(y+1, IMHT)] == 0xFF) count++;
-//           if (val[mod(x-1, IMWD)][mod(y+1, IMHT)] == 0xFF) count++;
-//           if (val[mod(x+1, IMWD)][mod(y-1, IMHT)] == 0xFF) count++;
-//           if (val[x][y] == 0xFF) {
-//               if (count > 3 || count < 2) val2[x][y] = 0;
-//           } else if (count == 3) val2[x][y] = 0xFF;
-//           else val2[x][y] = val[x][y];
-//           count = 0;
-//       }
-//   }
-   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
+  for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 2; x++) {
+                for (int i = 0; i < 8; i++) {
+                      printf("%d", !!((val[x][y] << i) & 0x80));
+                  } }
+                  printf("\n");
+
+        }
+  printf("\n");
+  for (int y = 0; y < 15; y++) {
+      for (int x = 0; x < 2; x++) {
+          for (int i = 0; i < 8; i++) {
+                printf("%d", !!((val2[x][y] << i) & 0x80));
+            } }
+            printf("\n");
+
+  }
+   for( int y = 0; y < IMHT; y++ ) {   //go through all lines OR HERE <---------------
      for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
-       c_out <: (uchar)(((val2[(int)(floor(x/8))][(int)(floor(y/8))] ^ 0xFF ) >> (mod((8 - (x+1)), 8))) & 1); //send some modified pixel out
+         if ((uchar)(((val2[(int)(floor(x/8))][y] ^ 0xFF ) >> (mod((8 - (x+1)), 8))) & 1) == 1) c_out <: 1;
+         else c_out <: 0;
+//         printf("%d\n", (uchar)(((val2[(int)(floor(x/8))][y] ^ 0xFF ) >> (mod((8 - (x+1)), 8))) & 1));
+//       c_out <: (uchar)(((val2[(int)(floor(x/8))][(int)(floor(y/8))] ^ 0xFF ) >> (mod((8 - (x+1)), 8))) & 1); //send some modified pixel out
      }
    }
-//  for( int y = 0; y < IMHT; y++ ) {   //go through all lines
-//    for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
-//      c_in :> val;                    //read the pixel value
-//      c_out <: (uchar)( val ^ 0xFF ); //send some modified pixel out
-//    }
-//  }
   printf( "\nOne processing round completed...\n" );
 }
 
