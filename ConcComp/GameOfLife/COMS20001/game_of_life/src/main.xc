@@ -27,6 +27,8 @@ port p_sda = XS1_PORT_1F;
 #define FXOS8700EQ_OUT_Z_MSB 0x5
 #define FXOS8700EQ_OUT_Z_LSB 0x6
 
+int getBit(uchar c, int location);
+
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 // Read Image from PGM file from path infname[] to channel c_out
@@ -74,7 +76,7 @@ uchar oneBitChangeMask(int x, int bit) {
 int mod(int x, int m) {
 //    if (x == m) x = 0;
     if (x == -1) x = m-1;
-//    while (x < 0) x += m;
+    while (x < 0) x += m;
     return x % m;
 }
 
@@ -84,12 +86,37 @@ int mod(int x, int m) {
 int checkNeighbourBit(int x, int y, uchar check[IMWD/8][IMHT]) {
     int arrayAddressX = mod(x, IMWD);
     int arrayAddressY = mod(y, IMHT);
+    int loc = (int)floor(arrayAddressX/8);
     x = mod(x, 8);
     //What it should do:
     //Take the correct position array, we get this above, and right shift the character by the correct ammount of bits
     //for checking. -1 should give x = 7 which gives a shift of 8 - x+1 = 0, while say 16 should give x=0 and
     //a shift of 8 - x+1 = 7 to check the leftmost bit in the character (we consider this the first bit)
-    return (((check[(int)floor(arrayAddressX/8)][arrayAddressY] >> (mod((8 - (x + 1)), 8))) & 1) == 1);
+//    return (((check[(int)floor(arrayAddressX/8)][arrayAddressY] >> (mod((8 - (x + 1)), 8))) & 1) == 1);
+    return getBit(check[loc][arrayAddressY], mod((8 - (x + 1)), 8));
+}
+
+uchar packBit(uchar c, int val, int location) {
+    if (val == 1) c |= 1 << location;
+    else {
+        char d = 0xFF; //More efficient way for ding this?
+        d ^= 1 << location;
+        c &= d;
+    }
+    return c;
+}
+
+//Gets correct bit
+int getBit(uchar c, int location) {
+    int bit = (c >> location) & 1;
+    return bit;
+}
+
+void printBits(uchar c) {
+    for (int i = 7; i >= 0; i--) {
+        int x = (c >> i) & 1;
+        printf("%d ", x);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -105,6 +132,8 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
   uchar val[IMWD/8][IMHT]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
   uchar val2[IMWD/8][IMHT];
   int count = 0;
+  int loc;
+  int liveCount = 0;
 
   emptyChar(val);//Set characters to all 0 bit
   emptyChar(val2);
@@ -117,11 +146,12 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
   //This just inverts every pixel, but you should
   //change the image according to the "Game of Life"
   printf( "Processing...\n" );
-  for (int y = 0; y < IMHT; y++) {
-      for (int x = 0; x < IMWD; x++) {
-          c_in :> read;
-          val[(int)floor(x/8)][y] |= read << (mod((8 - (x + 1)), 8)); //Loads bits into character array
-      }
+  for (int y = 0; y < IMHT; y++) { //Works
+          for (int i = 0; i < (int)ceil(IMWD/8); i++)
+              for (int x = 7; x >= 0; x--) {
+                  c_in :> read;
+                  val[i][y] = packBit(val[i][y], read, x);
+              }
   }
   for (int y = 0; y < IMHT; y++) {
          for (int x = 0; x < IMWD; x++) {
@@ -133,39 +163,32 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
              if (checkNeighbourBit(x+1, y+1, val)) count++;
              if (checkNeighbourBit(x-1, y+1, val)) count++;
              if (checkNeighbourBit(x+1, y-1, val)) count++;
+             loc = (int)floor(x/8);
              if (checkNeighbourBit(x, y, val)) { //Issue is here
-                 if (count > 3 || count < 2) val2[(int)floor(x/8)][y] ^= (1 << (mod((8 - (x + 1)),8))); //Toggles live bit to dead
-             } else if (count == 3) { val2[(int)floor(x/8)][y] ^= (1 << (mod((8 - (x + 1)), 8)));
-             } else val2[(int)floor(x/8)][y] |= ((val[(int)floor(x/8)][y] >> (mod((8 - (x + 1)), 8))) & 1) << (mod((8 - (x + 1)), 8));
+                 printf("%d\n", count);
+                 if (count > 3 || count < 2) val2[loc][y] = packBit(val2[loc][y], 0, mod((8 - (x + 1)), 8));
+                 else val2[loc][y] = packBit(val2[loc][y], 1, mod((8 - (x + 1)), 8));
+             } else if (count == 3) { val2[loc][y] = packBit(val2[loc][y], 1, mod((8 - (x + 1)),8));
+             } else val2[loc][y] = packBit(val2[loc][y], getBit(val[loc][y], mod((8 - (x + 1)), 8)), mod((8 - (x + 1)), 8));
              count = 0;
          }
      }
-  for (int y = 0; y < 16; y++) {
-            for (int x = 0; x < 2; x++) {
-                for (int i = 0; i < 8; i++) {
-                      printf("%d", !!((val[x][y] << i) & 0x80));
-                  } }
-                  printf("\n");
-
-        }
-  printf("\n");
-  for (int y = 0; y < 15; y++) {
-      for (int x = 0; x < 2; x++) {
-          for (int i = 0; i < 8; i++) {
-                printf("%d", !!((val2[x][y] << i) & 0x80));
-            } }
-            printf("\n");
-
-  }
-   for( int y = 0; y < IMHT; y++ ) {   //go through all lines OR HERE <---------------
+   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
      for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
-         if ((uchar)(((val2[(int)(floor(x/8))][y] ^ 0xFF ) >> (mod((8 - (x+1)), 8))) & 1) == 1) c_out <: 1;
+         if (getBit(val2[(int)(floor(x/8))][y], mod((8 - (x+1)), 8)) == 1) c_out <: 1;
          else c_out <: 0;
-//         printf("%d\n", (uchar)(((val2[(int)(floor(x/8))][y] ^ 0xFF ) >> (mod((8 - (x+1)), 8))) & 1));
-//       c_out <: (uchar)(((val2[(int)(floor(x/8))][(int)(floor(y/8))] ^ 0xFF ) >> (mod((8 - (x+1)), 8))) & 1); //send some modified pixel out
      }
    }
-  printf( "\nOne processing round completed...\n" );
+   for (int y = 0; y < IMHT; y++) {
+           for (int i = 0; i < (int)ceil(IMWD/8); i++) printBits(val[i][y]);
+           printf("\n");
+       }
+   printf("Step\n");
+   for (int y = 0; y < IMHT; y++) {
+              for (int i = 0; i < (int)ceil(IMWD/8); i++) printBits(val2[i][y]);
+              printf("\n");
+          }
+  printf( "\nOne processing round completed...\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
