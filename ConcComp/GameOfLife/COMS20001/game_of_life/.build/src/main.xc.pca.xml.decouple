@@ -26,6 +26,7 @@
 <fDef name="emptyChar" global="true" noreturn="false" doNotSpecialize="false" numParams="1"/>
 <fDef name="erfcl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="erfl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
+<fDef name="exp" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="1"/>
 <fDef name="exp2l" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="expl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="expm1l" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
@@ -46,6 +47,7 @@
 <fDef name="lgammal" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="llrintl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="llroundl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
+<fDef name="load" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="1"/>
 <fDef name="log10l" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="log1pl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="log2" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
@@ -82,6 +84,7 @@
 <fDef name="remquol" global="true" noreturn="false" doNotSpecialize="true" numParams="3"/>
 <fDef name="rintl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="roundl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
+<fDef name="row" global="true" noreturn="false" doNotSpecialize="false" numParams="2"/>
 <fDef name="scalblnl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="scalbnl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="send_stop_bit" global="true" interface="i2c_master_async_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
@@ -107,6 +110,7 @@
 <fDef name="write_reg16" global="true" interface="i2c_master_if" noreturn="false" doNotSpecialize="true" numParams="4"/>
 <fDef name="write_reg16_addr8" global="true" interface="i2c_master_if" noreturn="false" doNotSpecialize="true" numParams="4"/>
 <fDef name="write_reg8_addr16" global="true" interface="i2c_master_if" noreturn="false" doNotSpecialize="true" numParams="4"/>
+<fDef name="zero" global="true" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fCall name="delay_ticks_longlong" global="true" numArgs="1">
   <arg num="0">
     <values>
@@ -1061,12 +1065,12 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1090,7 +1094,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1101,13 +1105,6 @@
     </values>
   </arg>
   <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="1">
-  <arg num="0">
     <values>
       <value type="unknown"/>
     </values>
@@ -1130,7 +1127,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1142,7 +1139,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1223,12 +1220,12 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1249,7 +1246,7 @@
 <fCall name="ceil" global="true" numArgs="1">
   <arg num="0">
     <values>
-      <value type="intval"><intval isSigned="true" val="2"/></value>
+      <value type="intval"><intval isSigned="true" val="64"/></value>
     </values>
   </arg>
 </fCall>
@@ -1425,18 +1422,6 @@
     </values>
   </arg>
   <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
     <values>
       <value type="unknown"/>
     </values>
@@ -1613,57 +1598,18 @@
     </values>
   </arg>
 </fCall>
-<fCall name="ceil" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="intval"><intval isSigned="true" val="2"/></value>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printBits" global="true" numArgs="1">
+<fCall name="printf" global="true" numArgs="3">
   <arg num="0">
     <values>
       <value type="unknown"/>
     </values>
   </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="1">
-  <arg num="0">
+  <arg num="1">
     <values>
       <value type="unknown"/>
     </values>
   </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="ceil" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="intval"><intval isSigned="true" val="2"/></value>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printBits" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="1">
-  <arg num="0">
+  <arg num="2">
     <values>
       <value type="unknown"/>
     </values>
@@ -1684,12 +1630,12 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1713,7 +1659,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>

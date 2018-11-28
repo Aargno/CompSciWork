@@ -8,8 +8,13 @@
 #include "pgmIO.h"
 #include "i2c.h"
 
-#define  IMHT 16                  //image height
-#define  IMWD 16                  //image width
+#define  IMHT 512                  //image height
+#define  IMWD 512                  //image width
+
+typedef interface i {
+    void load(int x);
+    void exp(int x);
+} i;
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
@@ -26,6 +31,9 @@ port p_sda = XS1_PORT_1F;
 #define FXOS8700EQ_OUT_Y_LSB 0x4
 #define FXOS8700EQ_OUT_Z_MSB 0x5
 #define FXOS8700EQ_OUT_Z_LSB 0x6
+
+char infname[] = "test.pgm";     //put your input image path here
+char outfname[] = "testout.pgm"; //put your output image path here
 
 int getBit(uchar c, int location);
 
@@ -53,9 +61,10 @@ void DataInStream(char infname[], chanend c_out)
     for( int x = 0; x < IMWD; x++ ) {
         if (line[x] == 0xFF) c_out <: 1;
         else c_out <: 0;
-      printf( "-%4.1d ", line[ x ] ); //show image values
+//      printf( "-%4.1d ", line[ x ] ); //show image values
     }
-    printf( "\n" );
+    printf("%d\n", y);
+//    printf( "\n" );
   }
 
   //Close PGM image file
@@ -64,8 +73,8 @@ void DataInStream(char infname[], chanend c_out)
   return;
 }
 
-void emptyChar(uchar val[IMWD/8][IMHT]) {
-    for (int y = 0; y < IMHT; y++) for (int x = 0; x < IMWD/8; x++) val[x][y] = 0x00;
+void emptyChar(uchar val[IMHT][IMWD/8]) {
+    for (int y = 0; y < IMHT; y++) for (int x = 0; x < IMWD/8; x++) val[y][x] = 0x00;
 }
 
 uchar oneBitChangeMask(int x, int bit) {
@@ -83,7 +92,7 @@ int mod(int x, int m) {
 /**
  * Function to check if given bit is live or dead.
  */
-int checkNeighbourBit(int x, int y, uchar check[IMWD/8][IMHT]) {
+int checkNeighbourBit(int x, int y, uchar check[IMHT][IMWD/8]) {
     int arrayAddressX = mod(x, IMWD);
     int arrayAddressY = mod(y, IMHT);
     int loc = (int)floor(arrayAddressX/8);
@@ -92,8 +101,7 @@ int checkNeighbourBit(int x, int y, uchar check[IMWD/8][IMHT]) {
     //Take the correct position array, we get this above, and right shift the character by the correct ammount of bits
     //for checking. -1 should give x = 7 which gives a shift of 8 - x+1 = 0, while say 16 should give x=0 and
     //a shift of 8 - x+1 = 7 to check the leftmost bit in the character (we consider this the first bit)
-//    return (((check[(int)floor(arrayAddressX/8)][arrayAddressY] >> (mod((8 - (x + 1)), 8))) & 1) == 1);
-    return getBit(check[loc][arrayAddressY], mod((8 - (x + 1)), 8));
+    return getBit(check[arrayAddressY][loc], mod((8 - (x + 1)), 8));
 }
 
 uchar packBit(uchar c, int val, int location) {
@@ -129,11 +137,12 @@ void printBits(uchar c) {
 void distributor(chanend c_in, chanend c_out, chanend fromAcc)
 {
   int read;
-  uchar val[IMWD/8][IMHT]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
-  uchar val2[IMWD/8][IMHT];
+  uchar val[IMHT][IMWD/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
+  uchar val2[IMHT][IMWD/8];
   int count = 0;
   int loc;
-  int liveCount = 0;
+  timer t;
+  unsigned int startRound, endRound, start, end;
 
   emptyChar(val);//Set characters to all 0 bit
   emptyChar(val2);
@@ -146,13 +155,15 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
   //This just inverts every pixel, but you should
   //change the image according to the "Game of Life"
   printf( "Processing...\n" );
+  t :> start;
   for (int y = 0; y < IMHT; y++) { //Works
           for (int i = 0; i < (int)ceil(IMWD/8); i++)
               for (int x = 7; x >= 0; x--) {
                   c_in :> read;
-                  val[i][y] = packBit(val[i][y], read, x);
+                  val[y][i] = packBit(val[y][i], read, x);
               }
   }
+  t :> startRound;
   for (int y = 0; y < IMHT; y++) {
          for (int x = 0; x < IMWD; x++) {
              if (checkNeighbourBit(x-1, y, val)) count++;
@@ -165,30 +176,26 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc)
              if (checkNeighbourBit(x+1, y-1, val)) count++;
              loc = (int)floor(x/8);
              if (checkNeighbourBit(x, y, val)) { //Issue is here
-                 printf("%d\n", count);
-                 if (count > 3 || count < 2) val2[loc][y] = packBit(val2[loc][y], 0, mod((8 - (x + 1)), 8));
-                 else val2[loc][y] = packBit(val2[loc][y], 1, mod((8 - (x + 1)), 8));
-             } else if (count == 3) { val2[loc][y] = packBit(val2[loc][y], 1, mod((8 - (x + 1)),8));
-             } else val2[loc][y] = packBit(val2[loc][y], getBit(val[loc][y], mod((8 - (x + 1)), 8)), mod((8 - (x + 1)), 8));
+                 if (count > 3 || count < 2) val2[y][loc] = packBit(val2[y][loc], 0, mod((8 - (x + 1)), 8));
+                 else val2[y][loc] = packBit(val2[y][loc], 1, mod((8 - (x + 1)), 8));
+             } else if (count == 3) { val2[y][loc] = packBit(val2[y][loc], 1, mod((8 - (x + 1)),8));
+             } else val2[y][loc] = packBit(val2[y][loc], getBit(val[y][loc], mod((8 - (x + 1)), 8)), mod((8 - (x + 1)), 8));
              count = 0;
          }
      }
+  t :> endRound;
    for( int y = 0; y < IMHT; y++ ) {   //go through all lines
      for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
-         if (getBit(val2[(int)(floor(x/8))][y], mod((8 - (x+1)), 8)) == 1) c_out <: 1;
+         if (getBit(val2[y][(int)(floor(x/8))], mod((8 - (x+1)), 8)) == 1) c_out <: 1;
          else c_out <: 0;
      }
    }
-   for (int y = 0; y < IMHT; y++) {
-           for (int i = 0; i < (int)ceil(IMWD/8); i++) printBits(val[i][y]);
-           printf("\n");
-       }
-   printf("Step\n");
-   for (int y = 0; y < IMHT; y++) {
-              for (int i = 0; i < (int)ceil(IMWD/8); i++) printBits(val2[i][y]);
-              printf("\n");
-          }
-  printf( "\nOne processing round completed...\n");
+  t :> end;
+  printf( "\nOne processing round completed... Took %f secs Processing %f secs\n", (float)(end - start)/100000000, (float)(endRound - startRound)/100000000);
+}
+
+void row(chanend c_up, chanend c_down/*, uchar val[IMHT][IMWD/8]*/) {
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -270,6 +277,10 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
   }
 }
 
+int zero() {
+    return 15;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 // Orchestrate concurrent system and start up all threads
@@ -279,10 +290,10 @@ int main(void) {
 
 i2c_master_if i2c[1];               //interface to orientation
 
-char infname[] = "test.pgm";     //put your input image path here
+char infname[] = "512x512.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 chan c_inIO, c_outIO, c_control;    //extend your channel definitions here
-
+//chan c[16];
 par {
     i2c_master(i2c, 1, p_scl, p_sda, 10);   //server thread providing orientation data
     orientation(i2c[0],c_control);        //client thread reading orientation data
@@ -290,6 +301,17 @@ par {
     DataOutStream(outfname, c_outIO);       //thread to write out a PGM image
     distributor(c_inIO, c_outIO, c_control);//thread to coordinate work on image
   }
+//par {
+//    on tile[0] : i2c_master(i2c, 1, p_scl, p_sda, 10);   //server thread providing orientation data
+//    on tile[0] : orientation(i2c[0],c_control);        //client thread reading orientation data
+//    on tile[1] : DataInStream(infname, c_inIO);          //thread to read in a PGM image
+//    on tile[1] : DataOutStream(outfname, c_outIO);       //thread to write out a PGM image
+//    on tile[0] : distributor(c_inIO, c_outIO, c_control);//thread to coordinate work on image
+//    par (int i = 0; i < 12; i++) {
+//        on tile[i%2] : row(c[i], c[i+1]);
+//    }
+////    on tile[1] : row(c[15], c[0]);
+//  }
 
   return 0;
 }
