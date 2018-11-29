@@ -8,15 +8,15 @@
 #include "pgmIO.h"
 #include "i2c.h"
 
-#define  IMHT 16                 //image height
-#define  IMWD 16                  //image width
+#define  IMHT 512                 //image height
+#define  IMWD 512                 //image width
 
 typedef interface i {
     void load(int x);
     void exp(int x);
 } i;
 
-char infname[] = "test.pgm";     //put your input image path here
+char infname[] = "512x512.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 typedef unsigned char uchar;      //using uchar as shorthand
