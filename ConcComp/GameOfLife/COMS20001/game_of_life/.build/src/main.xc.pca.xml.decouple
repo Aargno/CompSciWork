@@ -1895,7 +1895,7 @@
 </fCall>
 <fCall name="dataReady" global="true" interface="i" numArgs="0">
 </fCall>
-<fCall name="printf" global="true" numArgs="2">
+<fCall name="__builtin_memcpy_xc" global="true" numArgs="3">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -1904,6 +1904,23 @@
   <arg num="1">
     <values>
       <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="intval"><intval isSigned="true" val="2"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
     </values>
   </arg>
 </fCall>
@@ -1936,31 +1953,9 @@
     </values>
   </arg>
 </fCall>
-<fCall name="printf" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
+<fCall name="dataReady" global="true" interface="i" numArgs="0">
 </fCall>
-<fCall name="printf" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="__builtin_memcpy_xc" global="true" numArgs="3">
+<fCall name="_safe_strncpy" global="true" numArgs="3">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -1977,19 +1972,7 @@
     </values>
   </arg>
 </fCall>
-<fCall name="mod" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="2">
+<fCall name="printf" global="true" numArgs="3">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -2000,14 +1983,7 @@
       <value type="unknown"/>
     </values>
   </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
+  <arg num="2">
     <values>
       <value type="unknown"/>
     </values>

@@ -183,8 +183,7 @@ void rowClient(client interface i rowClient, int index) {
 // Currently the function just inverts the image
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServer[noWorkers])
-{
+void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServer[noWorkers]) {
   int read;
   uchar val[IMHT][IMWD/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
   uchar val2[IMHT][IMWD/8];
@@ -207,39 +206,52 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
               }
   }
 
+  for (int i = 0; i < noWorkers; i++) {
+            rowServer[i].dataReady();
+  }
+
   int workerCount = 0;
+  int roundCount = 0;
+  int roundLimit = 13;
   t :> startRound;
-  while (workerCount < noWorkers * 2) {
+  while (roundCount < roundLimit) {
+
+      while (workerCount < noWorkers) {
+
+    //      for (int i = 0; i < noWorkers; i++) {
+    //          rowServer[i].dataReady();
+    //      }
+          [[ordered]]
+          select {
+              case rowServer[int cId].load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
+                  for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
+                      memcpy(&rows[r], &val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
+                  }
+                  break;
+
+              case rowServer[int cId].exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
+
+                    for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
+                        memcpy(&val2[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
+
+                    }
+                  workerCount++;
+                  break;
+          }
+      }
 
       for (int i = 0; i < noWorkers; i++) {
-          rowServer[i].dataReady();
-      }
-      [[ordered]]
-      select {
-          case rowServer[int cId].load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-              printf("rowServer has received load from client %d\n", index);
-              for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
-                  memcpy(&rows[r], &val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
-              }
-              printf("rowServer has finished load from client %d\n", index);
-              break;
-
-          case rowServer[int cId].exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-              printf("rowServer has received exp from client %d\n", index);
-
-                for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
-                    memcpy(&val2[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
-
-                }
-              workerCount++;
-              printf("rowServer has finished exp from client %d\n", index);
-              break;
-
-      }
+                rowServer[i].dataReady();
+             }
+             workerCount = 0;
+             roundCount++;
+             for (int r = 0; r < IMHT; r++) {
+                 strncpy(val[r], val2[r], (IMWD/8));
+             }
 
   }
   t :> endRound;
-  printf( "\nOne processing round completed... Took %f secs\n", (float)(endRound - startRound)/100000000);
+  printf( "\nProcessing %d rounds completed... Took %f secs\n",roundLimit , (float)(endRound - startRound)/100000000);
 
 
   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
@@ -344,13 +356,7 @@ i2c_master_if i2c[1];               //interface to orientation
 
 chan c_inIO, c_outIO, c_control;    //extend your channel definitions here
 interface i rowClientInterface[noWorkers];
-//par {
-//    i2c_master(i2c, 1, p_scl, p_sda, 10);   //server thread providing orientation data
-//    orientation(i2c[0],c_control);        //client thread reading orientation data
-//    DataInStream(infname, c_inIO);          //thread to read in a PGM image
-//    DataOutStream(outfname, c_outIO);       //thread to write out a PGM image
-//    distributor(c_inIO, c_outIO, c_control);//thread to coordinate work on image
-//  }
+
 par {
     on tile[0] : i2c_master(i2c, 1, p_scl, p_sda, 10);   //server thread providing orientation data
     on tile[0] : orientation(i2c[0],c_control);        //client thread reading orientation data
