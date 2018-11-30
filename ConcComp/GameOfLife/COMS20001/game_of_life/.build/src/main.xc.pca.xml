@@ -1955,7 +1955,7 @@
 </fCall>
 <fCall name="dataReady" global="true" interface="i" numArgs="0">
 </fCall>
-<fCall name="_safe_strncpy" global="true" numArgs="3">
+<fCall name="__builtin_memcpy_xc" global="true" numArgs="3">
   <arg num="0">
     <values>
       <value type="unknown"/>

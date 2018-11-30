@@ -21,7 +21,7 @@ typedef interface i {
     [[notification]] slave void dataReady();
 } i;
 
-char infname[] = "test.pgm";     //put your input image path here
+char infname[] = "16x16.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 
@@ -212,15 +212,12 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
 
   int workerCount = 0;
   int roundCount = 0;
-  int roundLimit = 13;
+  int roundLimit = 5;
   t :> startRound;
   while (roundCount < roundLimit) {
 
       while (workerCount < noWorkers) {
 
-    //      for (int i = 0; i < noWorkers; i++) {
-    //          rowServer[i].dataReady();
-    //      }
           [[ordered]]
           select {
               case rowServer[int cId].load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
@@ -246,7 +243,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
              workerCount = 0;
              roundCount++;
              for (int r = 0; r < IMHT; r++) {
-                 strncpy(val[r], val2[r], (IMWD/8));
+                 memcpy(val[r], val2[r], (IMWD/8));
              }
 
   }
