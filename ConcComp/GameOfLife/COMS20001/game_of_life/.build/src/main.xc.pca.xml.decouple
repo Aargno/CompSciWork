@@ -16,18 +16,19 @@
 <fDef name="cbrtl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="ceill" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="checkNeighbourBit" global="true" noreturn="false" doNotSpecialize="false" numParams="3"/>
-<fDef name="checkRows" global="true" noreturn="false" doNotSpecialize="false" numParams="3"/>
+<fDef name="checkNeighbours" global="true" noreturn="false" doNotSpecialize="false" numParams="5"/>
 <fDef name="copysignl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="coshl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="cosl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
+<fDef name="dataReady" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fDef name="delay_microseconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="delay_milliseconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="delay_seconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
-<fDef name="distributor" global="true" noreturn="false" doNotSpecialize="false" numParams="3"/>
+<fDef name="distributor" global="true" noreturn="false" doNotSpecialize="false" numParams="4"/>
 <fDef name="emptyChar" global="true" noreturn="false" doNotSpecialize="false" numParams="1"/>
 <fDef name="erfcl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="erfl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
-<fDef name="exp" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="1"/>
+<fDef name="exp" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="2"/>
 <fDef name="exp2l" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="expl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="expm1l" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
@@ -48,7 +49,7 @@
 <fDef name="lgammal" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="llrintl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="llroundl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
-<fDef name="load" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="1"/>
+<fDef name="load" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="2"/>
 <fDef name="log10l" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="log1pl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="log2" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
@@ -85,6 +86,7 @@
 <fDef name="remquol" global="true" noreturn="false" doNotSpecialize="true" numParams="3"/>
 <fDef name="rintl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="roundl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
+<fDef name="rowClient" global="true" noreturn="true" doNotSpecialize="false" numParams="2"/>
 <fDef name="scalblnl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="scalbnl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="send_stop_bit" global="true" interface="i2c_master_async_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
@@ -110,7 +112,6 @@
 <fDef name="write_reg16" global="true" interface="i2c_master_if" noreturn="false" doNotSpecialize="true" numParams="4"/>
 <fDef name="write_reg16_addr8" global="true" interface="i2c_master_if" noreturn="false" doNotSpecialize="true" numParams="4"/>
 <fDef name="write_reg8_addr16" global="true" interface="i2c_master_if" noreturn="false" doNotSpecialize="true" numParams="4"/>
-<fDef name="zero" global="true" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fCall name="delay_ticks_longlong" global="true" numArgs="1">
   <arg num="0">
     <values>
@@ -1065,12 +1066,12 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
     </values>
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
     </values>
   </arg>
 </fCall>
@@ -1094,19 +1095,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
     </values>
   </arg>
 </fCall>
@@ -1127,7 +1116,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
     </values>
   </arg>
 </fCall>
@@ -1139,7 +1128,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
+      <value type="intval"><intval isSigned="true" val="6"/></value>
     </values>
   </arg>
 </fCall>
@@ -1198,7 +1187,7 @@
     </values>
   </arg>
 </fCall>
-<fCall name="printf" global="true" numArgs="4">
+<fCall name="getBit" global="true" numArgs="2">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -1209,219 +1198,16 @@
       <value type="unknown"/>
     </values>
   </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="3">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
 </fCall>
-<fCall name="emptyChar" global="true" numArgs="1">
+<fCall name="mod" global="true" numArgs="2">
   <arg num="0">
+    <passThroughArg param="0" caller="checkNeighbours" global="true"/>
     <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="emptyChar" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
     </values>
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="printf" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="ceil" global="true" numArgs="1">
-  <arg num="0">
-    <values>
-      <value type="intval"><intval isSigned="true" val="64"/></value>
-    </values>
-  </arg>
-</fCall>
-<fCall name="packBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
     </values>
   </arg>
 </fCall>
@@ -1432,7 +1218,31 @@
     </values>
   </arg>
 </fCall>
-<fCall name="checkNeighbourBit" global="true" numArgs="3">
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="getBit" global="true" numArgs="2">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -1443,7 +1253,382 @@
       <value type="unknown"/>
     </values>
   </arg>
-  <arg num="2">
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <passThroughArg param="0" caller="checkNeighbours" global="true"/>
+    <values>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="getBit" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="getBit" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="getBit" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <passThroughArg param="1" caller="checkNeighbours" global="true"/>
+    <values>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="getBit" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="getBit" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="getBit" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <passThroughArg param="1" caller="checkNeighbours" global="true"/>
+    <values>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
     <values>
       <value type="unknown"/>
     </values>
@@ -1466,30 +1651,8 @@
     </values>
   </arg>
 </fCall>
-<fCall name="mod" global="true" numArgs="2">
+<fCall name="floor" global="true" numArgs="1">
   <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="intval"><intval isSigned="true" val="8"/></value>
-    </values>
-  </arg>
-</fCall>
-<fCall name="packBit" global="true" numArgs="3">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="intval"><intval isSigned="true" val="1"/></value>
-    </values>
-  </arg>
-  <arg num="2">
     <values>
       <value type="unknown"/>
     </values>
@@ -1507,32 +1670,10 @@
     </values>
   </arg>
 </fCall>
-<fCall name="packBit" global="true" numArgs="3">
+<fCall name="floor" global="true" numArgs="1">
   <arg num="0">
     <values>
       <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="intval"><intval isSigned="true" val="1"/></value>
-    </values>
-  </arg>
-  <arg num="2">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="mod" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="intval"><intval isSigned="true" val="8"/></value>
     </values>
   </arg>
 </fCall>
@@ -1553,39 +1694,10 @@
     </values>
   </arg>
 </fCall>
-<fCall name="getBit" global="true" numArgs="2">
+<fCall name="floor" global="true" numArgs="1">
   <arg num="0">
     <values>
       <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-</fCall>
-<fCall name="mod" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="intval"><intval isSigned="true" val="8"/></value>
-    </values>
-  </arg>
-</fCall>
-<fCall name="mod" global="true" numArgs="2">
-  <arg num="0">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="1">
-    <values>
-      <value type="intval"><intval isSigned="true" val="8"/></value>
     </values>
   </arg>
 </fCall>
@@ -1620,7 +1732,74 @@
     </values>
   </arg>
 </fCall>
-<fCall name="printf" global="true" numArgs="3">
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="packBit" global="true" numArgs="3">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="1"/></value>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="load" global="true" interface="i" numArgs="2">
+  <arg num="0">
+    <passThroughArg param="1" caller="rowClient" global="true"/>
+    <values>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="checkNeighbours" global="true" numArgs="5">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -1634,6 +1813,234 @@
   <arg num="2">
     <values>
       <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="3">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="4">
+    <passThroughArg param="1" caller="rowClient" global="true"/>
+    <values>
+    </values>
+  </arg>
+</fCall>
+<fCall name="exp" global="true" interface="i" numArgs="2">
+  <arg num="0">
+    <passThroughArg param="1" caller="rowClient" global="true"/>
+    <values>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="emptyChar" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="emptyChar" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="printf" global="true" numArgs="3">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="ceil" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="2"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="packBit" global="true" numArgs="3">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="dataReady" global="true" interface="i" numArgs="0">
+</fCall>
+<fCall name="printf" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="__builtin_memcpy_xc" global="true" numArgs="3">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="intval"><intval isSigned="true" val="2"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="printf" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="printf" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="__builtin_memcpy_xc" global="true" numArgs="3">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="intval"><intval isSigned="true" val="2"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="printf" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="printf" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="getBit" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="floor" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="mod" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="8"/></value>
     </values>
   </arg>
 </fCall>
@@ -1652,12 +2059,12 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
     </values>
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
     </values>
   </arg>
 </fCall>
@@ -1681,7 +2088,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="512"/></value>
+      <value type="intval"><intval isSigned="true" val="16"/></value>
     </values>
   </arg>
 </fCall>
@@ -1856,7 +2263,7 @@
     </values>
   </arg>
 </fCall>
-<fCall name="distributor" global="true" numArgs="3" impId="5">
+<fCall name="distributor" global="true" numArgs="4" impId="5">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -1870,74 +2277,107 @@
   <arg num="2">
     <values>
       <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="3">
+    <values>
+      <value type="interface"><interfaceInfo index="0" type="chan" isYielding="false"/><interfaceInfo index="1" type="chan" isYielding="false"/><interfaceInfo index="2" type="chan" isYielding="false"/><interfaceInfo index="3" type="chan" isYielding="false"/><interfaceInfo index="4" type="chan" isYielding="false"/><interfaceInfo index="5" type="chan" isYielding="false"/><interfaceInfo index="6" type="chan" isYielding="false"/><interfaceInfo index="7" type="chan" isYielding="false"/></value>
     </values>
   </arg>
 </fCall>
-<fCall name="checkRows" global="true" numArgs="3" impId="0">
+<fCall name="rowClient" global="true" numArgs="2" impId="0">
   <arg num="0">
     <values>
-      <value type="unknown"/>
+      <value type="interface"><interfaceInfo index="0" type="chan" isYielding="false"/></value>
     </values>
   </arg>
   <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
     <values>
       <value type="intval"><intval isSigned="true" val="0"/></value>
     </values>
   </arg>
 </fCall>
-<fCall name="checkRows" global="true" numArgs="3" impId="0">
+<fCall name="rowClient" global="true" numArgs="2" impId="0">
   <arg num="0">
     <values>
-      <value type="unknown"/>
+      <value type="interface"><interfaceInfo index="1" type="chan" isYielding="false"/></value>
     </values>
   </arg>
   <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
     <values>
       <value type="intval"><intval isSigned="true" val="1"/></value>
     </values>
   </arg>
 </fCall>
-<fCall name="checkRows" global="true" numArgs="3" impId="0">
+<fCall name="rowClient" global="true" numArgs="2" impId="0">
   <arg num="0">
     <values>
-      <value type="unknown"/>
+      <value type="interface"><interfaceInfo index="2" type="chan" isYielding="false"/></value>
     </values>
   </arg>
   <arg num="1">
-    <values>
-      <value type="unknown"/>
-    </values>
-  </arg>
-  <arg num="2">
     <values>
       <value type="intval"><intval isSigned="true" val="2"/></value>
     </values>
   </arg>
 </fCall>
-<fCall name="checkRows" global="true" numArgs="3" impId="6">
+<fCall name="rowClient" global="true" numArgs="2" impId="0">
   <arg num="0">
     <values>
-      <value type="unknown"/>
+      <value type="interface"><interfaceInfo index="3" type="chan" isYielding="false"/></value>
     </values>
   </arg>
   <arg num="1">
     <values>
-      <value type="unknown"/>
+      <value type="intval"><intval isSigned="true" val="3"/></value>
     </values>
   </arg>
-  <arg num="2">
+</fCall>
+<fCall name="rowClient" global="true" numArgs="2" impId="0">
+  <arg num="0">
     <values>
-      <value type="intval"><intval isSigned="true" val="3"/></value>
+      <value type="interface"><interfaceInfo index="4" type="chan" isYielding="false"/></value>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="rowClient" global="true" numArgs="2" impId="0">
+  <arg num="0">
+    <values>
+      <value type="interface"><interfaceInfo index="5" type="chan" isYielding="false"/></value>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="5"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="rowClient" global="true" numArgs="2" impId="0">
+  <arg num="0">
+    <values>
+      <value type="interface"><interfaceInfo index="6" type="chan" isYielding="false"/></value>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="6"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="rowClient" global="true" numArgs="2" impId="0">
+  <arg num="0">
+    <values>
+      <value type="interface"><interfaceInfo index="7" type="chan" isYielding="false"/></value>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="7"/></value>
     </values>
   </arg>
 </fCall>

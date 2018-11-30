@@ -10,19 +10,18 @@
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
-#define  IMHT 512               //image height
-#define  IMWD 512                 //image width
+#define  IMHT 16               //image height
+#define  IMWD 16                 //image width
 #define noWorkers 8             //number of clients
 
 typedef interface i {
+    [[clears_notification]]
     void load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]);
     void exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]);
-//    [[clears_notification]]
-//    int startNewRound();
-//    [[notification]] slave void endOfRound();
+    [[notification]] slave void dataReady();
 } i;
 
-char infname[] = "512x512.pgm";     //put your input image path here
+char infname[] = "test.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 
@@ -170,54 +169,58 @@ void rowClient(client interface i rowClient, int index) {
     int count = 0;
 //    printf("rowClient %d reporting\n", index);
 
-//    while (1) {
-        rowClient.load(index, rows);
-//        for (int r = 0; r < 6; r++) {
-//            printBits(rows[r][0]);
-//            printBits(rows[r][1]);
-//        }
-//
-////        printf("rowClient %d has called load\n", index);
-////        for (int i = 0; i < (IMHT/4 + 2); i++) {
-////            for (int a = 0; a < (IMWD/8); a++) {
-////                c :> rows[i][a];
-////            }
-////        }
-//        //error in checkNeighbourBit- to do with xy coords
-        for (int row = 1; row < (IMHT / noWorkers) + 1; row++) {
-            for (int col = 0; col < IMWD; col++) {
-                count = checkNeighbours(row, col, rows, output, index);
-//                printf("Cell %d, %d has %d live neighbours\n", (index * IMHT / noWorkers - 1 + row), col, count);
-            }
+    while (1) {
+        select {
+            case rowClient.dataReady() :
+                rowClient.load(index, rows);
+        //        for (int r = 0; r < 6; r++) {
+        //            printBits(rows[r][0]);
+        //            printBits(rows[r][1]);
+        //        }
+        //
+        ////        printf("rowClient %d has called load\n", index);
+        ////        for (int i = 0; i < (IMHT/4 + 2); i++) {
+        ////            for (int a = 0; a < (IMWD/8); a++) {
+        ////                c :> rows[i][a];
+        ////            }
+        ////        }
+        //        //error in checkNeighbourBit- to do with xy coords
+                for (int row = 1; row < (IMHT / noWorkers) + 1; row++) {
+                    for (int col = 0; col < IMWD; col++) {
+                        count = checkNeighbours(row, col, rows, output, index);
+        //                printf("Cell %d, %d has %d live neighbours\n", (index * IMHT / noWorkers - 1 + row), col, count);
+                    }
+                }
+        ////        for (int y = 1; y < IMHT/4 + 1; y++) {
+        ////                 for (int x = 0; x < IMWD; x++) {
+        ////                     if (checkNeighbourBit(x-1, y, rows)) count++;
+        ////                     if (checkNeighbourBit(x+1, y, rows)) count++;
+        ////                     if (checkNeighbourBit(x, y-1, rows)) count++;
+        ////                     if (checkNeighbourBit(x, y+1, rows)) count++;
+        ////                     if (checkNeighbourBit(x-1, y-1, rows)) count++;
+        ////                     if (checkNeighbourBit(x+1, y+1, rows)) count++;
+        ////                     if (checkNeighbourBit(x-1, y+1, rows)) count++;
+        ////                     if (checkNeighbourBit(x+1, y-1, rows)) count++;
+        ////                     loc = (int)floor(x/8);
+        ////                     if (checkNeighbourBit(x, y, rows)) {
+        ////                         if (count > 3 || count < 2) output[y][loc] = packBit(output[y][loc], 0, mod((8 - (x + 1)), 8));
+        ////                         else output[y][loc] = packBit(output[y][loc], 1, mod((8 - (x + 1)), 8));
+        ////                     } else if (count == 3) { output[y][loc] = packBit(output[y][loc], 1, mod((8 - (x + 1)),8));
+        ////                     } else output[y][loc] = packBit(output[y][loc], getBit(rows[y][loc], mod((8 - (x + 1)), 8)), mod((8 - (x + 1)), 8));
+        ////
+        ////                     count = 0;
+        ////                 }
+        ////        }
+                rowClient.exp(index, output);
+        //        printf("rowClient %d has called exp\n", index);
+        //        for (int i = 0; i < (IMHT/4 + 2); i++) {
+        //            for (int k = 0; k < IMWD/8; k++) {
+        //                c <: rows[i][k];
+        //            }
+        //        }
+        break;
         }
-////        for (int y = 1; y < IMHT/4 + 1; y++) {
-////                 for (int x = 0; x < IMWD; x++) {
-////                     if (checkNeighbourBit(x-1, y, rows)) count++;
-////                     if (checkNeighbourBit(x+1, y, rows)) count++;
-////                     if (checkNeighbourBit(x, y-1, rows)) count++;
-////                     if (checkNeighbourBit(x, y+1, rows)) count++;
-////                     if (checkNeighbourBit(x-1, y-1, rows)) count++;
-////                     if (checkNeighbourBit(x+1, y+1, rows)) count++;
-////                     if (checkNeighbourBit(x-1, y+1, rows)) count++;
-////                     if (checkNeighbourBit(x+1, y-1, rows)) count++;
-////                     loc = (int)floor(x/8);
-////                     if (checkNeighbourBit(x, y, rows)) {
-////                         if (count > 3 || count < 2) output[y][loc] = packBit(output[y][loc], 0, mod((8 - (x + 1)), 8));
-////                         else output[y][loc] = packBit(output[y][loc], 1, mod((8 - (x + 1)), 8));
-////                     } else if (count == 3) { output[y][loc] = packBit(output[y][loc], 1, mod((8 - (x + 1)),8));
-////                     } else output[y][loc] = packBit(output[y][loc], getBit(rows[y][loc], mod((8 - (x + 1)), 8)), mod((8 - (x + 1)), 8));
-////
-////                     count = 0;
-////                 }
-////        }
-        rowClient.exp(index, output);
-//        printf("rowClient %d has called exp\n", index);
-//        for (int i = 0; i < (IMHT/4 + 2); i++) {
-//            for (int k = 0; k < IMWD/8; k++) {
-//                c <: rows[i][k];
-//            }
-//        }
-//    }
+    }
 }
 
 
@@ -258,7 +261,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
 
   int workerCount = 0;
   t :> startRound;
-  while (workerCount < noWorkers) {
+  while (workerCount < noWorkers * 2) {
 //      printf("DISTRIBUTOR HAS BEGUN WHILE LOOP \n");
 
     //  for (int y = 0; y < IMHT; y++) {
@@ -283,10 +286,13 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
 
 
 //      printf("\n\n");
-
+      for (int i = 0; i < noWorkers; i++) {
+          rowServer[i].dataReady();
+      }
+      [[ordered]]
       select {
           case rowServer[int cId].load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-//              printf("rowServer has received load from client %d\n", index);
+              printf("rowServer has received load from client %d\n", index);
               for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
                   memcpy(&rows[r], &val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
 //                  printf("size of val: %d, ", sizeof val[mod((index * noWorkers - 1 + r), IMHT)]);
@@ -312,11 +318,11 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
 //                      printf("%d client channel sent successfully for char %c at position %d, %d %d\n", index, board[index][i][k], i, k);
 //                  }
 //              }
-//              printf("rowServer has finished load from client %d\n", index);
+              printf("rowServer has finished load from client %d\n", index);
               break;
 
           case rowServer[int cId].exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-//              printf("rowServer has received exp from client %d\n", index);
+              printf("rowServer has received exp from client %d\n", index);
 //              for (int i = 0; i < (IMHT/4 + 2); i++) {
 //                  for (int a = 0; a < (IMWD/8); a++) {
 //                      c[index] :> board[index][i][a];
@@ -335,7 +341,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
                 }
 //              printf("Iterating worker count\n");
               workerCount++;
-//              printf("rowServer has finished exp from client %d\n", index);
+              printf("rowServer has finished exp from client %d\n", index);
               break;
 
       }
@@ -360,7 +366,6 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
            }
          }
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
