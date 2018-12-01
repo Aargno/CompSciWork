@@ -186,12 +186,12 @@ void rowClient(client interface i rowClient, int index) {
 void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServer[noWorkers]) {
   int read;
   uchar val[IMHT][IMWD/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
-  uchar val2[IMHT][IMWD/8];
+//  uchar val2[IMHT][IMWD/8];
   timer t;
   unsigned int startRound, endRound;
 
   emptyChar(val);//Set characters to all 0 bit
-  emptyChar(val2);
+//  emptyChar(val2);
   //Starting up and wait for tilting of the xCore-200 Explorer
   printf( "ProcessImage: Start, size = %dx%d\n", IMHT, IMWD );
 
@@ -212,7 +212,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
 
   int workerCount = 0;
   int roundCount = 0;
-  int roundLimit = 5;
+  int roundLimit = 8;
   t :> startRound;
   while (roundCount < roundLimit) {
 
@@ -221,15 +221,16 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
           [[ordered]]
           select {
               case rowServer[int cId].load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
+//                  printf("%d client called load\n", cId);
                   for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
                       memcpy(&rows[r], &val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
                   }
                   break;
 
               case rowServer[int cId].exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-
+//                    printf("%d client called exp\n", cId);
                     for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
-                        memcpy(&val2[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
+                        memcpy(&val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
 
                     }
                   workerCount++;
@@ -242,9 +243,9 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
              }
              workerCount = 0;
              roundCount++;
-             for (int r = 0; r < IMHT; r++) {
-                 memcpy(val[r], val2[r], (IMWD/8));
-             }
+//             for (int r = 0; r < IMHT; r++) {
+//                 memcpy(val[r], val2[r], (IMWD/8));
+//             }
 
   }
   t :> endRound;
@@ -253,7 +254,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
 
   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
            for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
-               if (getBit(val2[y][(int)(floor(x/8))], mod((8 - (x+1)), 8)) == 1) c_out <: 1;
+               if (getBit(val[y][(int)(floor(x/8))], mod((8 - (x+1)), 8)) == 1) c_out <: 1;
                else c_out <: 0;
            }
          }
