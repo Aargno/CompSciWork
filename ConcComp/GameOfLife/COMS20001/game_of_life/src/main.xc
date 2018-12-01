@@ -185,12 +185,11 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
   // LED state
   unsigned int green_led_state = 0;
   int read;
-  int accRead = 0;
   int processing = 0;
   uchar val[IMHT][IMWD/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
   uchar val2[IMHT][IMWD/8];
   timer t;
-  unsigned int startRound, endRound;
+  unsigned int startRound, endRound, pauseRound;
 //  while (1) {
 //      green_led_state = (green_led_state + 1) % 2;
 //      led_green.output(!green_led_state);
@@ -259,10 +258,16 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
       for (int r = 0; r < IMHT; r++) {
            memcpy(val[r], val2[r], (IMWD/8));
       }
-      fromAcc :> accRead;
-      while (accRead) {
-          fromAcc :> accRead;
+      fromAcc :> read;
+      if (read) {
+          t :> pauseRound;
+          rgb_led_red.output(1);
+          printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, 0, pauseRound - startRound);
       }
+      while (read) {
+          fromAcc :> read;
+      }
+      rgb_led_red.output(0);
       fromIO :> read;
       if (read == 2) {
           led_green.output(0);
@@ -350,14 +355,13 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
   while (1) {
 
     //check until new orientation data is available
-    do {
-      status_data = i2c.read_reg(FXOS8700EQ_I2C_ADDR, FXOS8700EQ_DR_STATUS, result);
-    } while (!status_data & 0x08);
-    //get new x-axis tilt value
+    status_data = i2c.read_reg(FXOS8700EQ_I2C_ADDR, FXOS8700EQ_DR_STATUS, result);
+    //get new x and y axis tilt values
     int x = read_acceleration(i2c, FXOS8700EQ_OUT_X_MSB);
-      if (x > 10 || x < -10) {
+    int y = read_acceleration(i2c, FXOS8700EQ_OUT_Y_MSB);
+      if ((x > 10 || x < -10) || (y > 10 || y < -10)) { //if x or y is too far off horizontal, send a 1 indicating a pause should start
         toDist <: 1;
-      } else {
+      } else { //Send a 0 indicating not to pause or to end the pause
         toDist <: 0;
       }
   }
