@@ -24,10 +24,12 @@
 <fDef name="delay_microseconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="delay_milliseconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="delay_seconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
-<fDef name="distributor" global="true" noreturn="false" doNotSpecialize="false" numParams="4"/>
+<fDef name="distributor" global="true" noreturn="false" doNotSpecialize="false" numParams="9"/>
 <fDef name="emptyChar" global="true" noreturn="false" doNotSpecialize="false" numParams="1"/>
 <fDef name="erfcl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="erfl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
+<fDef name="event" global="true" interface="input_gpio_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
+<fDef name="event_when_pins_eq" global="true" interface="input_gpio_if" noreturn="false" doNotSpecialize="false" numParams="1"/>
 <fDef name="exp" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="2"/>
 <fDef name="exp2l" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="expl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
@@ -43,8 +45,11 @@
 <fDef name="getBit" global="true" noreturn="false" doNotSpecialize="false" numParams="2"/>
 <fDef name="get_read_data" global="true" interface="i2c_master_async_if" noreturn="false" doNotSpecialize="false" numParams="2"/>
 <fDef name="get_write_result" global="true" interface="i2c_master_async_if" noreturn="false" doNotSpecialize="false" numParams="1"/>
+<fDef name="gpio_handler" global="true" noreturn="true" doNotSpecialize="false" numParams="3"/>
 <fDef name="hypotl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="ilogbl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
+<fDef name="input" global="true" interface="input_gpio_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
+<fDef name="input_and_timestamp" global="true" interface="input_gpio_if" noreturn="false" doNotSpecialize="false" numParams="1"/>
 <fDef name="ldexpl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="lgammal" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="llrintl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
@@ -70,9 +75,10 @@
 <fDef name="nexttoward" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="nexttowardf" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="nexttowardl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
-<fDef name="oneBitChangeMask" global="true" noreturn="false" doNotSpecialize="false" numParams="2"/>
 <fDef name="operation_complete" global="true" interface="i2c_master_async_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fDef name="orientation" global="true" noreturn="true" doNotSpecialize="false" numParams="2"/>
+<fDef name="output" global="true" interface="output_gpio_if" noreturn="false" doNotSpecialize="false" numParams="1"/>
+<fDef name="output_and_timestamp" global="true" interface="output_gpio_if" noreturn="false" doNotSpecialize="false" numParams="1"/>
 <fDef name="packBit" global="true" noreturn="false" doNotSpecialize="false" numParams="3"/>
 <fDef name="powl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="printBits" global="true" noreturn="false" doNotSpecialize="false" numParams="1"/>
@@ -1869,6 +1875,20 @@
     </values>
   </arg>
 </fCall>
+<fCall name="printf" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="output" global="true" interface="output_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
 <fCall name="ceil" global="true" numArgs="1">
   <arg num="0">
     <values>
@@ -1972,6 +1992,39 @@
     </values>
   </arg>
 </fCall>
+<fCall name="output" global="true" interface="output_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="0"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="output" global="true" interface="output_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="1"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="printf" global="true" numArgs="2">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="output" global="true" interface="output_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
 <fCall name="printf" global="true" numArgs="3">
   <arg num="0">
     <values>
@@ -2017,6 +2070,13 @@
   <arg num="1">
     <values>
       <value type="intval"><intval isSigned="true" val="8"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="output" global="true" interface="output_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="0"/></value>
     </values>
   </arg>
 </fCall>
@@ -2176,6 +2236,66 @@
     </values>
   </arg>
 </fCall>
+<fCall name="event_when_pins_eq" global="true" interface="input_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="0"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="event_when_pins_eq" global="true" interface="input_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="0"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="input" global="true" interface="input_gpio_if" numArgs="0">
+</fCall>
+<fCall name="event_when_pins_eq" global="true" interface="input_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="1"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="delay_milliseconds" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="50"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="event_when_pins_eq" global="true" interface="input_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="0"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="input" global="true" interface="input_gpio_if" numArgs="0">
+</fCall>
+<fCall name="event_when_pins_eq" global="true" interface="input_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="1"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="delay_milliseconds" global="true" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="50"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="event_when_pins_eq" global="true" interface="input_gpio_if" numArgs="1">
+  <arg num="0">
+    <values>
+      <value type="intval"><intval isSigned="true" val="0"/></value>
+    </values>
+  </arg>
+</fCall>
 <fCall name="i2c_master" global="true" numArgs="5" impId="1">
   <arg num="0">
     <values>
@@ -2215,7 +2335,68 @@
     </values>
   </arg>
 </fCall>
-<fCall name="DataInStream" global="true" numArgs="2" impId="3">
+<fCall name="gpio_handler" global="true" numArgs="3" impId="3">
+  <arg num="0">
+    <values>
+      <value type="interface"><interfaceInfo index="0" type="chan" isYielding="false"/></value>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="interface"><interfaceInfo index="1" type="chan" isYielding="false"/></value>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="input_gpio_with_events" global="true" numArgs="4" impId="4">
+  <arg num="0">
+    <values>
+      <value type="interface"><interfaceInfo index="0" type="chan" isYielding="false"/><interfaceInfo index="1" type="chan" isYielding="false"/></value>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="2"/></value>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="3">
+    <values>
+      <value type="null"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="output_gpio" global="true" numArgs="4" impId="5">
+  <arg num="0">
+    <values>
+      <value type="interface"><interfaceInfo index="0" type="dist" func="output_gpio" global="true" impUnit="../src/main.xc" impId="5" param="0"/><interfaceInfo index="1" type="dist" func="output_gpio" global="true" impUnit="../src/main.xc" impId="5" param="0"/><interfaceInfo index="2" type="dist" func="output_gpio" global="true" impUnit="../src/main.xc" impId="5" param="0"/><interfaceInfo index="3" type="dist" func="output_gpio" global="true" impUnit="../src/main.xc" impId="5" param="0"/></value>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="intval"><intval isSigned="true" val="4"/></value>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="3">
+    <values>
+      <value type="null"/>
+    </values>
+  </arg>
+</fCall>
+<fCall name="DataInStream" global="true" numArgs="2" impId="6">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -2227,7 +2408,7 @@
     </values>
   </arg>
 </fCall>
-<fCall name="DataOutStream" global="true" numArgs="2" impId="4">
+<fCall name="DataOutStream" global="true" numArgs="2" impId="7">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -2239,7 +2420,7 @@
     </values>
   </arg>
 </fCall>
-<fCall name="distributor" global="true" numArgs="4" impId="5">
+<fCall name="distributor" global="true" numArgs="9" impId="8">
   <arg num="0">
     <values>
       <value type="unknown"/>
@@ -2257,7 +2438,32 @@
   </arg>
   <arg num="3">
     <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="4">
+    <values>
       <value type="interface"><interfaceInfo index="0" type="chan" isYielding="false"/><interfaceInfo index="1" type="chan" isYielding="false"/><interfaceInfo index="2" type="chan" isYielding="false"/><interfaceInfo index="3" type="chan" isYielding="false"/><interfaceInfo index="4" type="chan" isYielding="false"/><interfaceInfo index="5" type="chan" isYielding="false"/><interfaceInfo index="6" type="chan" isYielding="false"/><interfaceInfo index="7" type="chan" isYielding="false"/></value>
+    </values>
+  </arg>
+  <arg num="5">
+    <values>
+      <value type="interface"><interfaceInfo index="0" type="dist" func="output_gpio" global="true" impUnit="../src/main.xc" impId="5" param="0"/></value>
+    </values>
+  </arg>
+  <arg num="6">
+    <values>
+      <value type="interface"><interfaceInfo index="1" type="dist" func="output_gpio" global="true" impUnit="../src/main.xc" impId="5" param="0"/></value>
+    </values>
+  </arg>
+  <arg num="7">
+    <values>
+      <value type="interface"><interfaceInfo index="2" type="dist" func="output_gpio" global="true" impUnit="../src/main.xc" impId="5" param="0"/></value>
+    </values>
+  </arg>
+  <arg num="8">
+    <values>
+      <value type="interface"><interfaceInfo index="3" type="dist" func="output_gpio" global="true" impUnit="../src/main.xc" impId="5" param="0"/></value>
     </values>
   </arg>
 </fCall>

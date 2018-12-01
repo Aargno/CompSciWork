@@ -86,7 +86,13 @@ void emptyChar(uchar val[IMHT][IMWD/8]) {
     for (int y = 0; y < IMHT; y++) for (int x = 0; x < IMWD/8; x++) val[y][x] = 0x00;
 }
 
+uchar oneBitChangeMask(int x, int bit) {
+    uchar result = 0xFF;
+    result ^= (bit ^ 1) << ((8 - (x + 1)) % 8);
+}
+
 int mod(int x, int m) {
+//    if (x == m) x = 0;
     if (x == -1) x = m-1;
     while (x < 0) x += m;
     return x % m;
@@ -184,19 +190,14 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
         client output_gpio_if rgb_led_green, client output_gpio_if rgb_led_red) {
   // LED state
   unsigned int green_led_state = 0;
+  unsigned int rgb_led_state = 0;
   int read;
-  int accRead = 0;
   int processing = 0;
   uchar val[IMHT][IMWD/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
   uchar val2[IMHT][IMWD/8];
   timer t;
   unsigned int startRound, endRound;
-//  while (1) {
-//      green_led_state = (green_led_state + 1) % 2;
-//      led_green.output(!green_led_state);
-//      rgb_led_blue.output(green_led_state);
-//      delay_milliseconds(50);
-//  }
+  while (1) rgb_led_blue.output(1);
   emptyChar(val);//Set characters to all 0 bit
   emptyChar(val2);
   //Starting up and wait for tilting of the xCore-200 Explorer
@@ -226,7 +227,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
 
   int workerCount = 0;
   int roundCount = 0;
-//  int roundLimit = 5;
+  int roundLimit = 5;
   t :> startRound;
   while (processing) {
 
@@ -259,23 +260,18 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
       for (int r = 0; r < IMHT; r++) {
            memcpy(val[r], val2[r], (IMWD/8));
       }
-      fromAcc :> accRead;
-      while (accRead) {
-          fromAcc :> accRead;
-      }
       fromIO :> read;
       if (read == 2) {
           led_green.output(0);
           rgb_led_blue.output(1);
           processing = 0;
       } else {
-          printf("Round No.: %d\n", roundCount);
-          green_led_state = 1 - green_led_state;
+          green_led_state = !green_led_state;
           led_green.output(green_led_state);
       }
   }
   t :> endRound;
-  printf( "\nProcessing %d rounds completed... Took %d ticks\n",roundCount , endRound - startRound);
+  printf( "\nProcessing %d rounds completed... Took %f secs\n",roundCount , (float)(endRound - startRound)/100000000);
 
 
   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
@@ -284,7 +280,6 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
                else c_out <: 0;
            }
          }
-  rgb_led_blue.output(0);
 }
 
 
@@ -353,13 +348,17 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
     do {
       status_data = i2c.read_reg(FXOS8700EQ_I2C_ADDR, FXOS8700EQ_DR_STATUS, result);
     } while (!status_data & 0x08);
+
     //get new x-axis tilt value
     int x = read_acceleration(i2c, FXOS8700EQ_OUT_X_MSB);
-      if (x > 10 || x < -10) {
+
+    //send signal to distributor after first tilt
+    if (!tilted) {
+      if (x>30) {
+        tilted = 1 - tilted;
         toDist <: 1;
-      } else {
-        toDist <: 0;
       }
+    }
   }
 }
 
@@ -374,6 +373,7 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
         select {
             case button_1.event():
                 if (button_1.input() == 0) {
+                    printf("Hi\n");
                     c_out <: 1; //1 indicating start processing
                     // Set button event state to active high for debounce
                     button_1.event_when_pins_eq(1);
@@ -382,7 +382,6 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
                     delay_milliseconds(50);
                     button_1.event_when_pins_eq(0);
                 }
-                break;
             case button_2.event():
                             if (button_2.input() == 0) {
                                 c_out <: 2; //2 indicating start exporting
@@ -393,11 +392,8 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
                                 delay_milliseconds(50);
                                 button_2.event_when_pins_eq(0);
                             }
-                            break;
-            default:
-                c_out <: 0; //0 indicating carry on as normal
-                break;
         }
+        c_out <: 0; //0 indicating carry on as normal
     }
 }
 
@@ -421,8 +417,6 @@ par {
     on tile[0] : i2c_master(i2c, 1, p_scl, p_sda, 10);   //server thread providing orientation data
     on tile[0] : orientation(i2c[0],c_control);        //client thread reading orientation data
     on tile[0] : gpio_handler(i_explorer_buttons[0], i_explorer_buttons[1], c_gpio); //Handler thread handling IO data
-    on tile[0] : input_gpio_with_events(i_explorer_buttons, 2, explorer_buttons, null);
-    on tile[0] : output_gpio(i_explorer_leds, 4, explorer_leds, null);
     on tile[1] : DataInStream(infname, c_inIO);          //thread to read in a PGM image
     on tile[1] : DataOutStream(outfname, c_outIO);       //thread to write out a PGM image
     on tile[0] : distributor(c_inIO, c_outIO, c_control, c_gpio, rowClientInterface, i_explorer_leds[0],
