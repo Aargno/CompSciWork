@@ -1,0 +1,18 @@
+13:33:58 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:91:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:91:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating game_of_life.xe
+Build Complete
+
+13:34:02 Build Finished (took 3s.401ms)
+

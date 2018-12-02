@@ -17,8 +17,9 @@ typedef unsigned char uchar;      //using uchar as shorthand
 typedef interface i {
     [[clears_notification]]
     void load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]);
+    [[clears_notification]]
     void exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]);
-    [[notification]] slave void dataReady();
+    [[notification]] slave void serverReady();
 } i;
 
 char infname[] = "16x16.pgm";     //put your input image path here
@@ -158,18 +159,23 @@ void rowClient(client interface i rowClient, int index) {
     uchar rows[IMHT/noWorkers + 2][IMWD/8];
     uchar output[IMHT/noWorkers + 2][IMWD/8];
     int count = 0;
-
+    int load = 1;
     while (1) {
         select {
-            case rowClient.dataReady() :
-                rowClient.load(index, rows);
-                for (int row = 1; row < (IMHT / noWorkers) + 1; row++) {
-                    for (int col = 0; col < IMWD; col++) {
-                        count = checkNeighbours(row, col, rows, output, index);
+            case rowClient.serverReady() :
+                if (load) {
+                    rowClient.load(index, rows);
+                    for (int row = 1; row < (IMHT / noWorkers) + 1; row++) {
+                        for (int col = 0; col < IMWD; col++) {
+                            count = checkNeighbours(row, col, rows, output, index);
+                        }
                     }
+                } else {
+                    rowClient.exp(index, output);
                 }
-                rowClient.exp(index, output);
-        break;
+                load = 1 - load;
+                if (index == 1) printf("%d %d\n",load, index);
+             break;
         }
     }
 }
@@ -207,16 +213,16 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
   }
 
   for (int i = 0; i < noWorkers; i++) {
-            rowServer[i].dataReady();
+            rowServer[i].serverReady();
   }
-
-  int workerCount = 0;
+  int loadWorkers = 0;
+  int expWorkers = 0;
   int roundCount = 0;
   int roundLimit = 8;
   t :> startRound;
   while (roundCount < roundLimit) {
 
-      while (workerCount < noWorkers) {
+      while (expWorkers < noWorkers) {
 
           [[ordered]]
           select {
@@ -224,6 +230,12 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
 //                  printf("%d client called load\n", cId);
                   for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
                       memcpy(&rows[r], &val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
+                  }
+                  loadWorkers++;
+                  if (loadWorkers == noWorkers) {
+                      for (int i = 0; i < noWorkers; i++) {
+                           rowServer[i].serverReady();
+                      }
                   }
                   break;
 
@@ -233,19 +245,17 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, server i rowServe
                         memcpy(&val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
 
                     }
-                  workerCount++;
+                  expWorkers++;
                   break;
           }
       }
 
       for (int i = 0; i < noWorkers; i++) {
-                rowServer[i].dataReady();
+                rowServer[i].serverReady();
              }
-             workerCount = 0;
+             loadWorkers = 0;
+             expWorkers = 0;
              roundCount++;
-//             for (int r = 0; r < IMHT; r++) {
-//                 memcpy(val[r], val2[r], (IMWD/8));
-//             }
 
   }
   t :> endRound;

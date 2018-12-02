@@ -1,0 +1,210 @@
+13:12:47 **** Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing pgmIO.c
+Analyzing debug_printf.c
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Analyzing i2c_master.xc
+Analyzing i2c_master_async.xc
+/Users/AaronRobey/Repos/CompSciWork/CompSciWork/ConcComp/GameOfLife/COMS20001/lib_i2c/src/i2c_master_async.xc:126:26: warning: argument 1 of `i2c_master_async_aux' slices interface preventing analysis of its parallel usage [-Wunusual-code]
+    i2c_master_async_aux(i, n, i2c_dist[0], max_transaction_size);
+                         ^
+Analyzing i2c_master_ext.xc
+Analyzing i2c_master_single_port.xc
+Analyzing i2c_slave.xc
+Analyzing xassert.xc
+Propagating analysis
+Creating dependencies for xassert.xc
+Creating dependencies for i2c_slave.xc
+Creating dependencies for i2c_master_single_port.xc
+Creating dependencies for i2c_master_ext.xc
+Creating dependencies for i2c_master_async.xc
+Creating dependencies for i2c_master.xc
+Creating dependencies for main.xc
+Creating dependencies for debug_printf.c
+Creating dependencies for pgmIO.c
+Compiling pgmIO.c
+Compiling debug_printf.c
+Compiling main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Compiling i2c_master.xc
+Compiling i2c_master_async.xc
+/Users/AaronRobey/Repos/CompSciWork/CompSciWork/ConcComp/GameOfLife/COMS20001/lib_i2c/src/i2c_master_async.xc:126:26: warning: argument 1 of `i2c_master_async_aux' slices interface preventing analysis of its parallel usage [-Wunusual-code]
+    i2c_master_async_aux(i, n, i2c_dist[0], max_transaction_size);
+                         ^
+Compiling i2c_master_ext.xc
+Compiling i2c_master_single_port.xc
+Compiling i2c_slave.xc
+Compiling xassert.xc
+Creating game_of_life.xe
+Build Complete
+13:13:07 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+13:19:49 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+../src/main.xc:175:17: error: use of undeclared identifer `laod'
+                laod = 1 - load;
+                ^
+../src/main.xc:233:11: error: missing case for interface function `exp' of interface `i'
+          }
+          ^
+../src/main.xc:233:11: note: interface function `exp' can only be omitted from select if marked as [[guarded]]
+          }
+          ^
+../src/main.xc:226:20: note: other use of interface in select here
+              case rowServer[int cId].load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
+                   ^~~~~~~~~~~~~~~~~~
+../src/main.xc:252:11: error: missing case for interface function `load' of interface `i'
+          }
+          ^
+../src/main.xc:252:11: note: interface function `load' can only be omitted from select if marked as [[guarded]]
+          }
+          ^
+../src/main.xc:244:20: note: other use of interface in select here
+              case rowServer[int cId].exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
+                   ^~~~~~~~~~~~~~~~~~
+xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
+xmake: *** [analyze] Error 2
+13:21:06 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+13:27:29 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+../src/main.xc:223:14: error: use of undeclared identifer `workerCount'
+      while (workerCount < noWorkers) {
+             ^
+../src/main.xc:217:7: warning: unused variable `expCount' [-Wunused-variable]
+  int expCount = 0;
+      ^~~~~~~~
+xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
+xmake: *** [analyze] Error 2
+13:28:37 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+13:29:40 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating game_of_life.xe
+Build Complete
+13:30:15 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating game_of_life.xe
+Build Complete
+13:32:00 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+13:32:25 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:90:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating game_of_life.xe
+Build Complete
+13:33:58 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+Using build modules: lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(2.0.0)
+Analyzing main.xc
+../src/main.xc:91:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:91:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+Creating game_of_life.xe
+Build Complete

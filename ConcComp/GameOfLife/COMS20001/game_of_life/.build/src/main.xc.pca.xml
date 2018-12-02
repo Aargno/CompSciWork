@@ -20,7 +20,6 @@
 <fDef name="copysignl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="coshl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="cosl" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
-<fDef name="dataReady" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fDef name="delay_microseconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="delay_milliseconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
 <fDef name="delay_seconds" global="true" noreturn="false" doNotSpecialize="true" numParams="1"/>
@@ -91,6 +90,7 @@
 <fDef name="scalbnl" global="true" noreturn="false" doNotSpecialize="true" numParams="2"/>
 <fDef name="send_stop_bit" global="true" interface="i2c_master_async_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fDef name="send_stop_bit" global="true" interface="i2c_master_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
+<fDef name="serverReady" global="true" interface="i" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fDef name="shutdown" global="true" interface="i2c_master_async_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fDef name="shutdown" global="true" interface="i2c_master_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
 <fDef name="shutdown" global="true" interface="i2c_slave_callback_if" noreturn="false" doNotSpecialize="false" numParams="0"/>
@@ -1838,6 +1838,23 @@
     </values>
   </arg>
 </fCall>
+<fCall name="printf" global="true" numArgs="3">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
 <fCall name="emptyChar" global="true" numArgs="1">
   <arg num="0">
     <values>
@@ -1886,7 +1903,7 @@
     </values>
   </arg>
 </fCall>
-<fCall name="dataReady" global="true" interface="i" numArgs="0">
+<fCall name="serverReady" global="true" interface="i" numArgs="0">
 </fCall>
 <fCall name="__builtin_memcpy_xc" global="true" numArgs="3">
   <arg num="0">
@@ -1917,6 +1934,8 @@
     </values>
   </arg>
 </fCall>
+<fCall name="serverReady" global="true" interface="i" numArgs="0">
+</fCall>
 <fCall name="__builtin_memcpy_xc" global="true" numArgs="3">
   <arg num="0">
     <values>
@@ -1946,7 +1965,7 @@
     </values>
   </arg>
 </fCall>
-<fCall name="dataReady" global="true" interface="i" numArgs="0">
+<fCall name="serverReady" global="true" interface="i" numArgs="0">
 </fCall>
 <fCall name="printf" global="true" numArgs="3">
   <arg num="0">
