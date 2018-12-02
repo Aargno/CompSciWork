@@ -1399,7 +1399,6 @@
     <values>
       <value type="intval"><intval isSigned="true" val="1"/></value>
       <value type="intval"><intval isSigned="true" val="3"/></value>
-      <value type="intval"><intval isSigned="true" val="5"/></value>
     </values>
   </arg>
  <specializations>

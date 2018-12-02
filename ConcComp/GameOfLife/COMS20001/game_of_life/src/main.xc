@@ -262,6 +262,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
       if (read) {
           t :> pauseRound;
           rgb_led_red.output(1);
+          //Need to count number of live bits
           printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, 0, pauseRound - startRound);
       }
       while (read) {
@@ -274,7 +275,6 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
           rgb_led_blue.output(1);
           processing = 0;
       } else {
-          printf("Round No.: %d\n", roundCount);
           green_led_state = 1 - green_led_state;
           led_green.output(green_led_state);
       }
@@ -359,11 +359,11 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
     //get new x and y axis tilt values
     int x = read_acceleration(i2c, FXOS8700EQ_OUT_X_MSB);
     int y = read_acceleration(i2c, FXOS8700EQ_OUT_Y_MSB);
-      if ((x > 10 || x < -10) || (y > 10 || y < -10)) { //if x or y is too far off horizontal, send a 1 indicating a pause should start
+    if ((x > 10 || x < -10) || (y > 10 || y < -10)) { //if x or y is too far off horizontal, send a 1 indicating a pause should start
         toDist <: 1;
-      } else { //Send a 0 indicating not to pause or to end the pause
+    } else { //Send a 0 indicating not to pause or to end the pause
         toDist <: 0;
-      }
+    }
   }
 }
 
