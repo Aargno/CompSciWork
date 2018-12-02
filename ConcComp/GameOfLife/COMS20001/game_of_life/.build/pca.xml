@@ -469,6 +469,20 @@
     </values>
   </arg>
 </fInfo>
+<fInfo name="checkNeighbourBit" global="true" specialize="false" noreturn="false" doNotSpecialize="false" numParams="3">
+  <arg num="0" specialize="false">
+    <values>
+    </values>
+  </arg>
+  <arg num="1" specialize="false">
+    <values>
+    </values>
+  </arg>
+  <arg num="2" specialize="false">
+    <values>
+    </values>
+  </arg>
+</fInfo>
 <fInfo name="checkNeighbours" global="true" specialize="false" noreturn="false" doNotSpecialize="false" numParams="5">
   <arg num="0" specialize="false">
     <values>
@@ -1158,9 +1172,10 @@
   </arg>
   <arg num="1" specialize="false">
     <values>
-      <value type="intval"><intval isSigned="true" val="4"/></value>
       <value type="intval"><intval isSigned="true" val="8"/></value>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
+      <value type="intval"><intval isSigned="true" val="130"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fInfo>
@@ -1316,6 +1331,12 @@
     </values>
   </arg>
   <arg num="1" specialize="false">
+    <values>
+    </values>
+  </arg>
+</fInfo>
+<fInfo name="printBits" global="true" specialize="false" noreturn="false" doNotSpecialize="false" numParams="1">
+  <arg num="0" specialize="false">
     <values>
     </values>
   </arg>

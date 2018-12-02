@@ -157,7 +157,8 @@ int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][IMWD/8], uchar
     if (count < 2 || count > 3) output[y][(int) floor (x / 8)] = packBit(output[y][(int) floor (x / 8)], 0, mod((8 - (x + 1)), 8));
     else if (count == 2) output[y][(int) floor (x / 8)] = packBit(output[y][(int) floor (x / 8)], getBit(board[y][(int) floor (x / 8)], mod((8 - (x + 1)), 8)), mod((8 - (x + 1)), 8));
     else if (count == 3) output[y][(int) floor (x / 8)] = packBit(output[y][(int) floor (x / 8)], 1, mod((8 - (x + 1)), 8));
-    return count;
+
+    return getBit(board[mod(y, IMHT/noWorkers + 2)][(int) floor ((mod((x), IMWD))/ 8)], mod((8 - (x + 1)), 8));
 }
 
 
@@ -165,7 +166,7 @@ int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][IMWD/8], uchar
 void rowClient(client interface i rowClient, int index) {
     uchar rows[IMHT/noWorkers + 2][IMWD/8];
     uchar output[IMHT/noWorkers + 2][IMWD/8];
-    int count = 0;
+    int liveBitCount = 0;
     int load = 1;
     while (1) {
         select {
@@ -174,11 +175,12 @@ void rowClient(client interface i rowClient, int index) {
                     rowClient.load(index, rows);
                     for (int row = 1; row < (IMHT / noWorkers) + 1; row++) {
                         for (int col = 0; col < IMWD; col++) {
-                            count = checkNeighbours(row, col, rows, output, index);
+                            liveBitCount += checkNeighbours(row, col, rows, output, index);
                         }
                     }
                 } else {
-                    rowClient.exp(index, output);
+                    rowClient.exp(liveBitCount, output);
+                    liveBitCount = 0;
                 }
                 load = 1 - load;
              break;
@@ -239,7 +241,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
   int loadWorkers = 0;
   int expWorkers = 0;
   int roundCount = 0;
-  int roundLimit = 8;
+  int totalLiveBits = 0;
   t :> startRound;
   while (processing) {
 
@@ -260,12 +262,12 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
                   }
                   break;
 
-              case rowServer[int cId].exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-//                    printf("%d client called exp\n", cId);
+              case rowServer[int cId].exp(int liveBitCount, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
                     for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
-                        memcpy(&val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
+                        memcpy(&val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
 
                     }
+                  totalLiveBits += liveBitCount;
                   expWorkers++;
                   break;
           }
@@ -282,8 +284,9 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
             t :> pauseRound;
             rgb_led_red.output(1);
             //Need to count number of live bits
-            printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, 0, pauseRound - startRound);
+            printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, totalLiveBits, pauseRound - startRound);
       }
+      totalLiveBits = 0;
       while (read) {
             fromAcc :> read;
       }
@@ -300,7 +303,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
       }
   }
   t :> endRound;
-  printf( "\nProcessing %d rounds completed... Took %f secs\n",roundLimit , (float)(endRound - startRound)/100000000);
+  printf( "\nProcessing %d rounds completed... Took %f secs\n",roundCount , (float)(endRound - startRound)/100000000);
 
 
   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
