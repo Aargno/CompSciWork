@@ -4,6 +4,7 @@
 #include <platform.h>
 #include <xs1.h>
 #include <math.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include "gpio.h"
 #include "pgmIO.h"
@@ -11,9 +12,9 @@
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
-#define  IMHT 16               //image height
-#define  IMWD 16                 //image width
-#define noWorkers 8             //number of clients
+#define  IMHT 512                //image height
+#define  IMWD 512                //image width
+#define noWorkers 8              //number of clients
 
 typedef interface i {
     [[clears_notification]]
@@ -23,7 +24,7 @@ typedef interface i {
     [[notification]] slave void serverReady();
 } i;
 
-char infname[] = "16x16.pgm";     //put your input image path here
+char infname[] = "512x512.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 on tile[0]: in port explorer_buttons = XS1_PORT_4E;
@@ -58,27 +59,36 @@ void DataInStream(char infname[], chanend c_out)
   uchar line[ IMWD ];
   printf( "DataInStream: Start...\n" );
 
-  //Open PGM file
-  res = _openinpgm( infname, IMWD, IMHT );
-  if( res ) {
-    printf( "DataInStream: Error openening %s\n.", infname );
-    return;
-  }
+  if (IMHT < 512) {
+      //Open PGM file
+      res = _openinpgm( infname, IMWD, IMHT );
+      if( res ) {
+        printf( "DataInStream: Error openening %s\n.", infname );
+        return;
+      }
 
-  //Read image line-by-line and send byte by byte to channel c_out
-  for( int y = 0; y < IMHT; y++ ) {
-    _readinline( line, IMWD );
-    for( int x = 0; x < IMWD; x++ ) {
-        if (line[x] == 0xFF) c_out <: 1;
-        else c_out <: 0;
-//      printf( "-%4.1d ", line[ x ] ); //show image values
-    }
-//    printf("%d\n", y);
-//    printf( "\n" );
-  }
+      //Read image line-by-line and send byte by byte to channel c_out
+      for( int y = 0; y < IMHT; y++ ) {
+        _readinline( line, IMWD );
+        for( int x = 0; x < IMWD; x++ ) {
+            if (line[x] == 0xFF) c_out <: 1;
+            else c_out <: 0;
+    //      printf( "-%4.1d ", line[ x ] ); //show image values
+        }
+    //    printf("%d\n", y);
+    //    printf( "\n" );
+      }
 
-  //Close PGM image file
-  _closeinpgm();
+      //Close PGM image file
+      _closeinpgm();
+  } else {
+      for( int y = 0; y < IMHT; y++ ) {
+              for( int x = 0; x < IMWD; x++ ) {
+                  if (rand() % 100 < 74) c_out <: 0;
+                  else c_out <: 1;
+              }
+      }
+  }
   printf( "DataInStream: Done...\n" );
   return;
 }
@@ -94,20 +104,20 @@ int mod(int x, int m) {
     return x % m;
 }
 
-///**
-// * Function to check if given bit is live or dead.
-// */
-//int checkNeighbourBit(int x, int y, uchar check[IMHT/4 + 2][IMWD/8]) {
-//    int arrayAddressX = mod(x, IMWD);
-//    int arrayAddressY = mod(y, IMHT / 4 + 2);
-//    int loc = (int)floor(arrayAddressX/8);
-//    x = mod(x, 8);
-//    //What it should do:
-//    //Take the correct position array, we get this above, and right shift the character by the correct ammount of bits
-//    //for checking. -1 should give x = 7 which gives a shift of 8 - x+1 = 0, while say 16 should give x=0 and
-//    //a shift of 8 - x+1 = 7 to check the leftmost bit in the character (we consider this the first bit)
-//    return getBit(check[arrayAddressY][loc], mod((8 - (x + 1)), 8));
-//}
+/**
+ * Function to check if given bit is live or dead.
+ */
+int checkNeighbourBit(int x, int y, uchar check[IMHT/4 + 2][IMWD/8]) {
+    int arrayAddressX = mod(x, IMWD);
+    int arrayAddressY = mod(y, IMHT / 4 + 2);
+    int loc = (int)floor(arrayAddressX/8);
+    x = mod(x, 8);
+    //What it should do:
+    //Take the correct position array, we get this above, and right shift the character by the correct ammount of bits
+    //for checking. -1 should give x = 7 which gives a shift of 8 - x+1 = 0, while say 16 should give x=0 and
+    //a shift of 8 - x+1 = 7 to check the leftmost bit in the character (we consider this the first bit)
+    return getBit(check[arrayAddressY][loc], mod((8 - (x + 1)), 8));
+}
 
 uchar packBit(uchar c, int val, int location) {
     if (val == 1) c |= 1 << location;
@@ -125,12 +135,12 @@ int getBit(uchar c, int location) {
     return bit;
 }
 
-//void printBits(uchar c) {
-//    for (int i = 7; i >= 0; i--) {
-//        int x = (c >> i) & 1;
-//        printf("%d ", x);
-//    }
-//}
+void printBits(uchar c) {
+    for (int i = 7; i >= 0; i--) {
+        int x = (c >> i) & 1;
+        printf("%d ", x);
+    }
+}
 
 int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][IMWD/8], uchar output[IMHT/noWorkers + 2][IMWD/8], int index) {
     int count = 0;
@@ -147,7 +157,7 @@ int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][IMWD/8], uchar
     if (count < 2 || count > 3) output[y][(int) floor (x / 8)] = packBit(output[y][(int) floor (x / 8)], 0, mod((8 - (x + 1)), 8));
     else if (count == 2) output[y][(int) floor (x / 8)] = packBit(output[y][(int) floor (x / 8)], getBit(board[y][(int) floor (x / 8)], mod((8 - (x + 1)), 8)), mod((8 - (x + 1)), 8));
     else if (count == 3) output[y][(int) floor (x / 8)] = packBit(output[y][(int) floor (x / 8)], 1, mod((8 - (x + 1)), 8));
-    return (getBit(board[mod(y, IMHT/noWorkers + 2)][(int) floor ((mod((x), IMWD))/ 8)], mod((8 - (x + 1)), 8)));
+    return count;
 }
 
 
@@ -155,7 +165,7 @@ int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][IMWD/8], uchar
 void rowClient(client interface i rowClient, int index) {
     uchar rows[IMHT/noWorkers + 2][IMWD/8];
     uchar output[IMHT/noWorkers + 2][IMWD/8];
-    int liveCount = 0;
+    int count = 0;
     int load = 1;
     while (1) {
         select {
@@ -164,12 +174,11 @@ void rowClient(client interface i rowClient, int index) {
                     rowClient.load(index, rows);
                     for (int row = 1; row < (IMHT / noWorkers) + 1; row++) {
                         for (int col = 0; col < IMWD; col++) {
-                            liveCount += checkNeighbours(row, col, rows, output, index);
+                            count = checkNeighbours(row, col, rows, output, index);
                         }
                     }
                 } else {
-                    rowClient.exp(liveCount, output);
-                    liveCount = 0;
+                    rowClient.exp(index, output);
                 }
                 load = 1 - load;
              break;
@@ -204,6 +213,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
   printf( "ProcessImage: Start, size = %dx%d\n", IMHT, IMWD );
 
   while (processing != 1) {
+      fromIO <: 1;
       fromIO :> processing; //if 1 is recieved begin reading and processing, otherwise wait
       if (processing == 2) {
           printf("Can't export image until image is loaded\n");
@@ -229,9 +239,8 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
   int loadWorkers = 0;
   int expWorkers = 0;
   int roundCount = 0;
-  int liveCount = 0;
+  int roundLimit = 8;
   t :> startRound;
-
   while (processing) {
 
       while (expWorkers < noWorkers) {
@@ -241,7 +250,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
               case rowServer[int cId].load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
 //                  printf("%d client called load\n", cId);
                   for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
-                      memcpy(&rows[r], &val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
+                      memcpy(&rows[r], &val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
                   }
                   loadWorkers++;
                   if (loadWorkers == noWorkers) {
@@ -251,12 +260,12 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
                   }
                   break;
 
-              case rowServer[int cId].exp(int liveBits, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
+              case rowServer[int cId].exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
 //                    printf("%d client called exp\n", cId);
                     for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
-                        memcpy(&val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
+                        memcpy(&val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
+
                     }
-                    liveCount += liveBits;
                   expWorkers++;
                   break;
           }
@@ -273,13 +282,13 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
             t :> pauseRound;
             rgb_led_red.output(1);
             //Need to count number of live bits
-            printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, liveCount, pauseRound - startRound);
+            printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, 0, pauseRound - startRound);
       }
-      liveCount = 0;
       while (read) {
             fromAcc :> read;
       }
       rgb_led_red.output(0);
+      fromIO <: 1;
       fromIO :> read;
       if (read == 2) {
            led_green.output(0);
@@ -291,7 +300,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
       }
   }
   t :> endRound;
-  printf( "\n%d Rounds completed... Took %f secs\n",roundCount , (float)(endRound - startRound)/100000000);
+  printf( "\nProcessing %d rounds completed... Took %f secs\n",roundLimit , (float)(endRound - startRound)/100000000);
 
 
   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
@@ -383,12 +392,14 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
     // Initial button event state, active low
     button_1.event_when_pins_eq(0);
     button_2.event_when_pins_eq(0);
-
+    int output = 0;
+    int ready = 0;
     while (1) {
         select {
             case button_1.event():
                 if (button_1.input() == 0) {
-                    c_out <: 1; //1 indicating start processing
+                    output = 1;
+//                    c_out <: 1; //1 indicating start processing
                     // Set button event state to active high for debounce
                     button_1.event_when_pins_eq(1);
                 } else {
@@ -399,7 +410,8 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
                 break;
             case button_2.event():
                             if (button_2.input() == 0) {
-                                c_out <: 2; //2 indicating start exporting
+                                output = 2;
+//                                c_out <: 2; //2 indicating start exporting
                                 // Set button event state to active high for debounce
                                 button_2.event_when_pins_eq(1);
                             } else {
@@ -409,7 +421,17 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
                             }
                             break;
             default:
-                c_out <: 0; //0 indicating carry on as normal
+//                c_out <: 0; //0 indicating carry on as normal
+                break;
+        }
+        select {
+            case c_out :> ready:
+                if (ready)  {
+                    c_out <: output;
+                    output = 0;
+                }
+                break;
+            default:
                 break;
         }
     }
@@ -437,12 +459,13 @@ par {
     on tile[0] : gpio_handler(i_explorer_buttons[0], i_explorer_buttons[1], c_gpio); //Handler thread handling IO data
     on tile[0] : input_gpio_with_events(i_explorer_buttons, 2, explorer_buttons, null);
     on tile[0] : output_gpio(i_explorer_leds, 4, explorer_leds, null);
-    on tile[1] : DataInStream(infname, c_inIO);          //thread to read in a PGM image
-    on tile[1] : DataOutStream(outfname, c_outIO);       //thread to write out a PGM image
+    on tile[0] : DataInStream(infname, c_inIO);          //thread to read in a PGM image
+    on tile[0] : DataOutStream(outfname, c_outIO);       //thread to write out a PGM image
     on tile[0] : distributor(c_inIO, c_outIO, c_control, c_gpio, rowClientInterface, i_explorer_leds[0],
                                 i_explorer_leds[1],i_explorer_leds[2], i_explorer_leds[3]); //thread to coordinate work on image
-    par (int i = 0; i < noWorkers; i++) {
-        on tile[i%2] : rowClient(rowClientInterface[i], i);
+    on tile[0] : rowClient(rowClientInterface[0], 0);
+    par (int i = 1; i < noWorkers; i++) {
+        on tile[1] : rowClient(rowClientInterface[i], i);
     }
 }
 
