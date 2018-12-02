@@ -18,8 +18,9 @@ typedef unsigned char uchar;      //using uchar as shorthand
 typedef interface i {
     [[clears_notification]]
     void load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]);
+    [[clears_notification]]
     void exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]);
-    [[notification]] slave void dataReady();
+    [[notification]] slave void serverReady();
 } i;
 
 char infname[] = "16x16.pgm";     //put your input image path here
@@ -87,6 +88,7 @@ void emptyChar(uchar val[IMHT][IMWD/8]) {
 }
 
 int mod(int x, int m) {
+//    if (x == m) x = 0;
     if (x == -1) x = m-1;
     while (x < 0) x += m;
     return x % m;
@@ -154,18 +156,22 @@ void rowClient(client interface i rowClient, int index) {
     uchar rows[IMHT/noWorkers + 2][IMWD/8];
     uchar output[IMHT/noWorkers + 2][IMWD/8];
     int count = 0;
-
+    int load = 1;
     while (1) {
         select {
-            case rowClient.dataReady() :
-                rowClient.load(index, rows);
-                for (int row = 1; row < (IMHT / noWorkers) + 1; row++) {
-                    for (int col = 0; col < IMWD; col++) {
-                        count = checkNeighbours(row, col, rows, output, index);
+            case rowClient.serverReady() :
+                if (load) {
+                    rowClient.load(index, rows);
+                    for (int row = 1; row < (IMHT / noWorkers) + 1; row++) {
+                        for (int col = 0; col < IMWD; col++) {
+                            count = checkNeighbours(row, col, rows, output, index);
+                        }
                     }
+                } else {
+                    rowClient.exp(index, output);
                 }
-                rowClient.exp(index, output);
-        break;
+                load = 1 - load;
+             break;
         }
     }
 }
@@ -180,26 +186,22 @@ void rowClient(client interface i rowClient, int index) {
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, server i rowServer[noWorkers],
-        client output_gpio_if led_green, client output_gpio_if rgb_led_blue,
-        client output_gpio_if rgb_led_green, client output_gpio_if rgb_led_red) {
-  // LED state
+                                client output_gpio_if led_green, client output_gpio_if rgb_led_blue,
+                                client output_gpio_if rgb_led_green, client output_gpio_if rgb_led_red) {
   unsigned int green_led_state = 0;
   int read;
   int processing = 0;
+  int pauseRound;
   uchar val[IMHT][IMWD/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
-  uchar val2[IMHT][IMWD/8];
+//  uchar val2[IMHT][IMWD/8];
   timer t;
-  unsigned int startRound, endRound, pauseRound;
-//  while (1) {
-//      green_led_state = (green_led_state + 1) % 2;
-//      led_green.output(!green_led_state);
-//      rgb_led_blue.output(green_led_state);
-//      delay_milliseconds(50);
-//  }
+  unsigned int startRound, endRound;
+
   emptyChar(val);//Set characters to all 0 bit
-  emptyChar(val2);
+//  emptyChar(val2);
   //Starting up and wait for tilting of the xCore-200 Explorer
   printf( "ProcessImage: Start, size = %dx%d\n", IMHT, IMWD );
+
   while (processing != 1) {
       fromIO :> processing; //if 1 is recieved begin reading and processing, otherwise wait
       if (processing == 2) {
@@ -208,6 +210,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
   }
   green_led_state = !green_led_state;
   led_green.output(green_led_state);
+
   //Read in and do something with your image values..
   //This just inverts every pixel, but you should
   //change the image according to the "Game of Life"
@@ -220,76 +223,80 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, s
   }
 
   for (int i = 0; i < noWorkers; i++) {
-            rowServer[i].dataReady();
+            rowServer[i].serverReady();
   }
-
-  int workerCount = 0;
+  int loadWorkers = 0;
+  int expWorkers = 0;
   int roundCount = 0;
-//  int roundLimit = 5;
+  int roundLimit = 8;
   t :> startRound;
   while (processing) {
 
-      while (workerCount < noWorkers) {
+      while (expWorkers < noWorkers) {
 
           [[ordered]]
           select {
               case rowServer[int cId].load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
+//                  printf("%d client called load\n", cId);
                   for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
                       memcpy(&rows[r], &val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
+                  }
+                  loadWorkers++;
+                  if (loadWorkers == noWorkers) {
+                      for (int i = 0; i < noWorkers; i++) {
+                           rowServer[i].serverReady();
+                      }
                   }
                   break;
 
               case rowServer[int cId].exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-
+//                    printf("%d client called exp\n", cId);
                     for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
-                        memcpy(&val2[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
+                        memcpy(&val[mod((index * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
 
                     }
-                  workerCount++;
+                  expWorkers++;
                   break;
           }
       }
 
       for (int i = 0; i < noWorkers; i++) {
-           rowServer[i].dataReady();
+          rowServer[i].serverReady();
       }
-      workerCount = 0;
+      loadWorkers = 0;
+      expWorkers = 0;
       roundCount++;
-      for (int r = 0; r < IMHT; r++) {
-           memcpy(val[r], val2[r], (IMWD/8));
-      }
       fromAcc :> read;
       if (read) {
-          t :> pauseRound;
-          rgb_led_red.output(1);
-          //Need to count number of live bits
-          printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, 0, pauseRound - startRound);
+            t :> pauseRound;
+            rgb_led_red.output(1);
+            //Need to count number of live bits
+            printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, 0, pauseRound - startRound);
       }
       while (read) {
-          fromAcc :> read;
+            fromAcc :> read;
       }
       rgb_led_red.output(0);
       fromIO :> read;
       if (read == 2) {
-          led_green.output(0);
-          rgb_led_blue.output(1);
-          processing = 0;
+           led_green.output(0);
+           rgb_led_blue.output(1);
+           processing = 0;
       } else {
-          green_led_state = 1 - green_led_state;
-          led_green.output(green_led_state);
+           green_led_state = 1 - green_led_state;
+           led_green.output(green_led_state);
       }
   }
   t :> endRound;
-  printf( "\nProcessing %d rounds completed... Took %d ticks\n",roundCount , endRound - startRound);
+  printf( "\nProcessing %d rounds completed... Took %f secs\n",roundLimit , (float)(endRound - startRound)/100000000);
 
 
   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
            for( int x = 0; x < IMWD; x++ ) { //go through each pixel per line
-               if (getBit(val2[y][(int)(floor(x/8))], mod((8 - (x+1)), 8)) == 1) c_out <: 1;
+               if (getBit(val[y][(int)(floor(x/8))], mod((8 - (x+1)), 8)) == 1) c_out <: 1;
                else c_out <: 0;
            }
          }
-  rgb_led_blue.output(0);
 }
 
 
@@ -337,7 +344,6 @@ void DataOutStream(char outfname[], chanend c_in)
 void orientation( client interface i2c_master_if i2c, chanend toDist) {
   i2c_regop_res_t result;
   char status_data = 0;
-  int tilted = 0;
 
   // Configure FXOS8700EQ
   result = i2c.write_reg(FXOS8700EQ_I2C_ADDR, FXOS8700EQ_XYZ_DATA_CFG_REG, 0x01);
@@ -352,20 +358,21 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
   }
 
   //Probe the orientation x-axis forever
+  //Probe the orientation x-axis forever
   while (1) {
-
-    //check until new orientation data is available
-    status_data = i2c.read_reg(FXOS8700EQ_I2C_ADDR, FXOS8700EQ_DR_STATUS, result);
-    //get new x and y axis tilt values
-    int x = read_acceleration(i2c, FXOS8700EQ_OUT_X_MSB);
-    int y = read_acceleration(i2c, FXOS8700EQ_OUT_Y_MSB);
-    if ((x > 10 || x < -10) || (y > 10 || y < -10)) { //if x or y is too far off horizontal, send a 1 indicating a pause should start
-        toDist <: 1;
-    } else { //Send a 0 indicating not to pause or to end the pause
-        toDist <: 0;
-    }
+      //check until new orientation data is available
+      status_data = i2c.read_reg(FXOS8700EQ_I2C_ADDR, FXOS8700EQ_DR_STATUS, result);
+      //get new x and y axis tilt values
+      int x = read_acceleration(i2c, FXOS8700EQ_OUT_X_MSB);
+      int y = read_acceleration(i2c, FXOS8700EQ_OUT_Y_MSB);
+      if ((x > 10 || x < -10) || (y > 10 || y < -10)) { //if x or y is too far off horizontal, send a 1 indicating a pause should start
+          toDist <: 1;
+      } else { //Send a 0 indicating not to pause or to end the pause
+          toDist <: 0;
+      }
   }
 }
+
 
 //GPIO code built using: https://www.xmos.com/developer/download/private/AN00155%3A-xCORE-200-explorer---Simple-GPIO%281.0.1rc1%29.pdf
 //May need to reference
@@ -430,7 +437,7 @@ par {
     on tile[1] : DataInStream(infname, c_inIO);          //thread to read in a PGM image
     on tile[1] : DataOutStream(outfname, c_outIO);       //thread to write out a PGM image
     on tile[0] : distributor(c_inIO, c_outIO, c_control, c_gpio, rowClientInterface, i_explorer_leds[0],
-                            i_explorer_leds[1],i_explorer_leds[2], i_explorer_leds[3]);     //thread to coordinate work on image
+                                i_explorer_leds[1],i_explorer_leds[2], i_explorer_leds[3]); //thread to coordinate work on image
     par (int i = 0; i < noWorkers; i++) {
         on tile[i%2] : rowClient(rowClientInterface[i], i);
     }
