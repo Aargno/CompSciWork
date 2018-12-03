@@ -282,7 +282,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
       roundCount++;
       fromAcc :> read;
       if (read) {
-            int overFlow; //EXAMPLE
+            int overFlow;
             int startTime;
             int time;
             long result;
@@ -400,7 +400,6 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
 }
 
 void timing(chanend timeOut) {
-    //PROBABLY IN NEED OF TOTAL REWRITE
     int overflowCount = 0;
     int time = 0;
     int startTime;
@@ -420,7 +419,7 @@ void timing(chanend timeOut) {
             default :
                 t :> time;
                 if (time < 0) {
-                    overflowCount++; //May count repeatedly until timer itself leaves negative range, may require alternate sol.
+                    overflowCount++;
                     time = INT_MAX + time + 1; //Ticks passed between overflow and catching overflow
                 }
                 break;

@@ -242,8 +242,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
   int expWorkers = 0;
   int roundCount = 0;
   int totalLiveBits = 0;
-  fromTime <: 1;
-//  t :> startRound;
+  t :> startRound;
   while (processing) {
 
       while (expWorkers < noWorkers) {
@@ -282,17 +281,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
       roundCount++;
       fromAcc :> read;
       if (read) {
-            int overFlow; //EXAMPLE
-            int startTime;
-            int time;
-            long result;
-            fromTime <: 0;
-            fromTime :> overFlow;
-            fromTime :> time;
-            fromTime :> startTime;
-            if (overFlow == 0) result = time - startTime;
-            else result = overFlow * INT_MAX + (INT_MAX - startTime) + time; //Number of overflow
-//            t :> pauseRound;
+            t :> pauseRound;
             rgb_led_red.output(1);
             //Need to count number of live bits
             printf("Rounds Processed: %d, Live Bits: %d, Ticks Elapsed: %d\n", roundCount, totalLiveBits, pauseRound - startRound);
@@ -400,7 +389,6 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
 }
 
 void timing(chanend timeOut) {
-    //PROBABLY IN NEED OF TOTAL REWRITE
     int overflowCount = 0;
     int time = 0;
     int startTime;
@@ -420,7 +408,7 @@ void timing(chanend timeOut) {
             default :
                 t :> time;
                 if (time < 0) {
-                    overflowCount++; //May count repeatedly until timer itself leaves negative range, may require alternate sol.
+                    overflowCount++;
                     time = INT_MAX + time + 1; //Ticks passed between overflow and catching overflow
                 }
                 break;
