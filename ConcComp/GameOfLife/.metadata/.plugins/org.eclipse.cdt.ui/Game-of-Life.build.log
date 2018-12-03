@@ -1,43 +1,10 @@
-14:08:34 **** Incremental Build of configuration Default for project Game-of-Life ****
+10:24:26 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-../src/main.xc:93:1: warning: control reaches end of non-void function [-Wreturn-type]
-}
-^
-../src/main.xc:353:7: warning: unused variable `tilted' [-Wunused-variable]
-  int tilted = 0;
-      ^~~~~~
-Analyzing i2c_master.xc
-Analyzing i2c_master_async.xc
-/Users/AaronRobey/Repos/CompSciWork/CompSciWork/ConcComp/GameOfLife/COMS20001/lib_i2c/src/i2c_master_async.xc:126:26: warning: argument 1 of `i2c_master_async_aux' slices interface preventing analysis of its parallel usage [-Wunusual-code]
-    i2c_master_async_aux(i, n, i2c_dist[0], max_transaction_size);
-                         ^
-Analyzing i2c_master_ext.xc
-Analyzing i2c_master_single_port.xc
-Analyzing i2c_slave.xc
-Propagating analysis
-Creating dependencies for i2c_slave.xc
-Creating dependencies for i2c_master_ext.xc
-Creating dependencies for i2c_master.xc
-Creating dependencies for main.xc
-Creating dependencies for debug_printf.c
-Creating dependencies for pgmIO.c
-Compiling pgmIO.c
-Compiling debug_printf.c
-Compiling main.xc
-../src/main.xc:93:1: warning: control reaches end of non-void function [-Wreturn-type]
-}
-^
-../src/main.xc:353:7: warning: unused variable `tilted' [-Wunused-variable]
-  int tilted = 0;
-      ^~~~~~
-Compiling i2c_master.xc
-Compiling i2c_master_single_port.xc
-Creating game_of_life.xe
+xmake[1]: `bin//game_of_life.xe' is up to date.
 Build Complete
 
-14:08:39 Build Finished (took 5s.387ms)
+10:24:27 Build Finished (took 919ms)
 

@@ -7,15 +7,14 @@ int IMHT = 16;
 
 typedef unsigned char uchar;
 
-typedef struct compress_row_data
-{
-    int length;
-    int patternCount[];
-} data;
+// typedef struct compress_row_data
+// {
+//     int length;
+//     int patternCount[];
+// } data;
 
 typedef struct compress_row
 {
-    // data counts;
     int length;
     int *patternCount;
     uchar pattern[];
@@ -30,7 +29,7 @@ row * compress(uchar c[IMWD/8])
     int lastBit = 2;
     int bitCount[IMWD]; //Worst case, find a way around?
     for (int i = 0; i < IMWD; i++) bitCount[i] = 0;
-    int patternLoc = IMWD;
+    int patternLoc = IMWD-1;
     int patternX = 0;
     int get;
     for (int x = 0; x < IMWD / 8; x++)
@@ -48,7 +47,7 @@ row * compress(uchar c[IMWD/8])
             bitCount[patternLength-2]++;
         }
     }
-    row *comp = malloc(sizeof(row) + floor(patternLength/8));
+    row *comp = malloc(sizeof(row) + ceil(patternLength/8));
     comp->length = patternLength;
     comp->patternCount = malloc(sizeof(int) * patternLength);
     for (int i = 0; i < patternLength; i++) comp->patternCount[i] = bitCount[i];
@@ -62,10 +61,12 @@ row * compress(uchar c[IMWD/8])
                 if (lastBit != 2) {
                     // printf("%d\n", lastBit);
                     packBit(comp->pattern[patternX], lastBit, patternLoc % 8);
-                    if (patternLoc % 8 == 0) patternX--;
+                    patternLoc--;
+                    if (patternLoc % 8 == 7) {
+                        patternX++;
+                    }
                 } //packBit(comp->pattern[x], lastBit, patternLoc % 8);
                 lastBit = get;
-                patternLoc--;
             }
         }
     }
@@ -156,7 +157,8 @@ void testArray()
     row *comp;
     comp = compress(c[0]);
     for (int i = 0; i < 2; i++) printBits(comp->pattern[i]);
-    for (int i = 0; i < 16; i++) printf("\n%d\n",comp->patternCount[i]);
+    printf("\n");
+    for (int i = 0; i <= comp->length; i++) printf("%d ",comp->patternCount[i]);
     printf("\n");
     printf("%d\n", comp->length);
 }

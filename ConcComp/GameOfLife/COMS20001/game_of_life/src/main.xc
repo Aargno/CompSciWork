@@ -4,6 +4,7 @@
 #include <platform.h>
 #include <xs1.h>
 #include <math.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "gpio.h"
@@ -12,8 +13,8 @@
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
-#define  IMHT 512                //image height
-#define  IMWD 512                //image width
+#define  IMHT 16                //image height
+#define  IMWD 16                //image width
 #define noWorkers 8              //number of clients
 
 typedef interface i {
@@ -24,7 +25,7 @@ typedef interface i {
     [[notification]] slave void serverReady();
 } i;
 
-char infname[] = "512x512.pgm";     //put your input image path here
+char infname[] = "16x16.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 on tile[0]: in port explorer_buttons = XS1_PORT_4E;
@@ -197,20 +198,19 @@ void rowClient(client interface i rowClient, int index) {
 // Currently the function just inverts the image
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, server i rowServer[noWorkers],
-                                client output_gpio_if led_green, client output_gpio_if rgb_led_blue,
-                                client output_gpio_if rgb_led_green, client output_gpio_if rgb_led_red) {
+void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, chanend fromTime,
+                    server i rowServer[noWorkers], client output_gpio_if led_green,
+                    client output_gpio_if rgb_led_blue, client output_gpio_if rgb_led_green,
+                    client output_gpio_if rgb_led_red) {
   unsigned int green_led_state = 0;
   int read;
   int processing = 0;
   int pauseRound;
   uchar val[IMHT][IMWD/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
-//  uchar val2[IMHT][IMWD/8];
-  timer t;
+//  timer t;
   unsigned int startRound, endRound;
 
   emptyChar(val);//Set characters to all 0 bit
-//  emptyChar(val2);
   //Starting up and wait for tilting of the xCore-200 Explorer
   printf( "ProcessImage: Start, size = %dx%d\n", IMHT, IMWD );
 
@@ -388,6 +388,32 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
   }
 }
 
+void timing(chanend timeOut) {
+    int overflowCount = 0;
+    int time = 0;
+    int startTime;
+    timer t;
+    while (1) {
+        select {
+            case timeOut :> int read :
+                if (read == 1) {
+                    t :> startTime;
+                    time = startTime;
+                } else if (read == 0) {
+                    timeOut <: overflowCount;
+                    timeOut <: time;
+                }
+                break;
+            default :
+                t :> time;
+                if (time < 0) {
+                    overflowCount++;
+                    time = INT_MAX + time + 1; //Ticks passed between overflow and catching overflow
+                }
+                break;
+        }
+    }
+}
 
 //GPIO code built using: https://www.xmos.com/developer/download/private/AN00155%3A-xCORE-200-explorer---Simple-GPIO%281.0.1rc1%29.pdf
 //May need to reference
@@ -401,8 +427,7 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
         select {
             case button_1.event():
                 if (button_1.input() == 0) {
-                    output = 1;
-//                    c_out <: 1; //1 indicating start processing
+                    if (output != 2) output = 1;
                     // Set button event state to active high for debounce
                     button_1.event_when_pins_eq(1);
                 } else {
@@ -414,7 +439,6 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
             case button_2.event():
                             if (button_2.input() == 0) {
                                 output = 2;
-//                                c_out <: 2; //2 indicating start exporting
                                 // Set button event state to active high for debounce
                                 button_2.event_when_pins_eq(1);
                             } else {
@@ -424,7 +448,6 @@ void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, 
                             }
                             break;
             default:
-//                c_out <: 0; //0 indicating carry on as normal
                 break;
         }
         select {
@@ -453,10 +476,11 @@ output_gpio_if i_explorer_leds[4];
 i2c_master_if i2c[1];               //interface to orientation
 
 
-chan c_inIO, c_outIO, c_control, c_gpio;    //extend your channel definitions here
+chan c_inIO, c_outIO, c_control, c_gpio, c_time;    //extend your channel definitions here
 interface i rowClientInterface[noWorkers];
 
 par {
+    on tile[1] : timing(c_time);
     on tile[0] : i2c_master(i2c, 1, p_scl, p_sda, 10);   //server thread providing orientation data
     on tile[0] : orientation(i2c[0],c_control);        //client thread reading orientation data
     on tile[0] : gpio_handler(i_explorer_buttons[0], i_explorer_buttons[1], c_gpio); //Handler thread handling IO data
@@ -464,7 +488,7 @@ par {
     on tile[0] : output_gpio(i_explorer_leds, 4, explorer_leds, null);
     on tile[0] : DataInStream(infname, c_inIO);          //thread to read in a PGM image
     on tile[0] : DataOutStream(outfname, c_outIO);       //thread to write out a PGM image
-    on tile[0] : distributor(c_inIO, c_outIO, c_control, c_gpio, rowClientInterface, i_explorer_leds[0],
+    on tile[0] : distributor(c_inIO, c_outIO, c_control, c_gpio, c_time, rowClientInterface, i_explorer_leds[0],
                                 i_explorer_leds[1],i_explorer_leds[2], i_explorer_leds[3]); //thread to coordinate work on image
     on tile[0] : rowClient(rowClientInterface[0], 0);
     par (int i = 1; i < noWorkers; i++) {
