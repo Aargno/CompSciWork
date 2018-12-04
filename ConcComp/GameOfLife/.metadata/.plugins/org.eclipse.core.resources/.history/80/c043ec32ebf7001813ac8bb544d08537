@@ -309,18 +309,12 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
             fromTime :> overFlow;
             fromTime :> time;
             fromTime :> startTime;
-            if (time < 0) time = INT_MAX + time + 1; //Sets number of ticks passed since time became negative
             if (overFlow == 0) result = (long double)(time - startTime) / 100000000;
-            else {
-                if (startTime < 0) result = (long double)(overflow * INT_MAX + startTime); //Accounts for closeness of timer to overflow on first overflow
-                else result = (long double)(overflow * INT_MAX - startTime); //For positive start time
-//                result = (long double)(result + (INT_MAX - startTime) + time) / 100000000; //Number of overflow
-                result = (long double) (result + time) / 100000000; //gives the previous calculation of all overflows that have passed, adds the number of ticks passed since overflow
-            }
+            else result = (long double)(overFlow * INT_MAX + (INT_MAX - startTime) + time) / 100000000; //Number of overflow
 //            t :> pauseRound;
             rgb_led_red.output(1);
             //Need to count number of live bits
-            printf("Rounds Processed: %d, Live bits: %d, Seconds Elapsed: %Lf\n", roundCount, totalLiveBits, result);
+            printf("Rounds Processed: %d, Live bits: %d, Seconds Elapsed: %llf\n", roundCount, totalLiveBits, (float)(endRound - startRound)/100000000);
       }
       totalLiveBits = 0;
       while (read) {
