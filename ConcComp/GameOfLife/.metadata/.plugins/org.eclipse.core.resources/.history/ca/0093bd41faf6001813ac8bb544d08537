@@ -13,8 +13,8 @@
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
-#define  IMHT 1024                //image height
-#define  IMWD 1024                //image width
+#define  IMHT 512                //image height
+#define  IMWD 512                //image width
 #define noWorkers 8              //number of clients
 
 typedef interface i {

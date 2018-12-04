@@ -1,10 +1,30 @@
-10:24:26 **** Incremental Build of configuration Default for project Game-of-Life ****
+12:52:18 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-xmake[1]: `bin//game_of_life.xe' is up to date.
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         24 .  OKAY
+  Memory available:       262144,   used:      236484 .  OKAY
+    (Stack: 175188, Code: 57912, Data: 3384)
+Constraints checks PASSED.
+Constraint check for tile[1]:
+  Cores available:            8,   used:          8 .  OKAY
+  Timers available:          10,   used:          8 .  OKAY
+  Chanends available:        32,   used:         15 .  OKAY
+  Memory available:       262144,   used:      248216 .  OKAY
+    (Stack: 238932, Code: 8444, Data: 840)
+Constraints checks PASSED.
 Build Complete
 
-10:24:27 Build Finished (took 919ms)
+12:52:23 Build Finished (took 4s.751ms)
 

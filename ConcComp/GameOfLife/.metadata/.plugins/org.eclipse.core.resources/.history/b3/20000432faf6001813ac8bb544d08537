@@ -13,8 +13,8 @@
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
-#define  IMHT 1024                //image height
-#define  IMWD 1024                //image width
+#define  IMHT 16                //image height
+#define  IMWD 16                //image width
 #define noWorkers 8              //number of clients
 
 typedef interface i {
@@ -25,7 +25,7 @@ typedef interface i {
     [[notification]] slave void serverReady();
 } i;
 
-char infname[] = "512x512.pgm";     //put your input image path here
+char infname[] = "16x16.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 on tile[0]: in port explorer_buttons = XS1_PORT_4E;
