@@ -313,8 +313,8 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
             if (startTime < 0) startTime = INT_MAX + startTime + 1;
             if (overFlow == 0) result = (long double)(time - startTime) / 100000000;
             else {
-//                if (startTime < 0) result = (long double)(overflow * INT_MAX + startTime); //Accounts for closeness of timer to overflow on first overflow
-                /*else*/ result = (long double)(overflow * INT_MAX - startTime); //For positive start time
+                if (startTime < 0) result = (long double)(overflow * INT_MAX + startTime); //Accounts for closeness of timer to overflow on first overflow
+                else result = (long double)(overflow * INT_MAX - startTime); //For positive start time
 //                result = (long double)(result + (INT_MAX - startTime) + time) / 100000000; //Number of overflow
                 result = (long double) (result + time) / 100000000; //gives the previous calculation of all overflows that have passed, adds the number of ticks passed since overflow
             }
