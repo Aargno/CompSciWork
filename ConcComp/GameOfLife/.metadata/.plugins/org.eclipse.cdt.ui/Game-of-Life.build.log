@@ -1,10 +1,13 @@
-10:24:26 **** Incremental Build of configuration Default for project Game-of-Life ****
+15:27:21 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-xmake[1]: `bin//game_of_life.xe' is up to date.
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
 Build Complete
 
-10:24:27 Build Finished (took 919ms)
+15:27:25 Build Finished (took 3s.852ms)
 

@@ -14,8 +14,8 @@
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
-#define  IMHT 512               //image height
-#define  IMWD 512               //image width
+#define  IMHT 16               //image height
+#define  IMWD 16               //image width
 #define noWorkers 8              //number of clients
 
 typedef interface i {
@@ -26,7 +26,7 @@ typedef interface i {
     [[notification]] slave void serverReady();
 } i;
 
-char infname[] = "512x512.pgm";     //put your input image path here
+char infname[] = "16x16.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 on tile[0]: in port explorer_buttons = XS1_PORT_4E;
@@ -61,7 +61,7 @@ void DataInStream(char infname[], chanend c_out)
   uchar line[ IMWD ];
   printf( "DataInStream: Start...\n" );
 
-  if (IMHT < 512) {
+  if (IMHT <= 512) {
       //Open PGM file
       res = _openinpgm( infname, IMWD, IMHT );
       if( res ) {
@@ -229,7 +229,6 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
   emptyChar(val);//Set characters to all 0 bit
   //Starting up and wait for tilting of the xCore-200 Explorer
   printf( "ProcessImage: Start, size = %dx%d\n", IMHT, IMWD );
-
   while (processing != 1) {
       fromIO <: 1;
       fromIO :> processing; //if 1 is recieved begin reading and processing, otherwise wait
@@ -237,6 +236,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
           printf("Can't export image until image is loaded\n");
       }
   }
+  fromTime <: 1;
   green_led_state = !green_led_state;
   led_green.output(green_led_state);
 
@@ -261,7 +261,6 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
 
   while (processing) {
       t :> startRound;
-      fromTime <: 1;
 
       while (expWorkers < noWorkers) {
 
@@ -300,28 +299,27 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
       roundCount++;
       fromAcc :> read;
       if (read) {
-          t :> endRound;
-            int overFlow; //EXAMPLE
-            int startTime;
-            int time;
-            long double result;
+            t :> endRound;
+            unsigned int overFlow; //EXAMPLE
+            unsigned int startTime;
+            unsigned int time;
+            float result;
             fromTime <: 0;
             fromTime :> overFlow;
             fromTime :> time;
             fromTime :> startTime;
-            if (time < 0) time = INT_MAX + time + 1; //Sets number of ticks passed since time became negative
-            if (startTime < 0) startTime = INT_MAX + startTime + 1;
-            if (overFlow == 0) result = (long double)(time - startTime) / 100000000;
-            else {
-//                if (startTime < 0) result = (long double)(overflow * INT_MAX + startTime); //Accounts for closeness of timer to overflow on first overflow
-                /*else*/ result = (long double)(overflow * INT_MAX - startTime); //For positive start time
-//                result = (long double)(result + (INT_MAX - startTime) + time) / 100000000; //Number of overflow
-                result = (long double) (result + time) / 100000000; //gives the previous calculation of all overflows that have passed, adds the number of ticks passed since overflow
-            }
+            printf("%u %u %u\n", time, startTime, overFlow);
+            result = (float) overFlow * (UINT_MAX / 100000000);
+            printf("%f\n", result);
+            if (overFlow != 0) {
+//                printf("%d\n", overFlow);
+                result -= (float) startTime / 100000000;
+                result += (float) time / 100000000;
+            } else result = (float) (time - startTime) / 100000000;
 //            t :> pauseRound;
             rgb_led_red.output(1);
             //Need to count number of live bits
-            printf("Rounds Processed: %d, Live bits: %d, Seconds Elapsed: %Lf\n", roundCount, totalLiveBits, result);
+            printf("Rounds Processed: %d, Live bits: %d, Seconds Elapsed: %f %f\n", roundCount, totalLiveBits, result, (float)time / 100000000);
       }
       totalLiveBits = 0;
       while (read) {
@@ -427,10 +425,11 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
 
 void timing(chanend timeOut) {
     //PROBABLY IN NEED OF TOTAL REWRITE
-    int overflowCount = 0; //counts how many times overflow has occurred (number of times INT)MAX ticks have happened roughly)
-    int flag;
-    int time = 0;
-    int startTime;
+    unsigned int overflowCount = 0; //counts how many times overflow has occurred (number of times INT)MAX ticks have happened roughly)
+    unsigned int flag = 0;
+    unsigned int lastTime;
+    unsigned int time = 0;
+    unsigned int startTime = 0;
     timer t;
     while (1) {
         select {
@@ -438,7 +437,10 @@ void timing(chanend timeOut) {
                 if (read == 1) {
                     overflowCount = 0;
                     t :> startTime;
+                    flag = 1;
                     time = startTime;
+                    lastTime = startTime;
+                    read = 2;
                 } else if (read == 0) {
                     timeOut <: overflowCount;
                     timeOut <: time;
@@ -447,15 +449,8 @@ void timing(chanend timeOut) {
                 break;
             default :
                 t :> time;
-                if (time < 0 && !flag) {
-                    overflowCount++; //May count repeatedly until timer itself leaves negative range, may require alternate sol.
-//                    time = INT_MAX + time + 1; //Ticks passed between overflow and catching overflow
-                    flag = 1;
-                } else if (time > 0 && flag) {
-                    overflowCount++;
-                    flag = 0;
-                }
-                if (flag) time = INT_MAX + time + 1;
+                if (flag && time < lastTime) overflowCount++;
+                lastTime = time;
                 break;
         }
     }
