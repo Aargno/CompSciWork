@@ -236,3 +236,19 @@ java.lang.NullPointerException
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:636)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:591)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1450)
+
+!ENTRY org.eclipse.cdt.debug.core 4 104 2018-12-05 15:41:53.033
+!MESSAGE The program file specified in the launch configuration does not exist
+!STACK 0
+java.io.FileNotFoundException: /Users/AaronRobey/Repos/CompSciWork/CompSciWork/ConcComp/GameOfLife/COMS20001/game_of_life/bin/game_of_life.xe not found
+	at org.eclipse.cdt.debug.core.CDebugUtils.verifyProgramPath(Unknown Source)
+	at org.eclipse.cdt.debug.core.CDebugUtils.verifyProgramPath(Unknown Source)
+	at org.eclipse.cdt.launch.AbstractCLaunchDelegate.verifyProgramPath(AbstractCLaunchDelegate.java:444)
+	at com.xmos.cdt.launch.core.XCoreRunLaunchDelegate.access$0(Unknown Source)
+	at com.xmos.cdt.launch.core.XCoreRunLaunchDelegate$LaunchDelegateRun.launch(Unknown Source)
+	at com.xmos.cdt.launch.core.XCoreRunLaunchDelegate.launch(Unknown Source)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:858)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:707)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1018)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$8.run(DebugUIPlugin.java:1222)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:53)

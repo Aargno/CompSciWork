@@ -1,9 +1,4 @@
-14:16:49 **** Clean-only build of configuration Default for project Game-of-Life ****
-xmake clean 
-Cleaning /Users/AaronRobey/Repos/CompSciWork/CompSciWork/ConcComp/GameOfLife/COMS20001/game_of_life
-rm -rf './bin/'
-rm -rf '.build'
-14:16:58 **** Build of configuration Default for project Game-of-Life ****
+15:41:44 **** Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
@@ -11,17 +6,184 @@ Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xasse
 Analyzing pgmIO.c
 Analyzing debug_printf.c
 Analyzing main.xc
-../src/main.xc:312:22: error: use of undeclared identifer `overflow'
-            result = overflow * INT_MAX;
-                     ^
+../src/main.xc:225:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:225:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 0..4)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:520:54: note: previously used here
+    on tile[0] : rowClient(rowClientInterface[0], 0, c_Client[0], c_Client[1]);
+                                                     ^~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 4..8)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:520:67: note: previously used here
+    on tile[0] : rowClient(rowClientInterface[0], 0, c_Client[0], c_Client[1]);
+                                                                  ^~~~~~~~~~~
+../src/main.xc:529:58: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                         ^~~~~~~~~~~
+../src/main.xc:529:58: error: `c_Client' used in more than two parallel statements (byte range 12..16)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                         ^~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 8..12)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:58: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                         ^~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 16..20)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 20..24)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 24..28)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 28..32)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
 xmake: *** [analyze] Error 2
-14:17:15 **** Incremental Build of configuration Default for project Game-of-Life ****
+15:41:49 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
 Analyzing main.xc
+../src/main.xc:225:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:225:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 0..4)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:520:54: note: previously used here
+    on tile[0] : rowClient(rowClientInterface[0], 0, c_Client[0], c_Client[1]);
+                                                     ^~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 4..8)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:520:67: note: previously used here
+    on tile[0] : rowClient(rowClientInterface[0], 0, c_Client[0], c_Client[1]);
+                                                                  ^~~~~~~~~~~
+../src/main.xc:529:58: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                         ^~~~~~~~~~~
+../src/main.xc:529:58: error: `c_Client' used in more than two parallel statements (byte range 12..16)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                         ^~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 8..12)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:58: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                         ^~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 16..20)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 20..24)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 24..28)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: error: `c_Client' used in more than two parallel statements (byte range 28..32)
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:529:71: note: previously used here
+        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
+xmake: *** [analyze] Error 2
+15:42:44 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:225:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
 Analyzing gpio.xc
 Analyzing i2c_master.xc
 Analyzing i2c_master_async.xc
@@ -46,6 +208,12 @@ Creating dependencies for pgmIO.c
 Compiling pgmIO.c
 Compiling debug_printf.c
 Compiling main.xc
+../src/main.xc:225:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:225:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
 Compiling gpio.xc
 Compiling i2c_master.xc
 Compiling i2c_master_async.xc
@@ -58,76 +226,120 @@ Compiling i2c_slave.xc
 Compiling xassert.xc
 Creating game_of_life.xe
 Build Complete
-14:17:37 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-xmake[1]: `bin//game_of_life.xe' is up to date.
-Build Complete
-14:18:11 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-xmake[1]: `bin//game_of_life.xe' is up to date.
-Build Complete
-14:19:53 **** Incremental Build of configuration Default for project Game-of-Life ****
+15:44:32 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
 Analyzing main.xc
+../src/main.xc:225:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:225:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
 Propagating analysis
 Creating dependencies for main.xc
 Compiling main.xc
+../src/main.xc:225:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:225:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
 Compiling gpio.xc
 Compiling i2c_master.xc
 Creating game_of_life.xe
 Build Complete
-14:20:56 **** Incremental Build of configuration Default for project Game-of-Life ****
+15:52:02 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
 Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
-Creating game_of_life.xe
-Build Complete
-14:25:48 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-../src/main.xc:313:17: error: use of undeclared identifer `overflow'
-            if (overflow != 0) {
-                ^
+../src/main.xc:205:9: error: parse error before '}' token
+        }
+        ^
+../src/main.xc:227:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:227:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
+../src/main.xc:527:18: error: called object is not a function
+    on tile[0] : rowClient(rowClientInterface[0], 0, c_Client[0], c_Client[1]);
+                 ^
+../src/main.xc:528:18: error: called object is not a function
+    on tile[0] : rowClient(rowClientInterface[1], 1, c_Client[1], c_Client[2]);
+                 ^
+../src/main.xc:529:18: error: called object is not a function
+    on tile[1] : rowClient(rowClientInterface[2], 2, c_Client[2], c_Client[3]);
+                 ^
+../src/main.xc:530:18: error: called object is not a function
+    on tile[1] : rowClient(rowClientInterface[3], 3, c_Client[3], c_Client[4]);
+                 ^
+../src/main.xc:531:18: error: called object is not a function
+    on tile[1] : rowClient(rowClientInterface[4], 4, c_Client[4], c_Client[5]);
+                 ^
+../src/main.xc:532:18: error: called object is not a function
+    on tile[1] : rowClient(rowClientInterface[5], 5, c_Client[5], c_Client[6]);
+                 ^
+../src/main.xc:533:18: error: called object is not a function
+    on tile[1] : rowClient(rowClientInterface[6], 6, c_Client[6], c_Client[7]);
+                 ^
+../src/main.xc:534:18: error: called object is not a function
+    on tile[1] : rowClient(rowClientInterface[7], 7, c_Client[7], c_Client[0]);
+                 ^
 xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
 xmake: *** [analyze] Error 2
-14:25:58 **** Incremental Build of configuration Default for project Game-of-Life ****
+15:52:28 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
 Analyzing main.xc
+../src/main.xc:226:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:226:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
 Creating dependencies for main.xc
 Compiling main.xc
+../src/main.xc:226:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:226:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
 Creating game_of_life.xe
 Build Complete
-14:26:43 **** Incremental Build of configuration Default for project Game-of-Life ****
+15:57:55 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
 Analyzing main.xc
-../src/main.xc:314:32: error: use of undeclared identifer `test'
-                printf("%d\n", test);
-                               ^
-xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
-xmake: *** [analyze] Error 2
-14:26:55 **** Incremental Build of configuration Default for project Game-of-Life ****
+../src/main.xc:228:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:228:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:228:16: warning: unused variable `startRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+               ^~~~~~~~~~
+../src/main.xc:228:28: warning: unused variable `endRound' [-Wunused-variable]
+  unsigned int startRound, endRound;
+                           ^~~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+15:59:56 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
@@ -140,7 +352,17 @@ Compiling gpio.xc
 Compiling i2c_master.xc
 Creating game_of_life.xe
 Build Complete
-14:28:17 **** Incremental Build of configuration Default for project Game-of-Life ****
+16:01:29 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+16:03:56 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
@@ -151,163 +373,5 @@ Creating dependencies for main.xc
 Compiling main.xc
 Compiling gpio.xc
 Compiling i2c_master.xc
-Creating game_of_life.xe
-Build Complete
-14:30:25 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
-Creating game_of_life.xe
-Build Complete
-14:33:58 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Propagating analysis
-Creating dependencies for main.xc
-Compiling main.xc
-Compiling gpio.xc
-Compiling i2c_master.xc
-Creating game_of_life.xe
-Build Complete
-14:35:26 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
-Creating game_of_life.xe
-Build Complete
-14:37:16 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
-Creating game_of_life.xe
-Build Complete
-14:39:04 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
-Creating game_of_life.xe
-Build Complete
-14:57:36 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Propagating analysis
-Creating dependencies for main.xc
-Compiling main.xc
-Compiling gpio.xc
-Compiling i2c_master.xc
-Creating game_of_life.xe
-Build Complete
-15:02:13 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Propagating analysis
-Creating dependencies for main.xc
-Compiling main.xc
-Compiling gpio.xc
-Compiling i2c_master.xc
-Creating game_of_life.xe
-Build Complete
-15:05:24 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Propagating analysis
-Creating dependencies for main.xc
-Compiling main.xc
-Compiling gpio.xc
-Compiling i2c_master.xc
-Creating game_of_life.xe
-Build Complete
-15:06:06 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Propagating analysis
-Creating dependencies for main.xc
-Compiling main.xc
-Compiling gpio.xc
-Compiling i2c_master.xc
-Creating game_of_life.xe
-Build Complete
-15:12:27 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
-Creating game_of_life.xe
-Build Complete
-15:14:56 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Propagating analysis
-Creating dependencies for main.xc
-Compiling main.xc
-Compiling gpio.xc
-Compiling i2c_master.xc
-Creating game_of_life.xe
-Build Complete
-15:22:26 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
-Creating game_of_life.xe
-Build Complete
-15:26:00 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
-Creating game_of_life.xe
-Build Complete
-15:27:21 **** Incremental Build of configuration Default for project Game-of-Life ****
-xmake all 
-Checking build modules
-WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
-Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
-Analyzing main.xc
-Creating dependencies for main.xc
-Compiling main.xc
 Creating game_of_life.xe
 Build Complete

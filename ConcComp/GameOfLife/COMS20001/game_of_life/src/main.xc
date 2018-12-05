@@ -14,8 +14,8 @@
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
-#define  IMHT 16               //image height
-#define  IMWD 16               //image width
+#define  IMHT 128               //image height
+#define  IMWD 128               //image width
 #define noWorkers 8              //number of clients
 
 typedef interface i {
@@ -26,7 +26,7 @@ typedef interface i {
     [[notification]] slave void serverReady();
 } i;
 
-char infname[] = "16x16.pgm";     //put your input image path here
+char infname[] = "128x128.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 on tile[0]: in port explorer_buttons = XS1_PORT_4E;
@@ -201,6 +201,8 @@ void rowClient(client interface i rowClient, int index, streaming chanend c_up, 
                 }
                 load = 1 - load;
              break;
+            default :
+                break;
         }
     }
 }
@@ -220,11 +222,11 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
                     client output_gpio_if rgb_led_red) {
   unsigned int green_led_state = 0;
   int read;
+  int expFlag = 0;
   int processing = 0;
-//  int pauseRound;
-  uchar val[IMHT][IMWD/8]; //IMWD and IMHT are defined as 16, will need to change to handle different file res
-  timer t;
+  uchar val[IMHT][IMWD/8];
   unsigned int startRound, endRound;
+  timer t;
 
   emptyChar(val);//Set characters to all 0 bit
   //Starting up and wait for tilting of the xCore-200 Explorer
@@ -260,8 +262,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
   int totalLiveBits = 0;
 
   while (processing) {
-      t :> startRound;
-
+      t:>startRound;
       while (expWorkers < noWorkers) {
 
           [[ordered]]
@@ -282,63 +283,53 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
                   break;
 
               case rowServer[int cId].exp(int liveBitCount, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-                    for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
-                        memcpy(&val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
+                    if (expFlag) {
+                        for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
+                            memcpy(&val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
+                        }
+                        processing = 0;
                     }
                   totalLiveBits += liveBitCount;
                   expWorkers++;
                   break;
           }
       }
-
       for (int i = 0; i < noWorkers; i++) {
           rowServer[i].serverReady();
       }
       loadWorkers = 0;
       expWorkers = 0;
       roundCount++;
-      fromAcc :> read;
+      if (processing != 0) fromAcc :> read;
       if (read) {
             t :> endRound;
-            unsigned int overFlow; //EXAMPLE
-            unsigned int startTime;
-            unsigned int time;
+            printf( "\nProcessing %d round completed... Took %f secs\n",roundCount , (float)(endRound - startRound)/100000000);
             float result;
             fromTime <: 0;
-            fromTime :> overFlow;
-            fromTime :> time;
-            fromTime :> startTime;
-            printf("%u %u %u\n", time, startTime, overFlow);
-            result = (float) overFlow * (UINT_MAX / 100000000);
-            printf("%f\n", result);
-            if (overFlow != 0) {
-//                printf("%d\n", overFlow);
-                result -= (float) startTime / 100000000;
-                result += (float) time / 100000000;
-            } else result = (float) (time - startTime) / 100000000;
-//            t :> pauseRound;
+            fromTime :> result;
             rgb_led_red.output(1);
-            //Need to count number of live bits
-            printf("Rounds Processed: %d, Live bits: %d, Seconds Elapsed: %f %f\n", roundCount, totalLiveBits, result, (float)time / 100000000);
+            printf("Rounds Processed: %d, Live bits: %d, Seconds Elapsed: %f\n", roundCount, totalLiveBits, result);
       }
       totalLiveBits = 0;
       while (read) {
             fromAcc :> read;
       }
       rgb_led_red.output(0);
-      fromIO <: 1;
-      fromIO :> read;
-      if (read == 2) {
-           led_green.output(0);
-           rgb_led_blue.output(1);
-           processing = 0;
-      } else {
-           green_led_state = 1 - green_led_state;
-           led_green.output(green_led_state);
+      if (processing != 0) {
+          fromIO <: 1;
+          fromIO :> read;
+          if (read == 2) {
+               led_green.output(0);
+               rgb_led_blue.output(1);
+               expFlag = 1;
+          } else {
+               green_led_state = 1 - green_led_state;
+               led_green.output(green_led_state);
+          }
       }
   }
 //  t :> endRound;
-//  printf( "\nProcessing %d rounds completed... Took %f secs\n",roundCount , (float)(endRound - startRound)/100000000);
+//  printf( "\nProcessing %d round completed... Took %f secs\n",roundCount , (float)(endRound - startRound)/100000000);
 
 
   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
@@ -442,9 +433,13 @@ void timing(chanend timeOut) {
                     lastTime = startTime;
                     read = 2;
                 } else if (read == 0) {
-                    timeOut <: overflowCount;
-                    timeOut <: time;
-                    timeOut <: startTime;
+                    float result;
+                    result = (float) overflowCount * (UINT_MAX / 100000000);
+                    if (overflowCount != 0) {
+                        result -= (float) startTime / 100000000;
+                        result += (float) time / 100000000;
+                    } else result = (float) (time - startTime) / 100000000;
+                    timeOut <: result;
                 }
                 break;
             default :
@@ -541,7 +536,7 @@ par {
     on tile[1] : rowClient(rowClientInterface[6], 6, c_Client[6], c_Client[7]);
     on tile[1] : rowClient(rowClientInterface[7], 7, c_Client[7], c_Client[0]);
 //    par (int i = 1; i < noWorkers; i++) {
-//        on tile[1] : rowClient(rowClientInterface[i], 0, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
+//        on tile[1] : rowClient(rowClientInterface[i], i, c_Client[i], c_Client[mod(i + 1, noWorkers)]);
 //    }
 }
 
