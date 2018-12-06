@@ -403,10 +403,10 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
           output = 0;
       }
       select {
-          case toDist :> int read :
-              if (read) toDist <: output;
+          case toDist :> int read : //if Distributor has requested an output over the channel
+              if (read) toDist <: output; //Send output to distributor
               break;
-          default :
+          default : //else do nothing
               break;
       }
   }
@@ -415,34 +415,34 @@ void orientation( client interface i2c_master_if i2c, chanend toDist) {
 void timing(chanend timeOut) {
     //PROBABLY IN NEED OF TOTAL REWRITE
     unsigned int overflowCount = 0; //counts how many times overflow has occurred (number of times INT)MAX ticks have happened roughly)
-    unsigned int flag = 0;
-    unsigned int lastTime;
-    unsigned int time = 0;
-    unsigned int startTime = 0;
+    unsigned int flag = 0; //flag to track whether we should be counting overflows yet
+    unsigned int lastTime; //stores the last measured time
+    unsigned int time = 0; //stores current time
+    unsigned int startTime = 0; //stores the time the timer was started by distributor
     timer t;
     while (1) {
         select {
-            case timeOut :> int read :
-                if (read == 1) {
-                    overflowCount = 0;
-                    t :> startTime;
-                    flag = 1;
+            case timeOut :> int read : //if a value is received on the channel from distributor
+                if (read == 1) { //if distributor sent a 1, reset the timer
+                    overflowCount = 0; //reset the overflow count
+                    t :> startTime; //set startTime to current time
+                    flag = 1; //start counting overflows
                     time = startTime;
                     lastTime = startTime;
                     read = 2;
                 } else if (read == 0) {
                     float result;
-                    result = (float) overflowCount * (UINT_MAX / 100000000);
-                    if (overflowCount != 0) {
-                        result -= (float) startTime / 100000000;
-                        result += (float) time / 100000000;
-                    } else result = (float) (time - startTime) / 100000000;
+                    result = (float) overflowCount * (UINT_MAX / 100000000); //find number of overflowed ticks from overflowcount and convert to seconds
+                    if (overflowCount != 0) { //if there has been at least one instance of timer t overflowing
+                        result -= (float) startTime / 100000000; //subtract start time in seconds from result
+                        result += (float) time / 100000000; //add current value of timer to result
+                    } else result = (float) (time - startTime) / 100000000; //else just subtract start time from current time
                     timeOut <: result;
                 }
                 break;
             default :
                 t :> time;
-                if (flag && time < lastTime) overflowCount++;
+                if (flag && time < lastTime) overflowCount++; //if overflow counting flag is set and there has been an overflow, iterate overflowCount
                 lastTime = time;
                 break;
         }
@@ -453,45 +453,44 @@ void timing(chanend timeOut) {
 //May need to reference
 void gpio_handler(client input_gpio_if button_1, client input_gpio_if button_2, chanend c_out) {
     // Initial button event state, active low
-    button_1.event_when_pins_eq(0);
-    button_2.event_when_pins_eq(0);
+    button_1.event_when_pins_eq(0); //sets button 1 event to trigger when the value on the pin is 0/pressed
+    button_2.event_when_pins_eq(0); //sets button 2 event to trigger when the value on the pin is 0/pressed
     int output = 0;
     int ready = 0;
     while (1) {
         select {
             case button_1.event():
-                if (button_1.input() == 0) {
-                    if (output != 2) output = 1;
-                    // Set button event state to active high for debounce
-                    button_1.event_when_pins_eq(1);
+                if (button_1.input() == 0) { //if button is pressed
+                    if (output != 2) output = 1; //if the export button hasn't already been pressed, set output to 1
+                    button_1.event_when_pins_eq(1); // Set button event state to trigger when button released
                 } else {
                     // Debounce button
                     delay_milliseconds(50);
-                    button_1.event_when_pins_eq(0);
+                    button_1.event_when_pins_eq(0); //sets button 1 event to trigger when the value on the pin is 0/pressed
                 }
                 break;
             case button_2.event():
-                            if (button_2.input() == 0) {
-                                output = 2;
-                                // Set button event state to active high for debounce
-                                button_2.event_when_pins_eq(1);
-                            } else {
-                                // Debounce button
-                                delay_milliseconds(50);
-                                button_2.event_when_pins_eq(0);
-                            }
-                            break;
+                if (button_2.input() == 0) { //if button is pressed
+                    output = 2;
+                    // Set button event state to active high for debounce
+                    button_2.event_when_pins_eq(1); //sets button 2 event to trigger when the value on the pin is 1/released
+                } else {
+                    // Debounce button
+                    delay_milliseconds(50);
+                    button_2.event_when_pins_eq(0);
+                }
+                break;
             default:
                 break;
         }
         select {
-            case c_out :> ready:
+            case c_out :> ready: //if gpio_handler receives a 1 on the channel from distributor
                 if (ready)  {
-                    c_out <: output;
+                    c_out <: output; //send distributor output/the value of the button press
                     output = 0;
                 }
                 break;
-            default:
+            default: //else do nothing
                 break;
         }
     }
