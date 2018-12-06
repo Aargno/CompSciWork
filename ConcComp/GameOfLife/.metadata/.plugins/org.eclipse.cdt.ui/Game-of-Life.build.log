@@ -1,19 +1,16 @@
-22:19:46 **** Incremental Build of configuration Default for project Game-of-Life ****
+10:32:37 **** Incremental Build of configuration Default for project Game-of-Life ****
 xmake all 
 Checking build modules
 WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
 Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
 Analyzing main.xc
-../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
-  int expFlag = 0;
-      ^~~~~~~
+Propagating analysis
 Creating dependencies for main.xc
 Compiling main.xc
-../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
-  int expFlag = 0;
-      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
 Creating game_of_life.xe
 Build Complete
 
-22:19:50 Build Finished (took 3s.902ms)
+10:32:42 Build Finished (took 4s.753ms)
 

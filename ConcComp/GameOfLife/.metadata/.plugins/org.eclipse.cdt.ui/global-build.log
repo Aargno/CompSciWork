@@ -1815,3 +1815,327 @@ Compiling main.xc
       ^~~~~~~
 Creating game_of_life.xe
 Build Complete
+09:07:45 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:226:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:226:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+09:16:41 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+09:17:32 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+09:19:35 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+09:20:44 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+09:21:31 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+09:22:52 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+09:23:33 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:227:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+09:41:25 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+09:46:42 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+09:47:29 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+10:10:30 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+10:12:27 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+10:13:19 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+10:17:07 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+10:18:14 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+10:21:23 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+10:22:22 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+10:25:44 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+10:26:58 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+10:27:55 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+10:29:30 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+10:31:54 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+10:32:37 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
