@@ -20,9 +20,9 @@ typedef unsigned char uchar;      //using uchar as shorthand
 
 typedef interface i {
     [[clears_notification]]
-    void load(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]);
+    void load(int firstRound, int remainder, uchar rows[][IMWD/8]);
     [[clears_notification]]
-    void exp(int index, uchar rows[IMHT/noWorkers + 2][IMWD/8]);
+    void exp(int liveBits, int remainder, uchar rows[][IMWD/8]);
     [[notification]] slave void serverReady();
 } i;
 
@@ -104,20 +104,6 @@ int mod(int x, int m) {
     return x % m;
 }
 
-///**
-// * Function to check if given bit is live or dead.
-// */
-//int checkNeighbourBit(int x, int y, uchar check[IMHT/4 + 2][IMWD/8]) {
-//    int arrayAddressX = mod(x, IMWD);
-//    int arrayAddressY = mod(y, IMHT / 4 + 2);
-//    int loc = (int)floor(arrayAddressX/8);
-//    x = mod(x, 8);
-//    //What it should do:
-//    //Take the correct position array, we get this above, and right shift the character by the correct ammount of bits
-//    //for checking. -1 should give x = 7 which gives a shift of 8 - x+1 = 0, while say 16 should give x=0 and
-//    //a shift of 8 - x+1 = 7 to check the leftmost bit in the character (we consider this the first bit)
-//    return getBit(check[arrayAddressY][loc], mod((8 - (x + 1)), 8));
-//}
 
 //Packs a given bit into a given location in a given uchar
 uchar packBit(uchar c, int val, int location) {
@@ -178,30 +164,35 @@ void rowClient(client interface i rowClient, int index, streaming chanend c_up, 
     int liveBitCount = 0;
     int firstRound = 1; //Flag indicating if we are on the first processing round
     int load = 1;   //Flag indiciating if we should load the board form the server
+    int remainder = 0; //Value storing additional number of rows beyond IMHT/noWorkers the thread must process
+    if (index == noWorkers - 1) {
+        remainder = mod(IMHT, noWorkers);
+    }
+
     while (1) {
         select {
             case rowClient.serverReady() :
                 if (load) {
-                    rowClient.load(firstRound, rows); //Sync client with server and other clients
+                    rowClient.load(firstRound, remainder, rows); //Sync client with server and other clients
                     if (firstRound) {
                         firstRound = 0;
                     }
-                    for (int row = 1; row < (IMHT / noWorkers) + 1; row++) { //Perform round processing on rows and store results in output
+                    for (int row = 1; row < (IMHT / noWorkers) + 1 + remainder; row++) { //Perform round processing on rows and store results in output
                         for (int col = 0; col < IMWD; col++) {
                             liveBitCount += checkNeighbours(row, col, rows, output, index); //Keeps track of the number of live bits on the board
                         }
                     }
 
                 } else { //If the client has loaded already
-                    rowClient.exp(liveBitCount, output); //Update the server that a round has been processed, send processed round
-                    for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //Update rows with output for start of next round
+                    rowClient.exp(liveBitCount, remainder, output); //Update the server that a round has been processed, send processed round
+                    for (int r = 1; r < (IMHT/noWorkers + 1 + remainder); r++) { //Update rows with output for start of next round
                         memcpy(&rows[r], &output[r], (IMWD/8));
                     }
                     for (int c = 0; c < (IMWD/8); c++) { //Using async channels send processed rows that need to be shared to other workers
                        c_down <: rows[IMHT/noWorkers][c];
                        c_up <: rows[1][c];
                        c_up :> rows[0][c];
-                       c_down :> rows[IMHT/noWorkers + 1][c];
+                       c_down :> rows[IMHT/noWorkers + remainder + 1][c];
                     }
                     liveBitCount = 0; //Reset liveBitCount
                 }
@@ -268,9 +259,9 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
           select {
               //Load function, called at start of each processing round by each worker, forces workers to wait until all workers have called load
               //before being able to call exp
-              case rowServer[int cId].load(int firstRound, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
+              case rowServer[int cId].load(int firstRound, int remainder, uchar rows[][IMWD/8]) :
                   if (firstRound) { //Only loads board to worker when on first round
-                      for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
+                      for (int r = 0; r < (IMHT/noWorkers + 2 + remainder); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
                           memcpy(&rows[r], &val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
                       }
                   }
@@ -282,8 +273,8 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
                   }
                   break;
               //Export function, allows workers to update server with round they just processed
-              case rowServer[int cId].exp(int liveBitCount, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-                        for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
+              case rowServer[int cId].exp(int liveBitCount, int remainder, uchar rows[][IMWD/8]) :
+                        for (int r = 1; r < (IMHT/noWorkers + 1 + remainder); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
                             memcpy(&val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
                         }
                   totalLiveBits += liveBitCount; //Track the number of livebits recorded by workers
