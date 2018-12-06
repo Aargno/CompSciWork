@@ -1073,12 +1073,12 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1102,12 +1102,17 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
-<fCall name="printf" global="true" numArgs="1">
+<fCall name="printf" global="true" numArgs="2">
   <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
     <values>
       <value type="unknown"/>
     </values>
@@ -1132,7 +1137,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1144,7 +1149,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="34"/></value>
+      <value type="intval"><intval isSigned="true" val="130"/></value>
     </values>
   </arg>
 </fCall>
@@ -1223,7 +1228,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1242,7 +1247,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1278,7 +1283,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1297,7 +1302,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1333,7 +1338,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1352,7 +1357,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1388,7 +1393,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1407,7 +1412,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1443,7 +1448,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1462,7 +1467,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1498,7 +1503,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1517,7 +1522,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1553,7 +1558,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1572,7 +1577,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1608,7 +1613,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1627,7 +1632,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1823,7 +1828,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="18"/></value>
+      <value type="intval"><intval isSigned="true" val="66"/></value>
     </values>
   </arg>
 </fCall>
@@ -1842,7 +1847,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1922,7 +1927,7 @@
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="64"/></value>
     </values>
   </arg>
 </fCall>
@@ -1941,12 +1946,12 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -1967,7 +1972,7 @@
 <fCall name="ceil" global="true" numArgs="1">
   <arg num="0">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="64"/></value>
     </values>
   </arg>
 </fCall>
@@ -2003,7 +2008,7 @@
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="64"/></value>
     </values>
   </arg>
 </fCall>
@@ -2015,7 +2020,7 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -2034,7 +2039,7 @@
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="16"/></value>
+      <value type="intval"><intval isSigned="true" val="64"/></value>
     </values>
   </arg>
 </fCall>
@@ -2046,7 +2051,24 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
+    </values>
+  </arg>
+</fCall>
+<fCall name="printf" global="true" numArgs="3">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="unknown"/>
     </values>
   </arg>
 </fCall>
@@ -2126,6 +2148,23 @@
     </values>
   </arg>
 </fCall>
+<fCall name="printf" global="true" numArgs="3">
+  <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="2">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+</fCall>
 <fCall name="getBit" global="true" numArgs="2">
   <arg num="0">
     <values>
@@ -2172,12 +2211,12 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
   <arg num="2">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
@@ -2201,12 +2240,17 @@
   </arg>
   <arg num="1">
     <values>
-      <value type="intval"><intval isSigned="true" val="128"/></value>
+      <value type="intval"><intval isSigned="true" val="512"/></value>
     </values>
   </arg>
 </fCall>
-<fCall name="printf" global="true" numArgs="1">
+<fCall name="printf" global="true" numArgs="2">
   <arg num="0">
+    <values>
+      <value type="unknown"/>
+    </values>
+  </arg>
+  <arg num="1">
     <values>
       <value type="unknown"/>
     </values>

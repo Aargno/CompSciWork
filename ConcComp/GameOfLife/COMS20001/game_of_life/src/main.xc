@@ -14,8 +14,8 @@
 
 typedef unsigned char uchar;      //using uchar as shorthand
 
-#define  IMHT 128               //image height
-#define  IMWD 128               //image width
+#define  IMHT 512               //image height
+#define  IMWD 512               //image width
 #define noWorkers 8              //number of clients
 
 typedef interface i {
@@ -26,7 +26,7 @@ typedef interface i {
     [[notification]] slave void serverReady();
 } i;
 
-char infname[] = "128x128.pgm";     //put your input image path here
+char infname[] = "512x512.pgm";     //put your input image path here
 char outfname[] = "testout.pgm"; //put your output image path here
 
 on tile[0]: in port explorer_buttons = XS1_PORT_4E;
@@ -77,7 +77,7 @@ void DataInStream(char infname[], chanend c_out)
             else c_out <: 0;
     //      printf( "-%4.1d ", line[ x ] ); //show image values
         }
-        if (y % 100 == 0) printf( "DataInStream: 100 Lines read...\n" );
+        if (y % 100 == 0) printf( "DataInStream: %d Lines read...\n", y);
     //    printf("%d\n", y);
     //    printf( "\n" );
       }
@@ -238,7 +238,6 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
           printf("Can't export image until image is loaded\n");
       }
   }
-  fromTime <: 1;
   green_led_state = !green_led_state;
   led_green.output(green_led_state);
 
@@ -260,7 +259,7 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
   int expWorkers = 0;
   int roundCount = 0;
   int totalLiveBits = 0;
-
+  fromTime <: 1;
   while (processing) {
       t:>startRound;
       while (expWorkers < noWorkers) {
@@ -268,7 +267,6 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
           [[ordered]]
           select {
               case rowServer[int cId].load(int firstRound, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-//                  printf("%d client called load\n", cId);
                   if (firstRound) {
                       for (int r = 0; r < (IMHT/noWorkers + 2); r++) { //DO A FOR LOOP ITERATING THROUG HEACH ROW OF BOARD WITH MEMCPY
                           memcpy(&rows[r], &val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], (IMWD/8));
@@ -283,17 +281,19 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
                   break;
 
               case rowServer[int cId].exp(int liveBitCount, uchar rows[IMHT/noWorkers + 2][IMWD/8]) :
-                    if (expFlag) {
+//                    if (expFlag) {
                         for (int r = 1; r < (IMHT/noWorkers + 1); r++) { //DO A FOR LOOP ITERATING THROUGH EACH ROW OF BOARD WITH MEMCPY
                             memcpy(&val[mod((cId * (IMHT/noWorkers) - 1 + r), IMHT)], &rows[r], (IMWD/8));
                         }
-                        processing = 0;
-                    }
+//                        processing = 0;
+//                    }
                   totalLiveBits += liveBitCount;
                   expWorkers++;
                   break;
           }
       }
+      t :> endRound;
+      printf( "\nProcessing %d round completed... Took %f secs\n",roundCount , (float)(endRound - startRound)/100000000);
       for (int i = 0; i < noWorkers; i++) {
           rowServer[i].serverReady();
       }
@@ -321,15 +321,19 @@ void distributor(chanend c_in, chanend c_out, chanend fromAcc, chanend fromIO, c
           if (read == 2) {
                led_green.output(0);
                rgb_led_blue.output(1);
-               expFlag = 1;
+               processing = 0;
+//               expFlag = 1;
           } else {
                green_led_state = 1 - green_led_state;
                led_green.output(green_led_state);
           }
       }
   }
+  float result;
+  fromTime <: 0;
+  fromTime :> result;
 //  t :> endRound;
-//  printf( "\nProcessing %d round completed... Took %f secs\n",roundCount , (float)(endRound - startRound)/100000000);
+  printf( "\nProcessing %d round completed... Took %f secs\n",roundCount , result);
 
 
   for( int y = 0; y < IMHT; y++ ) {   //go through all lines
@@ -368,7 +372,7 @@ void DataOutStream(char outfname[], chanend c_in)
       else line[x] = 0x00;
     }
     _writeoutline( line, IMWD );
-    if (y % 100 == 0) printf( "DataOutStream: 100 Lines written...\n" );
+    if (y % 100 == 0) printf( "DataOutStream: %d Lines written...\n", y);
   }
 
   //Close the PGM image
@@ -528,7 +532,7 @@ par {
     on tile[0] : distributor(c_inIO, c_outIO, c_control, c_gpio, c_time, rowClientInterface, i_explorer_leds[0],
                                 i_explorer_leds[1],i_explorer_leds[2], i_explorer_leds[3]); //thread to coordinate work on image
     on tile[0] : rowClient(rowClientInterface[0], 0, c_Client[0], c_Client[1]);
-    on tile[0] : rowClient(rowClientInterface[1], 1, c_Client[1], c_Client[2]);
+    on tile[1] : rowClient(rowClientInterface[1], 1, c_Client[1], c_Client[2]);
     on tile[1] : rowClient(rowClientInterface[2], 2, c_Client[2], c_Client[3]);
     on tile[1] : rowClient(rowClientInterface[3], 3, c_Client[3], c_Client[4]);
     on tile[1] : rowClient(rowClientInterface[4], 4, c_Client[4], c_Client[5]);

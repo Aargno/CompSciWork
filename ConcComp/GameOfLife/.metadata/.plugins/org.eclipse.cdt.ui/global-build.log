@@ -375,3 +375,1443 @@ Compiling gpio.xc
 Compiling i2c_master.xc
 Creating game_of_life.xe
 Build Complete
+17:55:51 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:270:91: error: size of array has non-integer type
+              case rowServer[int cId].load(int firstRound, uchar rows[IMHT/noWorkers + 2][ceil(IMWD/8)]) :
+                                                                                          ^~~~~~~~~~~~
+../src/main.xc:270:60: error: type of parameter `rows' does not match function declaration `load' of interface `i'
+              case rowServer[int cId].load(int firstRound, uchar rows[IMHT/noWorkers + 2][ceil(IMWD/8)]) :
+                                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/main.xc:284:92: error: size of array has non-integer type
+              case rowServer[int cId].exp(int liveBitCount, uchar rows[IMHT/noWorkers + 2][ceil(IMWD/8)]) :
+                                                                                           ^~~~~~~~~~~~
+../src/main.xc:284:61: error: type of parameter `rows' does not match function declaration `exp' of interface `i'
+              case rowServer[int cId].exp(int liveBitCount, uchar rows[IMHT/noWorkers + 2][ceil(IMWD/8)]) :
+                                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
+xmake: *** [analyze] Error 2
+17:58:04 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:23:57: error: size of array has non-integer type
+    void load(int index, uchar rows[IMHT/noWorkers + 2][ceil(IMWD/8)]);
+                                                        ^~~~~~~~~~~~
+../src/main.xc:25:56: error: size of array has non-integer type
+    void exp(int index, uchar rows[IMHT/noWorkers + 2][ceil(IMWD/8)]);
+                                                       ^~~~~~~~~~~~
+../src/main.xc:99:32: error: size of array has non-integer type
+void emptyChar(uchar val[IMHT][ceil(IMWD/8)]) {
+                               ^~~~~~~~~~~~
+../src/main.xc:113:61: error: size of array has non-integer type
+int checkNeighbourBit(int x, int y, uchar check[IMHT/4 + 2][ceil(IMWD/8)]) {
+                                                            ^~~~~~~~~~~~
+../src/main.xc:148:67: error: size of array has non-integer type
+int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][ceil(IMWD/8)], uchar output[IMHT/noWorkers + 2][ceil(IMWD/8)], int index) {
+                                                                  ^~~~~~~~~~~~
+../src/main.xc:148:115: error: size of array has non-integer type
+int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][ceil(IMWD/8)], uchar output[IMHT/noWorkers + 2][ceil(IMWD/8)], int index) {
+                                                                                                                  ^~~~~~~~~~~~
+../src/main.xc:179:48: error: incompatible type for argument 2 of `load'
+                    rowClient.load(firstRound, rows);
+                                               ^~~~
+../src/main.xc:185:71: error: incompatible type for argument 3 of `checkNeighbours'
+                            liveBitCount += checkNeighbours(row, col, rows, output, index);
+                                                                      ^~~~
+../src/main.xc:185:77: error: incompatible type for argument 4 of `checkNeighbours'
+                            liveBitCount += checkNeighbours(row, col, rows, output, index);
+                                                                            ^~~~~~
+../src/main.xc:190:49: error: incompatible type for argument 2 of `exp'
+                    rowClient.exp(liveBitCount, output);
+                                                ^~~~~~
+../src/main.xc:231:13: error: incompatible type for argument 1 of `emptyChar'
+  emptyChar(val);//Set characters to all 0 bit
+            ^~~
+../src/main.xc:270:91: error: size of array has non-integer type
+              case rowServer[int cId].load(int firstRound, uchar rows[IMHT/noWorkers + 2][ceil(IMWD/8)]) :
+                                                                                          ^~~~~~~~~~~~
+../src/main.xc:284:92: error: size of array has non-integer type
+              case rowServer[int cId].exp(int liveBitCount, uchar rows[IMHT/noWorkers + 2][ceil(IMWD/8)]) :
+                                                                                           ^~~~~~~~~~~~
+xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
+xmake: *** [analyze] Error 2
+17:59:21 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:23:57: error: size of array is not constant
+    void load(int index, uchar rows[IMHT/noWorkers + 2][(int) ceil(IMWD/8)]);
+                                                        ^~~~~~~~~~~~~~~~~~
+../src/main.xc:25:56: error: size of array is not constant
+    void exp(int index, uchar rows[IMHT/noWorkers + 2][(int) ceil(IMWD/8)]);
+                                                       ^~~~~~~~~~~~~~~~~~
+../src/main.xc:99:32: error: size of array is not constant
+void emptyChar(uchar val[IMHT][(int) ceil(IMWD/8)]) {
+                               ^~~~~~~~~~~~~~~~~~
+../src/main.xc:113:61: error: size of array is not constant
+int checkNeighbourBit(int x, int y, uchar check[IMHT/4 + 2][(int) ceil(IMWD/8)]) {
+                                                            ^~~~~~~~~~~~~~~~~~
+../src/main.xc:148:67: error: size of array is not constant
+int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][(int) ceil(IMWD/8)], uchar output[IMHT/noWorkers + 2][(int) ceil(IMWD/8)], int index) {
+                                                                  ^~~~~~~~~~~~~~~~~~
+../src/main.xc:148:121: error: size of array is not constant
+int checkNeighbours(int y, int x, uchar board[IMHT/noWorkers + 2][(int) ceil(IMWD/8)], uchar output[IMHT/noWorkers + 2][(int) ceil(IMWD/8)], int index) {
+                                                                                                                        ^~~~~~~~~~~~~~~~~~
+../src/main.xc:179:48: error: incompatible type for argument 2 of `load'
+                    rowClient.load(firstRound, rows);
+                                               ^~~~
+../src/main.xc:185:71: error: incompatible type for argument 3 of `checkNeighbours'
+                            liveBitCount += checkNeighbours(row, col, rows, output, index);
+                                                                      ^~~~
+../src/main.xc:185:77: error: incompatible type for argument 4 of `checkNeighbours'
+                            liveBitCount += checkNeighbours(row, col, rows, output, index);
+                                                                            ^~~~~~
+../src/main.xc:190:49: error: incompatible type for argument 2 of `exp'
+                    rowClient.exp(liveBitCount, output);
+                                                ^~~~~~
+../src/main.xc:231:13: error: incompatible type for argument 1 of `emptyChar'
+  emptyChar(val);//Set characters to all 0 bit
+            ^~~
+../src/main.xc:270:91: error: size of array is not constant
+              case rowServer[int cId].load(int firstRound, uchar rows[IMHT/noWorkers + 2][(int) ceil(IMWD/8)]) :
+                                                                                          ^~~~~~~~~~~~~~~~~~
+../src/main.xc:284:92: error: size of array is not constant
+              case rowServer[int cId].exp(int liveBitCount, uchar rows[IMHT/noWorkers + 2][(int) ceil(IMWD/8)]) :
+                                                                                           ^~~~~~~~~~~~~~~~~~
+xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
+xmake: *** [analyze] Error 2
+17:59:57 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:01:42 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:03:48 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+18:06:36 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:09:29 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:23:31 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:25:11 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:25:52 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:26:23 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:28:04 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:29:18 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:30:24 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:31:26 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          8 .  OKAY
+  Timers available:          10,   used:          8 .  OKAY
+  Chanends available:        32,   used:         30 .  OKAY
+  Memory available:       262144,   used:      350372 .  FAILED
+    (Stack: 287372, Code: 59484, Data: 3516)
+Error: Constraints check FAILED for tile[0].
+Constraint check for tile[1]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         25 .  OKAY
+  Memory available:       262144,   used:      295040 .  FAILED
+    (Stack: 283564, Code: 10588, Data: 888)
+Error: Constraints check FAILED for tile[1].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+18:32:29 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          8 .  OKAY
+  Timers available:          10,   used:          8 .  OKAY
+  Chanends available:        32,   used:         30 .  OKAY
+  Memory available:       262144,   used:      311684 .  FAILED
+    (Stack: 248692, Code: 59476, Data: 3516)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+18:32:51 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          8 .  OKAY
+  Timers available:          10,   used:          8 .  OKAY
+  Chanends available:        32,   used:         30 .  OKAY
+  Memory available:       262144,   used:      272268 .  FAILED
+    (Stack: 209668, Code: 59088, Data: 3512)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+18:33:11 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Creating dependencies for main.xc
+Compiling main.xc
+Creating game_of_life.xe
+Build Complete
+18:33:54 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:34:09 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[1]:
+  Cores available:            8,   used:          8 .  OKAY
+  Timers available:          10,   used:          8 .  OKAY
+  Chanends available:        32,   used:         29 .  OKAY
+  Memory available:       262144,   used:      262832 .  FAILED
+    (Stack: 251172, Code: 10740, Data: 920)
+Error: Constraints check FAILED for tile[1].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+18:34:58 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:35:52 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+18:43:03 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+19:58:20 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+19:59:42 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+19:59:52 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+20:00:23 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+20:01:31 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+20:02:17 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+20:02:29 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+20:03:07 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+20:05:40 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+20:07:09 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:07:44 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+20:08:52 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:12:38 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:13:51 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:14:14 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+20:23:09 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+xmake[1]: `bin//game_of_life.xe' is up to date.
+Build Complete
+20:35:26 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:42:38 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:44:34 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+20:46:00 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:48:50 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:52:58 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:53:58 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+20:55:06 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+../src/main.xc:537:75: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[3], 3, c_Client[3], c_Client[4]);
+                                                                          ^~~
+../src/main.xc:538:46: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[4], 4, c_Client[4], c_Client[5]);
+                                             ^~~
+../src/main.xc:538:62: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[4], 4, c_Client[4], c_Client[5]);
+                                                             ^~~
+../src/main.xc:538:75: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[4], 4, c_Client[4], c_Client[5]);
+                                                                          ^~~
+../src/main.xc:539:46: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[5], 5, c_Client[5], c_Client[6]);
+                                             ^~~
+../src/main.xc:539:62: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[5], 5, c_Client[5], c_Client[6]);
+                                                             ^~~
+../src/main.xc:539:75: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[5], 5, c_Client[5], c_Client[6]);
+                                                                          ^~~
+../src/main.xc:540:46: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[6], 6, c_Client[6], c_Client[7]);
+                                             ^~~
+../src/main.xc:540:62: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[6], 6, c_Client[6], c_Client[7]);
+                                                             ^~~
+../src/main.xc:540:75: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[6], 6, c_Client[6], c_Client[7]);
+                                                                          ^~~
+../src/main.xc:541:46: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[7], 7, c_Client[7], c_Client[0]);
+                                             ^~~
+../src/main.xc:541:62: error: index of array exceeds its upper bound
+    on tile[1] : rowClient(rowClientInterface[7], 7, c_Client[7], c_Client[0]);
+                                                             ^~~
+xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
+xmake: *** [analyze] Error 2
+20:55:38 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:56:27 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         22 .  OKAY
+  Memory available:       262144,   used:      276252 .  FAILED
+    (Stack: 214044, Code: 58700, Data: 3508)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+20:56:55 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Constraint check for tile[1]:
+  Cores available:            8,   used:          5 .  OKAY
+  Timers available:          10,   used:          5 .  OKAY
+  Chanends available:        32,   used:         17 .  OKAY
+  Memory available:       262144,   used:      287752 .  FAILED
+    (Stack: 276724, Code: 10228, Data: 800)
+Error: Constraints check FAILED for tile[1].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+20:57:13 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         22 .  OKAY
+  Memory available:       262144,   used:      276252 .  FAILED
+    (Stack: 214044, Code: 58700, Data: 3508)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+20:58:04 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+20:59:05 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         22 .  OKAY
+  Memory available:       262144,   used:      269572 .  FAILED
+    (Stack: 207740, Code: 58328, Data: 3504)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+20:59:33 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         22 .  OKAY
+  Memory available:       262144,   used:      267636 .  FAILED
+    (Stack: 205500, Code: 58632, Data: 3504)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+20:59:50 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         22 .  OKAY
+  Memory available:       262144,   used:      266724 .  FAILED
+    (Stack: 204692, Code: 58524, Data: 3508)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+21:00:06 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:00:22 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:00:39 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         22 .  OKAY
+  Memory available:       262144,   used:      263884 .  FAILED
+    (Stack: 201676, Code: 58700, Data: 3508)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+21:00:53 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:01:50 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:21:06 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:32:51 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:37:06 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:38:40 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:40:18 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[0]:
+  Cores available:            8,   used:          7 .  OKAY
+  Timers available:          10,   used:          7 .  OKAY
+  Chanends available:        32,   used:         20 .  OKAY
+  Memory available:       262144,   used:      322908 .  FAILED
+    (Stack: 260884, Code: 58536, Data: 3488)
+Error: Constraints check FAILED for tile[0].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+21:40:31 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Constraint check for tile[1]:
+  Cores available:            8,   used:          3 .  OKAY
+  Timers available:          10,   used:          3 .  OKAY
+  Chanends available:        32,   used:          9 .  OKAY
+  Memory available:       262144,   used:      263952 .  FAILED
+    (Stack: 253284, Code: 9944, Data: 724)
+Error: Constraints check FAILED for tile[1].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+21:40:59 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:41:56 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+21:59:54 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+22:00:18 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+22:10:45 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+22:14:07 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+22:14:32 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
+22:15:56 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+22:17:26 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Build Complete
+22:18:38 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+../src/main.xc:534:67: error: call makes alias in function `rowClient'
+    on tile[1] : rowClient(rowClientInterface[0], 0, c_Client[0], c_Client[0]);
+                                                                  ^~~~~~~~~~~
+../src/main.xc:534:54: note: aliased item is here
+    on tile[1] : rowClient(rowClientInterface[0], 0, c_Client[0], c_Client[0]);
+                                                     ^~~~~~~~~~~
+xmake[1]: *** [.build/src/main.xc.pca.xml.decouple] Error 1
+xmake: *** [analyze] Error 2
+22:19:27 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Propagating analysis
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Compiling gpio.xc
+Compiling i2c_master.xc
+Creating game_of_life.xe
+Constraint check for tile[1]:
+  Cores available:            8,   used:          9 .  FAILED
+  Timers available:          10,   used:          9 .  OKAY
+  Chanends available:        32,   used:         33 .  FAILED
+  Memory available:       262144,   used:      86720 .  OKAY
+    (Stack: 75204, Code: 10576, Data: 940)
+Error: Constraints check FAILED for tile[1].
+xmake[1]: *** [bin//game_of_life.xe] Error 1
+xmake: *** [bin//game_of_life.xe] Error 2
+22:19:46 **** Incremental Build of configuration Default for project Game-of-Life ****
+xmake all 
+Checking build modules
+WARNING: Required version of lib_xassert is >=2.0.0 and actual version has greater major version: 3.0.0. There could be API incompatibilities.
+Using build modules: lib_gpio(1.1.0) lib_i2c(3.0.0) lib_logging(2.0.0) lib_xassert(3.0.0)
+Analyzing main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating dependencies for main.xc
+Compiling main.xc
+../src/main.xc:225:7: warning: unused variable `expFlag' [-Wunused-variable]
+  int expFlag = 0;
+      ^~~~~~~
+Creating game_of_life.xe
+Build Complete
