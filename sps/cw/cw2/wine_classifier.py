@@ -25,12 +25,42 @@ MODES = ['feature_sel', 'knn', 'alt', 'knn_3d', 'knn_pca']
 def feature_selection(train_set, train_labels, **kwargs):
     # write your code here and make sure you return the features at the end of 
     # the function
+
+    #Taken from lab_5 answer, if we want to put pur code in here, we can
+    n_features = train_set.shape[1] 
+    fig, ax = plt.subplots(n_features, n_features)
+    plt.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.01, wspace=0.2, hspace=0.4)
+
+    colours = np.zeros_like(train_labels, dtype=np.object)
+    colours[train_labels == 1] = CLASS_1_C
+    colours[train_labels == 2] = CLASS_2_C
+    colours[train_labels == 3] = CLASS_3_C
+
+    for row in range(n_features):
+        for col in range(n_features):
+            ax[row][col].scatter(train_set[:, row], train_set[:, col], c=colours)
+            ax[row][col].set_title('Features {} vs {}'.format(row+1, col+1))
+            
+    plt.show()
     return []
 
 
 def knn(train_set, train_labels, test_set, k, **kwargs):
     # write your code here and make sure you return the predictions at the end of 
     # the function
+        # def nearest_centroid(centroids, test_set): #Nearest centroid code modifying this should give us knn
+        # dist = lambda x, y: np.sqrt(np.sum((x-y)**2))
+        # centroid_dist = lambda x : [dist(x, centroid) for centroid in centroids]
+        # predicted = np.argmin([centroid_dist(p) for p in test_set], axis=1).astype(np.int) + 1
+        
+        # return predicted
+        
+        # predicted = nearest_centroid(centroids, test_set_red)
+        # np.savetxt('results.csv', predicted, delimiter=',', fmt='%d')
+
+        # for i, pred in enumerate(predicted):
+        #     print('{:02d}) gt class: {}\tpredicted class: {}'.format(i+1, pred, test_labels[i]))
+    #Assign labels based on majority class of k nearest neighbors in test set
     return []
 
 
