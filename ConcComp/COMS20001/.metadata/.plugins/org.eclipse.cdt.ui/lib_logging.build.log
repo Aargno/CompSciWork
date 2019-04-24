@@ -1,6 +1,0 @@
-17:35:24 **** Build of configuration Default for project lib_logging ****
-xmake -f .makefile all 
-** Module only - only builds as part of application **
-
-17:35:24 Build Finished (took 85ms)
-

@@ -29,6 +29,8 @@ def feature_selection(train_set, train_labels, **kwargs):
     #Taken from lab_5 answer, if we want to put pur code in here, we can
     n_features = train_set.shape[1] 
     fig, ax = plt.subplots(n_features, n_features)
+    fig = plt.gcf()
+    fig.set_size_inches(50, 50, forward=True)
     plt.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.01, wspace=0.2, hspace=0.4)
 
     colours = np.zeros_like(train_labels, dtype=np.object)
@@ -42,6 +44,7 @@ def feature_selection(train_set, train_labels, **kwargs):
             ax[row][col].set_title('Features {} vs {}'.format(row+1, col+1))
             
     plt.show()
+    fig.savefig('fs.png', dpi=100)
     return []
 
 
