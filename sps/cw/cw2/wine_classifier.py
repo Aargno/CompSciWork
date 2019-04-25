@@ -43,9 +43,10 @@ def feature_selection(train_set, train_labels, **kwargs):
             ax[row][col].scatter(train_set[:, row], train_set[:, col], c=colours)
             ax[row][col].set_title('Features {} vs {}'.format(row+1, col+1))
             
-    plt.show()
+    # plt.show()
     fig.savefig('fs.png', dpi=100)
-    return []
+    #7vs1 or 7vs6
+    return train_set[:, [0, 6]]
 
 
 def knn(train_set, train_labels, test_set, k, **kwargs):
@@ -64,6 +65,23 @@ def knn(train_set, train_labels, test_set, k, **kwargs):
         # for i, pred in enumerate(predicted):
         #     print('{:02d}) gt class: {}\tpredicted class: {}'.format(i+1, pred, test_labels[i]))
     #Assign labels based on majority class of k nearest neighbors in test set
+    #Reduce train and test set here
+    dist = lambda x, y: np.sqrt(np.sum((x-y)**2))
+    train_dist = lambda x : [dist(x, train) for train in train_set] #Returns distances between x and every element in train set
+    # idx = np.argpartition([train_dist(test) for test in test_set], k) #first k elements are indexes of k min
+    # lbls = [idx[:k]] += 1 #Possible alternative? Probably not
+    # pred_lbl = np.argmax(lbls) + 1 #Should be label shared by majority of k nearest neighbours
+    lbls = []
+    j = 0
+    while j < test_set.shape[0] :
+        idx = np.argpartition([train_dist(test_set[j])], k) #first k elements are indexes of k min
+        i = 0
+        while i < k :
+            lbls[idx[i]] += 1
+            i += 1
+        pred_lbl = np.argmax(lbls) + 1 #Should be label shared by majority of k nearest neighbours
+        #TODO: Store predicted labels and output
+    # print(train_set.shape)
     return []
 
 
