@@ -14,6 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utilities import load_data, print_features, print_predictions
 
+from sklearn.neighbors import KNeighborsClassifier #Remove when done testing
 from sklearn.decomposition import PCA
 
 # you may use these colours to produce the scatter plots
@@ -39,6 +40,13 @@ def confusion_matrix(pred_labels, test_labels, name) :
     #Save a confusion matrix
     return 0
 
+def actual_knn(train_set, train_labels, test_red, k) :
+    train_red = train_set[:, [2,11]]
+    test_red = test_set[:, [2,11]]
+    neigh = KNeighborsClassifier(n_neighbors=k)
+    neigh.fit(train_red, train_labels)
+    return neigh.predict(test_red)
+
 def knn_classifier(train_red, train_labels, test_red, k) : #If something coes wrong jsut copy this code back into knn funcs
     dist = lambda x, y: np.sqrt(np.sum((x-y)**2))
     train_dist = lambda x : [dist(x, train) for train in train_red] #Returns distances between x and every element in train set
@@ -51,7 +59,7 @@ def knn_classifier(train_red, train_labels, test_red, k) : #If something coes wr
         while i < k :
             lbls[train_labels[idx[j][i]] - 1] += 1 #Maybe some room to implement distance weighting?
             i += 1
-        pred_lbls[j] = np.argmax(lbls) + 1 #Should be label shared by majority of k nearest neighbours
+        pred_lbls[j] = np.argmax(lbls) + 1 #What if there is no single modal value? (To lbls with same count)
         j += 1
     return pred_lbls
 
@@ -84,8 +92,8 @@ def feature_selection(train_set, train_labels, **kwargs):
 
 
 def knn(train_set, train_labels, test_set, k, **kwargs):
-    train_red = train_set[:, [0,6]]
-    test_red = test_set[:, [0,6]]
+    train_red = train_set[:, [2,11]]
+    test_red = test_set[:, [2,11]]
     return knn_classifier(train_red, train_labels, test_red, k)
 
 
@@ -139,7 +147,10 @@ if __name__ == '__main__':
         selected_features = feature_selection(train_set, train_labels)
         print_features(selected_features)
     elif mode == 'knn':
+        # prediction = actual_knn(train_set, train_labels, test_set, args.k)
         predictions = knn(train_set, train_labels, test_set, args.k)
+        # accuracy(prediction, predictions)
+        # accuracy(prediction, test_labels) #EXTRA FOR REPORT
         accuracy(predictions, test_labels) #EXTRA FOR REPORT
         print_predictions(predictions)
     elif mode == 'alt':
