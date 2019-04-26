@@ -41,8 +41,10 @@ def confusion_matrix(pred_labels, test_labels, name) :
     return 0
 
 def actual_knn(train_set, train_labels, test_red, k) :
-    train_red = train_set[:, [2,11]]
-    test_red = test_set[:, [2,11]]
+    train_red = train_set[:, [0,6]]
+    test_red = test_set[:, [0,6]]
+    # train_red = train_set[:, [2,11]]
+    # test_red = test_set[:, [2,11]]
     neigh = KNeighborsClassifier(n_neighbors=k)
     neigh.fit(train_red, train_labels)
     return neigh.predict(test_red)
@@ -53,13 +55,15 @@ def knn_classifier(train_red, train_labels, test_red, k) : #If something coes wr
     idx = np.argpartition([train_dist(test) for test in test_red], k) #first k elements are indexes of k min
     pred_lbls = [0] * test_set.shape[0]
     j = 0
-    while j < test_set.shape[0] :
+    while j < test_red.shape[0] :
         lbls = [0] * 3
         i = 0
         while i < k :
             lbls[train_labels[idx[j][i]] - 1] += 1 #Maybe some room to implement distance weighting?
             i += 1
-        pred_lbls[j] = np.argmax(lbls) + 1 #What if there is no single modal value? (To lbls with same count)
+        pred_lbls[j] = np.argmax(lbls) + 1
+        if (lbls.count(lbls[np.argmax(lbls)]) > 1) : #If no single modal value, run knn again with k-1
+            pred_lbls[j] = knn_classifier(train_red, train_labels, test_red[j], k-1)[0]
         j += 1
     return pred_lbls
 
@@ -92,8 +96,10 @@ def feature_selection(train_set, train_labels, **kwargs):
 
 
 def knn(train_set, train_labels, test_set, k, **kwargs):
-    train_red = train_set[:, [2,11]]
-    test_red = test_set[:, [2,11]]
+    train_red = train_set[:, [0,6]]
+    test_red = test_set[:, [0,6]]
+    # train_red = train_set[:, [2,11]]
+    # test_red = test_set[:, [2,11]]
     return knn_classifier(train_red, train_labels, test_red, k)
 
 
