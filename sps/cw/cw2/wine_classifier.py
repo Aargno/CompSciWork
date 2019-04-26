@@ -14,6 +14,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utilities import load_data, print_features, print_predictions
 
+from sklearn.decomposition import PCA
+
 # you may use these colours to produce the scatter plots
 CLASS_1_C = r'#3366ff'
 CLASS_2_C = r'#cc3300'
@@ -21,6 +23,37 @@ CLASS_3_C = r'#ffc34d'
 
 MODES = ['feature_sel', 'knn', 'alt', 'knn_3d', 'knn_pca']    
 
+def accuracy(pred_labels, test_labels) :
+    #Code to show accuracy of guess
+    j = 0
+    matches = 0.0
+    while j < len(test_labels) :
+        print("Predicted: {} GT: {}".format(pred_labels[j], test_labels[j]))
+        if (pred_labels[j] == test_labels[j]) :
+            matches += 1.0
+        j += 1
+    print("Accuracy: {}%".format(round((matches/float(len(test_labels)))*100, 2)))
+    return 0
+
+def confusion_matrix(pred_labels, test_labels, name) :
+    #Save a confusion matrix
+    return 0
+
+def knn_classifier(train_red, train_labels, test_red, k) : #If something coes wrong jsut copy this code back into knn funcs
+    dist = lambda x, y: np.sqrt(np.sum((x-y)**2))
+    train_dist = lambda x : [dist(x, train) for train in train_red] #Returns distances between x and every element in train set
+    idx = np.argpartition([train_dist(test) for test in test_red], k) #first k elements are indexes of k min
+    pred_lbls = [0] * test_set.shape[0]
+    j = 0
+    while j < test_set.shape[0] :
+        lbls = [0] * 3
+        i = 0
+        while i < k :
+            lbls[train_labels[idx[j][i]] - 1] += 1 #Maybe some room to implement distance weighting?
+            i += 1
+        pred_lbls[j] = np.argmax(lbls) + 1 #Should be label shared by majority of k nearest neighbours
+        j += 1
+    return pred_lbls
 
 def feature_selection(train_set, train_labels, **kwargs):
     # write your code here and make sure you return the features at the end of 
@@ -44,45 +77,16 @@ def feature_selection(train_set, train_labels, **kwargs):
             ax[row][col].set_title('Features {} vs {}'.format(row+1, col+1))
             
     # plt.show()
-    fig.savefig('fs.png', dpi=100)
+    # fig.savefig('fs.png', dpi=100)
     #7vs1 or 7vs6
-    return train_set[:, [0, 6]]
+    #trainset[:,[0,6]]
+    return [0, 6]
 
 
 def knn(train_set, train_labels, test_set, k, **kwargs):
-    # write your code here and make sure you return the predictions at the end of 
-    # the function
-        # def nearest_centroid(centroids, test_set): #Nearest centroid code modifying this should give us knn
-        # dist = lambda x, y: np.sqrt(np.sum((x-y)**2))
-        # centroid_dist = lambda x : [dist(x, centroid) for centroid in centroids]
-        # predicted = np.argmin([centroid_dist(p) for p in test_set], axis=1).astype(np.int) + 1
-        
-        # return predicted
-        
-        # predicted = nearest_centroid(centroids, test_set_red)
-        # np.savetxt('results.csv', predicted, delimiter=',', fmt='%d')
-
-        # for i, pred in enumerate(predicted):
-        #     print('{:02d}) gt class: {}\tpredicted class: {}'.format(i+1, pred, test_labels[i]))
-    #Assign labels based on majority class of k nearest neighbors in test set
-    #Reduce train and test set here
-    dist = lambda x, y: np.sqrt(np.sum((x-y)**2))
-    train_dist = lambda x : [dist(x, train) for train in train_set] #Returns distances between x and every element in train set
-    # idx = np.argpartition([train_dist(test) for test in test_set], k) #first k elements are indexes of k min
-    # lbls = [idx[:k]] += 1 #Possible alternative? Probably not
-    # pred_lbl = np.argmax(lbls) + 1 #Should be label shared by majority of k nearest neighbours
-    lbls = []
-    j = 0
-    while j < test_set.shape[0] :
-        idx = np.argpartition([train_dist(test_set[j])], k) #first k elements are indexes of k min
-        i = 0
-        while i < k :
-            lbls[idx[i]] += 1
-            i += 1
-        pred_lbl = np.argmax(lbls) + 1 #Should be label shared by majority of k nearest neighbours
-        #TODO: Store predicted labels and output
-    # print(train_set.shape)
-    return []
+    train_red = train_set[:, [0,6]]
+    test_red = test_set[:, [0,6]]
+    return knn_classifier(train_red, train_labels, test_red, k)
 
 
 def alternative_classifier(train_set, train_labels, test_set, **kwargs):
@@ -92,15 +96,20 @@ def alternative_classifier(train_set, train_labels, test_set, **kwargs):
 
 
 def knn_three_features(train_set, train_labels, test_set, k, **kwargs):
-    # write your code here and make sure you return the predictions at the end of 
-    # the function
-    return []
+    #Covariance for finding correlations?
+    train_red = train_set[:, [0,6,9]] #THESE FEATURES ARE NOT FINAL, PLOT THE COMPARISONS AND CHOOSE 3 FEATURES
+    test_red = test_set[:, [0,6,9]] #THESE FEATURES ARE NOT FINAL
+    return knn_classifier(train_red, train_labels, test_red, k)
 
 
 def knn_pca(train_set, train_labels, test_set, k, n_components=2, **kwargs):
     # write your code here and make sure you return the predictions at the end of 
     # the function
-    return []
+    pca = PCA(n_components)
+    pca.fit(train_set)
+    train_red = pca.transform(train_set)
+    test_red = pca.transform(test_set)
+    return knn_classifier(train_red, train_labels, test_red, k)
 
 
 def parse_args():
@@ -131,15 +140,18 @@ if __name__ == '__main__':
         print_features(selected_features)
     elif mode == 'knn':
         predictions = knn(train_set, train_labels, test_set, args.k)
+        accuracy(predictions, test_labels) #EXTRA FOR REPORT
         print_predictions(predictions)
     elif mode == 'alt':
         predictions = alternative_classifier(train_set, train_labels, test_set)
         print_predictions(predictions)
     elif mode == 'knn_3d':
         predictions = knn_three_features(train_set, train_labels, test_set, args.k)
+        accuracy(predictions, test_labels) #EXTRA FOR REPORT
         print_predictions(predictions)
     elif mode == 'knn_pca':
         prediction = knn_pca(train_set, train_labels, test_set, args.k)
+        accuracy(prediction, test_labels) #EXTRA FOR REPORT
         print_predictions(prediction)
     else:
         raise Exception('Unrecognised mode: {}. Possible modes are: {}'.format(mode, MODES))
