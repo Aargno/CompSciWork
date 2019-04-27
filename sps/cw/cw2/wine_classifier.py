@@ -88,7 +88,10 @@ def knn_classifier(train_red, train_labels, test_red, k) : #If something coes wr
             i += 1
         pred_lbls[j] = np.argmax(lbls) + 1
         if (lbls.count(lbls[np.argmax(lbls)]) > 1) : #If no single modal value, run knn again with k-1
-            pred_lbls[j] = knn_classifier(train_red, train_labels, test_red[j], k-1)[0]
+            if (test_red.ndim > 1) : 
+                pred_lbls[j] = knn_classifier(train_red, train_labels, test_red[j], k-1)[0]
+            else : 
+                pred_lbls[j] = knn_classifier(train_red, train_labels, test_red, k-1)[0]
         j += 1
     return pred_lbls
 
@@ -114,7 +117,7 @@ def feature_selection(train_set, train_labels, **kwargs):
             ax[row][col].set_title('Features {} vs {}'.format(row+1, col+1))
             
     # plt.show()
-    # fig.savefig('fs.png', dpi=100)
+    fig.savefig('fs.png', dpi=100)
     #7vs1 or 7vs6
     #trainset[:,[0,6]]
     return [0, 6]
@@ -244,7 +247,7 @@ if __name__ == '__main__':
         # accuracy(prediction, test_labels) #EXTRA FOR REPORT
         accuracy(predictions, test_labels) #EXTRA FOR REPORT
         print_predictions(predictions)
-        confusion_matrix(predictions, test_labels, 'cm.png')
+        confusion_matrix(predictions, test_labels, 'knn_cm.png')
     elif mode == 'alt':
         predictions = alternative_classifier(train_set, train_labels, test_set)
         accuracy(predictions, test_labels)
