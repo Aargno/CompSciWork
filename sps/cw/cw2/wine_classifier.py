@@ -13,6 +13,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from utilities import load_data, print_features, print_predictions
+import math
 
 from sklearn.neighbors import KNeighborsClassifier #Remove when done testing
 from sklearn.decomposition import PCA
@@ -102,11 +103,71 @@ def knn(train_set, train_labels, test_set, k, **kwargs):
     # test_red = test_set[:, [2,11]]
     return knn_classifier(train_red, train_labels, test_red, k)
 
+def separateClasses(data, labels):
+    classes = {}
+    for i in range(len(data)):
+        instance = data[i]
+        if (labels[i] not in classes):
+            classes[labels[i]] = []
+        classes[labels[i]].append(instance)
+    return classes
+
+def getMean(data):
+    return sum(data)/float(len(data))
+
+def getStandardDeviation(data):
+    mean = getMean(data)
+    s = 0;
+    for x in data:
+        s+= pow(x - mean, 2)
+    s = s/float(len(data) - 1)
+    return math.sqrt(s)
+
+def summarize(data):
+    summaries = [(getMean(feature), getStandardDeviation(feature)) for feature in zip(*data)]
+    return summaries
+    
+def summarizeByClass(data, labels):
+    separatedData = separateClasses(data, labels)
+    summaries = {}
+    for className, data in separatedData.items():
+        summaries[className] = summarize(data)
+    return summaries
+
+def getGPDF(x, mean, standardDeviation):
+    exp = -(pow((x - mean), 2))/(2 * pow(standardDeviation, 2))
+    return 1 * math.exp(exp) / (standardDeviation * math.sqrt(2 * math.pi))
+
+def getProbabilities(summaries, instance):
+    probabilities = {}
+    for className, classSummaries in summaries.items():
+        for i in range(len(classSummaries)):
+            x = instance[i]
+            mean, standardDeviation = classSummaries[i]
+            probabilities[className] = getGPDF(x, mean, standardDeviation)
+    return probabilities
+
+def classify(summaries, instance):
+    probabilities = getProbabilities(summaries, instance)
+    currentProbability = 0
+    currentClass = None
+    for className, probability in probabilities.items():
+        if probability >= currentProbability:
+            currentClass = className
+            currentProbability = probability
+    return currentClass
+            
 
 def alternative_classifier(train_set, train_labels, test_set, **kwargs):
     # write your code here and make sure you return the predictions at the end of 
-    # the function
-    return []
+    # the function    
+    pred = []
+    train_red = train_set[:, [0,6]]
+    test_red = test_set[:, [0,6]]
+    summaries = summarizeByClass(train_red, train_labels)
+    for i in range(len(test_red)):
+        pred.append(classify(summaries, test_red[i]))
+    return pred
 
 
 def knn_three_features(train_set, train_labels, test_set, k, **kwargs):
@@ -161,7 +222,8 @@ if __name__ == '__main__':
         print_predictions(predictions)
     elif mode == 'alt':
         predictions = alternative_classifier(train_set, train_labels, test_set)
-        print_predictions(predictions)
+        accuracy(predictions, test_labels)
+        print_predictions(predictions)    
     elif mode == 'knn_3d':
         predictions = knn_three_features(train_set, train_labels, test_set, args.k)
         accuracy(predictions, test_labels) #EXTRA FOR REPORT
