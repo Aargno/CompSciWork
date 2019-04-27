@@ -39,7 +39,31 @@ def accuracy(pred_labels, test_labels) :
 
 def confusion_matrix(pred_labels, test_labels, name) :
     #Save a confusion matrix
-    return 0
+    mismatch = 0
+    classes = len(set(test_labels))
+    cm = np.zeros((classes, classes))
+    unique, counts = np.unique(test_labels, return_counts=True)
+    print(dict(zip(unique, counts)))
+    for i in range(1, classes+1):
+        for j in range(1, classes+1):
+            mismatch = 0
+            for n in range(0, len(pred_labels)):
+                if (test_labels[n] == i and pred_labels[n] == j): mismatch += 1
+            cm[i-1][j-1] = mismatch/counts[i-1]            
+    
+    ax = plt.gca()
+    fig = plt.gcf()
+    im = ax.imshow(X=cm, cmap=plt.get_cmap('summer'))
+    for i, j in enumerate(cm):
+        for k, l in enumerate(j):
+            test_l = str(l)
+            if len(test_l) > 5:
+                test_l = test_l[:5]
+            plt.text(k, i, test_l, fontsize=8)
+    fig.colorbar(im)    
+    fig.savefig(name)
+    
+    return cm
 
 def actual_knn(train_set, train_labels, test_red, k) :
     train_red = train_set[:, [0,6]]
@@ -220,6 +244,7 @@ if __name__ == '__main__':
         # accuracy(prediction, test_labels) #EXTRA FOR REPORT
         accuracy(predictions, test_labels) #EXTRA FOR REPORT
         print_predictions(predictions)
+        confusion_matrix(predictions, test_labels, 'cm.png')
     elif mode == 'alt':
         predictions = alternative_classifier(train_set, train_labels, test_set)
         accuracy(predictions, test_labels)
