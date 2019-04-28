@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from utilities import load_data, print_features, print_predictions
 import math
 
-from sklearn.neighbors import KNeighborsClassifier #Remove when done testing
+# from sklearn.neighbors import KNeighborsClassifier #Remove when done testing
 from sklearn.decomposition import PCA
 
 # you may use these colours to produce the scatter plots
@@ -65,14 +65,14 @@ def confusion_matrix(pred_labels, test_labels, name) :
     
     return cm
 
-def actual_knn(train_set, train_labels, test_red, k) :
-    train_red = train_set[:, [0,6]]
-    test_red = test_set[:, [0,6]]
-    # train_red = train_set[:, [2,11]]
-    # test_red = test_set[:, [2,11]]
-    neigh = KNeighborsClassifier(n_neighbors=k)
-    neigh.fit(train_red, train_labels)
-    return neigh.predict(test_red)
+# def actual_knn(train_set, train_labels, test_red, k) :
+#     train_red = train_set[:, [0,6]]
+#     test_red = test_set[:, [0,6]]
+#     # train_red = train_set[:, [2,11]]
+#     # test_red = test_set[:, [2,11]]
+#     neigh = KNeighborsClassifier(n_neighbors=k)
+#     neigh.fit(train_red, train_labels)
+#     return neigh.predict(test_red)
 
 def knn_classifier(train_red, train_labels, test_red, k) : #If something coes wrong jsut copy this code back into knn funcs
     dist = lambda x, y: np.sqrt(np.sum((x-y)**2))
@@ -241,24 +241,21 @@ if __name__ == '__main__':
         selected_features = feature_selection(train_set, train_labels)
         print_features(selected_features)
     elif mode == 'knn':
-        # prediction = actual_knn(train_set, train_labels, test_set, args.k)
         predictions = knn(train_set, train_labels, test_set, args.k)
-        # accuracy(prediction, predictions)
-        # accuracy(prediction, test_labels) #EXTRA FOR REPORT
-        accuracy(predictions, test_labels) #EXTRA FOR REPORT
+        accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
         print_predictions(predictions)
-        confusion_matrix(predictions, test_labels, 'knn_cm.png')
+        # confusion_matrix(predictions, test_labels, 'knn_cm.png')
     elif mode == 'alt':
         predictions = alternative_classifier(train_set, train_labels, test_set)
-        accuracy(predictions, test_labels)
+        # accuracy(predictions, test_labels) #REMOVE AFTER REPORT
         print_predictions(predictions)    
     elif mode == 'knn_3d':
         predictions = knn_three_features(train_set, train_labels, test_set, args.k)
-        accuracy(predictions, test_labels) #EXTRA FOR REPORT
+        # accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
         print_predictions(predictions)
     elif mode == 'knn_pca':
         prediction = knn_pca(train_set, train_labels, test_set, args.k)
-        accuracy(prediction, test_labels) #EXTRA FOR REPORT
+        accuracy(prediction, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
         print_predictions(prediction)
     else:
         raise Exception('Unrecognised mode: {}. Possible modes are: {}'.format(mode, MODES))
