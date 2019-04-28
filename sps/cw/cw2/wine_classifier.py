@@ -12,6 +12,7 @@ from __future__ import print_function
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from utilities import load_data, print_features, print_predictions
 import math
 
@@ -122,6 +123,29 @@ def feature_selection(train_set, train_labels, **kwargs):
     #trainset[:,[0,6]]
     return [0, 6]
 
+def three_feature_selection(train_set, train_labels, **kwargs):
+    n_features = train_set.shape[1] 
+    fig = plt.figure()
+    fig.set_size_inches(50, 50, forward=True)
+    plt.subplots_adjust(left=0.01, right=0.99, top=0.99, bottom=0.01, wspace=0.2, hspace=0.4)
+
+
+    colours = np.zeros_like(train_labels, dtype=np.object)
+    colours[train_labels == 1] = CLASS_1_C
+    colours[train_labels == 2] = CLASS_2_C
+    colours[train_labels == 3] = CLASS_3_C
+
+    for z in range(n_features):
+        ax = fig.add_subplot(3, 5, z+1, projection='3d')
+        ax.scatter(train_set[:, 0], train_set[:, 6], train_set[:, z], c=colours)
+        ax.set_title('Feature {}'.format(z+1))
+            
+    # plt.show()
+    fig.savefig('tfs.png', dpi=100)
+    #7vs1 or 7vs6
+    #trainset[:,[0,6]]
+    return [0, 6]
+
 
 def knn(train_set, train_labels, test_set, k, **kwargs):
     train_red = train_set[:, [0,6]]
@@ -199,8 +223,8 @@ def alternative_classifier(train_set, train_labels, test_set, **kwargs):
 
 def knn_three_features(train_set, train_labels, test_set, k, **kwargs):
     #Covariance for finding correlations?
-    train_red = train_set[:, [0,6,9]] #THESE FEATURES ARE NOT FINAL, PLOT THE COMPARISONS AND CHOOSE 3 FEATURES
-    test_red = test_set[:, [0,6,9]] #THESE FEATURES ARE NOT FINAL
+    train_red = train_set[:, [0, 6, 9]] #THESE FEATURES ARE NOT FINAL, PLOT THE COMPARISONS AND CHOOSE 3 FEATURES
+    test_red = test_set[:, [0, 6, 9]] #THESE FEATURES ARE NOT FINAL
     return knn_classifier(train_red, train_labels, test_red, k)
 
 
@@ -239,19 +263,22 @@ if __name__ == '__main__':
                                                                        test_labels_path=args.test_labels_path)
     if mode == 'feature_sel':
         selected_features = feature_selection(train_set, train_labels)
+        #three_feature_selection(train_set, train_labels)
         print_features(selected_features)
     elif mode == 'knn':
         predictions = knn(train_set, train_labels, test_set, args.k)
-        accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
+        #accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
         print_predictions(predictions)
         # confusion_matrix(predictions, test_labels, 'knn_cm.png')
     elif mode == 'alt':
         predictions = alternative_classifier(train_set, train_labels, test_set)
-        # accuracy(predictions, test_labels) #REMOVE AFTER REPORT
+        #accuracy(predictions, test_labels) #REMOVE AFTER REPORT
+        #confusion_matrix(predictions, test_labels, 'alt_cm.png')
         print_predictions(predictions)    
     elif mode == 'knn_3d':
         predictions = knn_three_features(train_set, train_labels, test_set, args.k)
-        # accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
+        accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
+        confusion_matrix(predictions, test_labels, '3d_knn_cm.png')
         print_predictions(predictions)
     elif mode == 'knn_pca':
         prediction = knn_pca(train_set, train_labels, test_set, args.k)
