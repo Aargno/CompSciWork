@@ -257,5 +257,6 @@ if __name__ == '__main__':
         prediction = knn_pca(train_set, train_labels, test_set, args.k)
         accuracy(prediction, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
         print_predictions(prediction)
+        # confusion_matrix(prediction, test_labels, 'knnPCA_cm.png')
     else:
         raise Exception('Unrecognised mode: {}. Possible modes are: {}'.format(mode, MODES))
