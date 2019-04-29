@@ -277,12 +277,12 @@ if __name__ == '__main__':
         print_predictions(predictions)    
     elif mode == 'knn_3d':
         predictions = knn_three_features(train_set, train_labels, test_set, args.k)
-        accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
-        confusion_matrix(predictions, test_labels, '3d_knn_cm.png')
+        # accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
+        # confusion_matrix(predictions, test_labels, '3d_knn_cm.png')
         print_predictions(predictions)
     elif mode == 'knn_pca':
         prediction = knn_pca(train_set, train_labels, test_set, args.k)
-        accuracy(prediction, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
+        # accuracy(prediction, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
         print_predictions(prediction)
         # confusion_matrix(prediction, test_labels, 'knnPCA_cm.png')
     else:
