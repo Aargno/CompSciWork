@@ -1,3 +1,6 @@
+# Important
+Personal Copy of work done on group project. Original repo located at: https://github.com/MaxTheWhale/firefox-extensions-ecosystem
+
 # Remote storage library for browser extensions
 This project implements a JavaScript library that allows developers to interface their browser extensions to cloud storage services such as Google Drive and OneDrive. The library is designed so that the interface is exactly the same no matter what cloud storage is being used, making supporting multiple cloud storage providers in an extension very simple.
 
