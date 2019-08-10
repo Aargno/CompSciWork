@@ -16,7 +16,6 @@ from mpl_toolkits.mplot3d import Axes3D
 from utilities import load_data, print_features, print_predictions
 import math
 
-# from sklearn.neighbors import KNeighborsClassifier #Remove when done testing
 from sklearn.decomposition import PCA
 
 # you may use these colours to produce the scatter plots
@@ -66,15 +65,6 @@ def confusion_matrix(pred_labels, test_labels, name) :
     
     return cm
 
-# def actual_knn(train_set, train_labels, test_red, k) :
-#     train_red = train_set[:, [0,6]]
-#     test_red = test_set[:, [0,6]]
-#     # train_red = train_set[:, [2,11]]
-#     # test_red = test_set[:, [2,11]]
-#     neigh = KNeighborsClassifier(n_neighbors=k)
-#     neigh.fit(train_red, train_labels)
-#     return neigh.predict(test_red)
-
 def knn_classifier(train_red, train_labels, test_red, k) : #If something coes wrong jsut copy this code back into knn funcs
     dist = lambda x, y: np.sqrt(np.sum((x-y)**2))
     train_dist = lambda x : [dist(x, train) for train in train_red] #Returns distances between x and every element in train set
@@ -118,7 +108,7 @@ def feature_selection(train_set, train_labels, **kwargs):
             ax[row][col].set_title('Features {} vs {}'.format(row+1, col+1))
             
     # plt.show()
-    fig.savefig('fs.png', dpi=100)
+    # fig.savefig('fs.png', dpi=100)
     #7vs1 or 7vs6
     #trainset[:,[0,6]]
     return [0, 6]
@@ -139,19 +129,14 @@ def three_feature_selection(train_set, train_labels, **kwargs):
         ax = fig.add_subplot(3, 5, z+1, projection='3d')
         ax.scatter(train_set[:, 0], train_set[:, 6], train_set[:, z], c=colours)
         ax.set_title('Feature {}'.format(z+1))
-            
-    # plt.show()
+
     fig.savefig('tfs.png', dpi=100)
-    #7vs1 or 7vs6
-    #trainset[:,[0,6]]
     return [0, 6]
 
 
 def knn(train_set, train_labels, test_set, k, **kwargs):
     train_red = train_set[:, [0,6]]
     test_red = test_set[:, [0,6]]
-    # train_red = train_set[:, [2,11]]
-    # test_red = test_set[:, [2,11]]
     return knn_classifier(train_red, train_labels, test_red, k)
 
 def separateClasses(data, labels):
@@ -263,27 +248,18 @@ if __name__ == '__main__':
                                                                        test_labels_path=args.test_labels_path)
     if mode == 'feature_sel':
         selected_features = feature_selection(train_set, train_labels)
-        #three_feature_selection(train_set, train_labels)
         print_features(selected_features)
     elif mode == 'knn':
         predictions = knn(train_set, train_labels, test_set, args.k)
-        #accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
         print_predictions(predictions)
-        # confusion_matrix(predictions, test_labels, 'knn_cm.png')
     elif mode == 'alt':
         predictions = alternative_classifier(train_set, train_labels, test_set)
-        #accuracy(predictions, test_labels) #REMOVE AFTER REPORT
-        #confusion_matrix(predictions, test_labels, 'alt_cm.png')
         print_predictions(predictions)    
     elif mode == 'knn_3d':
         predictions = knn_three_features(train_set, train_labels, test_set, args.k)
-        # accuracy(predictions, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
-        # confusion_matrix(predictions, test_labels, '3d_knn_cm.png')
         print_predictions(predictions)
     elif mode == 'knn_pca':
         prediction = knn_pca(train_set, train_labels, test_set, args.k)
-        # accuracy(prediction, test_labels) #EXTRA FOR REPORT REMOVE AFTER REPORT
         print_predictions(prediction)
-        # confusion_matrix(prediction, test_labels, 'knnPCA_cm.png')
     else:
         raise Exception('Unrecognised mode: {}. Possible modes are: {}'.format(mode, MODES))
