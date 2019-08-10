@@ -1,0 +1,34 @@
+{
+  "name": "firefox-extensions-ecosystem-master",
+  "version": "1.0.0",
+  "description": "This project implements a JavaScript library that allows developers to interface their browser extensions to cloud storage services such as Google Drive and OneDrive. The library is designed so that the interface is exactly the same no matter what cloud storage is being used, making supporting multiple cloud storage providers in an extension very simple.",
+  "main": "index.js",
+  "module": "main.js",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "scripts": {
+    "instrument": "npx nyc instrument ./src ./output && shx cp ./src/remoteStorage.js ./src/remoteStorage.bak && shx cp ./output/remoteStorage.js ./src/remoteStorage.js",
+    "deinstrument": "shx cp ./src/remoteStorage.bak ./src/remoteStorage.js && shx rm ./src/remoteStorage.bak && shx rm -r ./output",
+    "runtest": "nyc --instrument false node ./test/unit/test.js",
+    "test": "npm-run-all -c \"instrument --silent\" runtest \"deinstrument --silent\" --silent",
+    "copysrc": "shx cp ./src/remoteStorage.js ./test/remoteStorage.js && shx cp ./src/remoteStorage.js ./example-extension/remoteStorage.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaxTheWhale/firefox-extensions-ecosystem.git"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.3",
+    "esm": "^3.2.22",
+    "fetch-mock": "^7.3.1",
+    "jasmine": "^3.4.0",
+    "node-fetch": "^2.3.0",
+    "npm-run-all": "^4.1.5",
+    "nyc": "^14.0.0",
+    "shx": "^0.3.2"
+  }
+}
