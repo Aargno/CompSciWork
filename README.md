@@ -1,2 +1,2 @@
 # CompSciWork
-Repo for storing all course-work from y2 of degree onwards
+Repo for storing all course-work from each year of degree
