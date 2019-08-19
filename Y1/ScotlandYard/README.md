@@ -1,4 +1,4 @@
-#Scotland Yard Coursework
+# Scotland Yard Coursework
 Paired Project. The coursework was to design the games logic, not the game itself. 
 
 For Part 1 The work done by our pair is in: 
