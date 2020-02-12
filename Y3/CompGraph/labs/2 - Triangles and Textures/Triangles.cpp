@@ -8,6 +8,8 @@
 #include <string.h>
 #include <iostream>
 
+#include <math.h>
+
 using namespace std;
 using namespace glm;
 
@@ -32,7 +34,6 @@ CanvasTriangle sortedTri(CanvasTriangle tri);
 CanvasPoint getFlat(CanvasTriangle tri);
 void triangle(CanvasTriangle triang, Colour col);
 void rasterize(CanvasTriangle tri, Colour col);
-// vector<uint32_t> loadTexture(CanvasPoint begin, CanvasPoint end, float stepCount);
 vector<uint32_t> loadTexture(CanvasPoint begin, CanvasPoint end, float stepCount, vector<uint32_t> texture);
 
 DrawingWindow window = DrawingWindow(WIDTH, HEIGHT, false);
@@ -53,27 +54,7 @@ int main(int argc, char* argv[])
 
 void draw()
 {
-  // window.clearPixels();
 
-  // for(int y=0; y<window.height ;y++) {
-  //   for(int x=0; x<window.width ;x++) {
-  //     float red = rand() % 255;
-  //     float green = 0.0;
-  //     float blue = 0.0;
-  //     uint32_t colour = (255<<24) + (int(red)<<16) + (int(green)<<8) + int(blue);
-  //     window.setPixelColour(x, y, colour);
-  //   }
-  // }
-
-  // CanvasPoint begin(30,45);
-  // CanvasPoint end(window.width-1,window.height-1);
-  // CanvasPoint end(27,200);
-  // CanvasPoint begin(window.width-1,0);
-  // CanvasPoint end(0,window.height-1);
-  // CanvasPoint begin(11,20);
-  // CanvasPoint end(0,20);
-  // Colour col(255,255,255);
-  // line(begin, end, col);
 }
 
 uint32_t packColour(Colour col) {
@@ -91,15 +72,11 @@ float getStep(float begin, float end, float numStep) {
   return (end - begin)/(numStep);
 }
 
-// float maxStepCount(CanvasPoint begin, CanvasPoint end) {
-
-// }
-
 vector<float> interpolate(float begin, float end, float numEl) {
   vector<float> out;
   if (numEl <= 0) return out;
   float step = getStep(begin, end, numEl);
-  for (int i = 0; i < numEl; i++) {
+  for (int i = 0; i <= numEl; i++) {
       out.push_back(begin + (step*i));
   }
   return out;
@@ -110,8 +87,8 @@ vector<CanvasPoint> interpolate(CanvasPoint begin, CanvasPoint end, float numEl)
   if (numEl <= 0) return out;
   float stepX = getStep(begin.x, end.x, numEl);
   float stepY = getStep(begin.y, end.y, numEl);
-  CanvasPoint step(0,0);
-  for (float i = 0.0; i < numEl; i++) {
+  CanvasPoint step(0.0,0.0);
+  for (float i = 0.0; i <= numEl; i++) {
     step.x = begin.x + (stepX*i);
     step.y = begin.y + (stepY*i);
     out.push_back(step);
@@ -122,19 +99,17 @@ vector<CanvasPoint> interpolate(CanvasPoint begin, CanvasPoint end, float numEl)
 void line(CanvasPoint begin, CanvasPoint end, Colour colour) {
   float diffX = end.x-begin.x;
   float diffY = end.y-begin.y;
-  // float steps = (std::abs(diffX) > std::abs(diffY)) ? diffX : diffY;
   float steps = std::max(abs(diffX), abs(diffY));
-  // vector<CanvasPoint> linePoints = interpolate(begin, end, steps);
+
   if (steps <= 0) return;
   float stepX = getStep(begin.x, end.x, steps);
   float stepY = getStep(begin.y, end.y, steps);
-  //Rounding leaves gap in centre of line
+
   float x, y;
   for (float i = 0.0; i < steps; i++) {
     x = begin.x + (i*stepX);
     y = begin.y + (i*stepY);
     window.setPixelColour(std::round(x), std::round(y), packColour(colour));
-    // window.setPixelColour(std::round(linePoints[i].x), std::round(linePoints[i].y), packColour(colour));
   }
 }
 
@@ -157,9 +132,11 @@ CanvasPoint getFlat(CanvasTriangle tri) {
   float diffX = tri.vertices[2].x-tri.vertices[0].x;
   float diffY = tri.vertices[2].y-tri.vertices[0].y;
   float steps = std::max(abs(diffX), abs(diffY));
+  
   if (steps <= 0) return tri.vertices[1];
   float stepX = getStep(tri.vertices[0].x, tri.vertices[2].x, steps);
   float stepY = getStep(tri.vertices[0].y, tri.vertices[2].y, steps);
+  
   float i = (tri.vertices[1].y - tri.vertices[0].y)/stepY;
   return CanvasPoint(std::round(tri.vertices[0].x + (stepX*i)), tri.vertices[1].y);
 }
@@ -170,22 +147,42 @@ void triangle(CanvasTriangle tri, Colour col) {
   line(tri.vertices[2], tri.vertices[0], col);
 }
 
-//Problem is here
+// void fillTri(CanvasTriangle tri, Colour col) {
+
+//   float diffX = tri.vertices[0].x-tri.vertices[1].x;
+//   float diffY = tri.vertices[0].y-tri.vertices[1].y;
+//   float steps1 = std::max(abs(diffX), abs(diffY));
+
+//   diffX = tri.vertices[0].x-tri.vertices[2].x;
+//   diffY = tri.vertices[0].y-tri.vertices[2].y;
+//   float steps2 = std::max(abs(diffX), abs(diffY));
+
+//   float steps = std::max(steps1, steps2);
+
+//   vector<CanvasPoint> side1 = interpolate(tri.vertices[0], tri.vertices[1], steps);
+//   vector<CanvasPoint> side2 = interpolate(tri.vertices[0], tri.vertices[2], steps);
+//   cout << side1.size() << " " << side2.size() << endl;
+//   for (float i = 0.0; i < steps; i++) {
+//     line(side1[i], side2[i], col);
+//   }
+// }
+
 void fillTri(CanvasTriangle tri, Colour col) {
 
-  //Probably here
   float diffX = tri.vertices[0].x-tri.vertices[1].x;
   float diffY = tri.vertices[0].y-tri.vertices[1].y;
   float steps1 = std::max(abs(diffX), abs(diffY));
+
   diffX = tri.vertices[0].x-tri.vertices[2].x;
   diffY = tri.vertices[0].y-tri.vertices[2].y;
   float steps2 = std::max(abs(diffX), abs(diffY));
+  
   float steps = std::max(steps1, steps2);
 
   vector<CanvasPoint> side1 = interpolate(tri.vertices[0], tri.vertices[1], steps);
   vector<CanvasPoint> side2 = interpolate(tri.vertices[0], tri.vertices[2], steps);
-  cout << side1.size() << " " << side2.size() << endl;
-  for (float i = 0.0; i < steps; i++) {
+  // cout << side1.size() << " " << side2.size() << endl;
+  for (float i = 0.0; i <= steps; i++) {
     line(side1[i], side2[i], col);
   }
 }
@@ -231,7 +228,7 @@ string nextNonComment(ifstream &file) {
   return removeComments(line);
 }
 
-vector<uint32_t> loadPPM(string fileName) {
+vector<uint32_t> loadPPM(string fileName, bool draw) {
   vector<uint32_t> out;
   ifstream file;
   file.open(fileName, ios::in | ios::binary | ios::ate);
@@ -254,7 +251,7 @@ vector<uint32_t> loadPPM(string fileName) {
     int green = (unsigned char) c[i+2];
     Colour col(red, green, blue);
     out.push_back(packColour(col));
-    window.setPixelColour(j%width, y, packColour(col));
+    if (draw) window.setPixelColour(j%width, y, packColour(col));
     j++;
     if ((j%width) == 0) y++;
   }
@@ -265,6 +262,42 @@ vector<uint32_t> loadPPM(string fileName) {
 
 ///////
 //Texture Tri
+
+vector<CanvasPoint> getFlat(CanvasTriangle tri, CanvasTriangle tex) {
+  //Could probably actually solve triangle for this
+  vector<CanvasPoint> out;
+  float diffX = tri.vertices[2].x-tri.vertices[0].x;
+  float diffY = tri.vertices[2].y-tri.vertices[0].y;
+  float steps = std::max(abs(diffX), abs(diffY));
+  float ratio = 0;
+  if (steps <= 0) {
+    out.push_back(tri.vertices[1]);
+  } else {  
+    float stepX = getStep(tri.vertices[0].x, tri.vertices[2].x, steps);
+    float stepY = getStep(tri.vertices[0].y, tri.vertices[2].y, steps);
+  
+    float i = (tri.vertices[1].y - tri.vertices[0].y)/stepY;
+    out.push_back(CanvasPoint(std::round(tri.vertices[0].x + (stepX*i)), tri.vertices[1].y));
+    ratio = i/steps;
+  }
+  if (ratio == 0) {
+    out.push_back(tex.vertices[1]);
+    return out;
+  }
+  diffX = tex.vertices[2].x-tex.vertices[0].x;
+  diffY = tex.vertices[2].y-tex.vertices[0].y;
+  steps = std::max(abs(diffX), abs(diffY));
+  if (steps <= 0) {
+    out.push_back(tex.vertices[1]);
+    return out;
+  }
+  float stepX = getStep(tex.vertices[0].x, tex.vertices[2].x, steps);
+  float stepY = getStep(tex.vertices[0].y, tex.vertices[2].y, steps);
+  
+  float i = ratio*steps;
+  out.push_back(CanvasPoint(std::round(tex.vertices[0].x + (stepX*i)), std::round(tex.vertices[0].y + (stepY*i))));
+  return out;
+}
 
 void line(CanvasPoint begin, CanvasPoint end, vector<uint32_t> texture, float step) {
   if (step <= 0) return;
@@ -342,32 +375,58 @@ CanvasTriangle sortedTri(CanvasTriangle tri, CanvasTriangle &tex) {
 
 void fillTri(CanvasTriangle tri, CanvasTriangle tex, vector<uint32_t> texture) {
 
+  //Issue not here (maybe, what if I get straight length of line)
   float diffX = tri.vertices[0].x-tri.vertices[2].x;
   float diffY = tri.vertices[0].y-tri.vertices[2].y;
-  float steps = std::max(abs(diffX), abs(diffY));
+  float steps1 = std::max(abs(diffX), abs(diffY));
+  float steps = steps1;
+  // cout << abs(diffX) << " " << abs(diffY) << endl;
+  diffX = tri.vertices[0].x-tri.vertices[1].x;
+  diffY = tri.vertices[0].y-tri.vertices[1].y;
+  steps1 = std::max(abs(diffX), abs(diffY));
+  steps = std::max(steps, steps1);
 
-  vector<CanvasPoint> side2 = interpolate(tex.vertices[0], tex.vertices[1], steps);
-  vector<CanvasPoint> side1 = interpolate(tex.vertices[0], tex.vertices[2], steps);
-  vector<CanvasPoint> tri2 = interpolate(tri.vertices[0], tri.vertices[1], steps);
-  vector<CanvasPoint> tri1 = interpolate(tri.vertices[0], tri.vertices[2], steps);
-  vector<vector<uint32_t>>lineTex;
-  for (int i = 0; i < steps; i++) {
+  // cout << abs(diffX) << " " << abs(diffY) << endl;
+  //Issue arises when top->right longer than top->bottom
+  //Issue is due to steps being too small
+  //Is properly maximising, but need large number of steps (2000) to not have gaps
+
+  // diffX = tex.vertices[0].x-tex.vertices[1].x;
+  // diffY = tex.vertices[0].y-tex.vertices[1].y;
+  // float stepsT = std::max(abs(diffX), abs(diffY));
+  // diffX = tex.vertices[0].x-tex.vertices[2].x;
+  // diffY = tex.vertices[0].y-tex.vertices[2].y;
+  // steps1 = std::max(abs(diffX), abs(diffY));
+  // stepsT = std::max(stepsT, steps1);
+  // steps = std::max(steps, stepsT);
+  // steps++;
+
+  //Not here
+  vector<CanvasPoint> side1 = interpolate(tex.vertices[0], tex.vertices[1], steps);
+  vector<CanvasPoint> side2 = interpolate(tex.vertices[0], tex.vertices[2], steps);
+  vector<CanvasPoint> tri1 = interpolate(tri.vertices[0], tri.vertices[1], steps);
+  vector<CanvasPoint> tri2 = interpolate(tri.vertices[0], tri.vertices[2], steps);
+  // vector<vector<uint32_t>>lineTex;
+  for (float i = 0.0; i <= steps; i++) {
     diffX = tri1[i].x-tri2[i].x;
     diffY = tri1[i].y-tri2[i].y;
-    float steps1 = std::max(abs(diffX), abs(diffY));
-    lineTex.push_back(loadTexture(side1[i], side2[i], steps1, texture));
+    steps1 = std::max(abs(diffX), abs(diffY));
+    // lineTex.push_back(loadTexture(side1[i], side2[i], steps1, texture));
+    line(tri1[i], tri2[i], loadTexture(side1[i], side2[i], steps1, texture), steps1);
   }
-  for (int i = 0; i < steps; i++) {
-    diffX = tri1[i].x-tri2[i].x;
-    diffY = tri1[i].y-tri2[i].y;
-    float steps1 = std::max(abs(diffX), abs(diffY));
-    line(tri1[i], tri2[i], lineTex[i], steps1);
-  }
+  // for (int i = 0; i < steps; i++) {
+  //   diffX = tri1[i].x-tri2[i].x;
+  //   diffY = tri1[i].y-tri2[i].y;
+  //   steps1 = std::max(abs(diffX), abs(diffY));
+  //   line(tri1[i], tri2[i], lineTex[i], steps1);
+  // }
 }
 
 vector<uint32_t> loadTexture(CanvasPoint begin, CanvasPoint end, float stepCount, vector<uint32_t> texture) {
   vector<uint32_t> tex;
   vector<CanvasPoint> locs = interpolate(begin, end, stepCount);
+  // cout << locs.size()-1 << endl;
+  // cout << stepCount << endl;
   for (int i = 0; i < stepCount; i++) {
     // tex.push_back(window.getPixelColour(std::round(locs[i].x), std::round(locs[i].y)));
     tex.push_back(texture[std::round(locs[i].x) + WIDTH*std::round(locs[i].y)]);
@@ -377,23 +436,25 @@ vector<uint32_t> loadTexture(CanvasPoint begin, CanvasPoint end, float stepCount
 
 void rasterize(CanvasTriangle tri, string fileName) {
   vector<uint32_t> texture;
-  texture = loadPPM(fileName);
-  window.clearPixels();
+  texture = loadPPM(fileName, false);
+  // window.clearPixels();
   tri = sortedTri(tri);
   CanvasTriangle tex = getTextureTri(tri);
+  vector<CanvasPoint> flats = getFlat(tri, tex);
   // CanvasPoint flat = getFlat(tri);
+  //Need to put flat at point with relevant ratio i.e halfway on tri = halfway on tex
   // CanvasPoint flatTex = getFlat(tex);
-  // CanvasTriangle tri1 = tri;
-  // CanvasTriangle tri2 = tri;
-  // CanvasTriangle tex1 = tex;
-  // CanvasTriangle tex2 = tex;
-  // tri1.vertices[2] = flat;
-  // tri2.vertices[0] = flat;
-  // tex1.vertices[2] = flatTex;
-  // tex2.vertices[0] = flatTex;
-  // fillTri(tri1, tex1, texture);
-  // fillTri(tri2, tex2, texture);
-  fillTri(tri, tex, texture);
+  CanvasTriangle tri1 = tri;
+  CanvasTriangle tri2 = tri;
+  CanvasTriangle tex1 = tex;
+  CanvasTriangle tex2 = tex;
+  tri1.vertices[2] = flats[0];
+  tri2.vertices[0] = flats[0];
+  tex1.vertices[2] = flats[1];
+  tex2.vertices[0] = flats[1];
+  fillTri(tri1, tex1, texture);
+  fillTri(tri2, tex2, texture);
+  // fillTri(tri, tex, texture);
 }
 
 ///////
@@ -447,7 +508,7 @@ void handleEvent(SDL_Event event)
         break;
       }
       case SDLK_r : 
-        loadPPM("texture.ppm");
+        loadPPM("texture.ppm", true);
         break;
       case SDLK_t : {
         //DRAW DIAGRAM AND FIGURE OUT STEPS
@@ -458,12 +519,50 @@ void handleEvent(SDL_Event event)
         CanvasPoint v3(10, 150);
         v3.texturePoint = TexturePoint(65, 330);
         CanvasTriangle tri(v1,v2,v3);
-        // CanvasPoint v4(195, 5);
-        // CanvasPoint v5(395, 380);
-        // CanvasPoint v6(65, 330);
-        // CanvasTriangle tex(v4,v5,v6);
         rasterize(tri, "texture.ppm");
         Colour white(255, 255, 255);
+        triangle(tri, white);
+        break;
+      }
+      case SDLK_y : {
+        //DRAW DIAGRAM AND FIGURE OUT STEPS
+        CanvasPoint v1(rand()%(window.width-1), rand()%(window.height-1));
+        v1.texturePoint = TexturePoint(rand()%(window.width-1), rand()%(window.height-1));
+        CanvasPoint v2(rand()%(window.width-1), rand()%(window.height-1));
+        v2.texturePoint = TexturePoint(rand()%(window.width-1), rand()%(window.height-1));
+        CanvasPoint v3(rand()%(window.width-1), rand()%(window.height-1));
+        v3.texturePoint = TexturePoint(rand()%(window.width-1), rand()%(window.height-1));
+        CanvasTriangle tri(v1,v2,v3);
+        rasterize(tri, "texture.ppm");
+        Colour white(255, 255, 255);
+        triangle(tri, white);
+        break;
+      }
+      case SDLK_b : {
+        //DRAW DIAGRAM AND FIGURE OUT STEPS
+        CanvasPoint v1(428, 8);
+        v1.texturePoint = TexturePoint(255, 335);
+        CanvasPoint v2(13, 155);
+        v2.texturePoint = TexturePoint(41, 243);
+        CanvasPoint v3(267, 364);
+        v3.texturePoint = TexturePoint(289, 20);
+        CanvasTriangle tri(v1,v2,v3);
+        rasterize(tri, "texture.ppm");
+        Colour white(255, 255, 255);
+        triangle(tri, white);
+        break;
+      }
+      case SDLK_n : {
+        //DRAW DIAGRAM AND FIGURE OUT STEPS
+        CanvasPoint v1(428, 8);
+        v1.texturePoint = TexturePoint(255, 335);
+        CanvasPoint v2(13, 155);
+        v2.texturePoint = TexturePoint(41, 243);
+        CanvasPoint v3(267, 364);
+        v3.texturePoint = TexturePoint(289, 20);
+        CanvasTriangle tri(v1,v2,v3);
+        Colour white(255, 255, 255);
+        rasterize(tri, white);
         triangle(tri, white);
         break;
       }
